@@ -3,99 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeiFei Website</title>
-    <link rel="stylesheet" href="styleblack.css">
-    <script src="topnav.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>itpyi's website</title>
 </head>
 <body>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div class="topnav" id="myTopnav">
-            <div class="nav-container">
-                <div class="left-container">
-                    <a href="#top"><img src = "icon.svg" alt="主页" style='vertical-align:bottom; width: 30px;'/> Fei's Website </a>
+    <!-- 导航栏 -->
+    <nav class="topnav">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="#top"><span>itpyi's website</span></a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#research">Research</a>
+                <a href="#experience">Résumé</a>
+                <a href="#publication">Publications</a>
+                <a href="notes.html">Notes</a>
+                <a href="https://itpyi.github.io/blog">Blog</a>
+                <a href="index.html">漢語</a>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-                </div>
-                <div class="right-container">
-                    <a href="#research" class="right">Research</a>
-                    <a href="#experience" class="right">Résumé</a>
-                    <a href="#publication" class="right">Publications</a>
-                    <a href="notes.html" class="right">Notes</a>
-                    <a href="https://itpyi.github.io/blog" class="right">Blog</a>
-                    <a href="index.html" class="right">漢语</a>
-                </div>
-            <a class="icon">
-                <i class="fa fa-bars"></i>
-            </a>
+    <!-- 头部区域 -->
+    <header id="top">
+        <div class="h1-container en">
+            <h1>itpyi's website</h1>
+            <h2>Physics and miscellaneous</h2>
         </div>
-        </div>
-        <header>
-            <div class="h1-container en">
-                <h1>itpyi's personal website</h1>
-                <h2>Quantum information, cold atoms, statistical physics, condensed matter physics and others</h2>
+    </header>
+
+    <!-- 主要内容 -->
+    <main>
+        <!-- 个人简介 -->
+        <section id="profile">
+            <h2>About Me</h2>
+            <div class="profile-section">
+                <div class="profile-img">
+                    <img src="avatar.JPG" alt="王逸飞">
+                    <div class="profile-info">
+                    <h3>Wang Yifei</h3>
+                    <p>PhD candidate in theoretical physics<br>Institute for Advanced Study, Tsinghua University</p>
+                    <div class="social-links">
+                        <a href="mailto:wang_yff@outlook.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/itpyi" aria-label="GitHub" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                <div class="bio-content">
+                    <p>
+                        Physics researcher. Focusing on fault-tolerant quantum computation, topological phases of matter and quantum simulation.
+                    </p>
+                    <p>Typography enthusiast, amateur developer of Typst templates and packages.</p>
+                    <p>Broadly interested in the achievements of human civilizations across regions, eras, and types. Long-term hobbies include language learning and piano playing. Also interested in history, linguistics (including but not limited to Chinese phonology), and ancient scripts. Recently practicing Muay Thai.</p>
+                </div>
             </div>
-        </header>
-        <section>
-            <div class="column right"> 
-                <img src="avatar.JPG" style="display: block; margin-left: auto; margin-right: auto; width: 80%; border-radius: 50%;">
-                <!-- <p> </p>   -->
-                <p style="font-size: x-large; font-weight: bold; text-align: center; padding-top: 1em;">
-                    Wang Yifei
-                </p>
-                <p style="font-size: large; color:slategray; text-align: center;">
-                    PhD candidate in theoretical physics<br>
-                    Institute for Advanced Study, Tsinghua University
-                </p>
-                <p style="font-size: x-large; color:slategray; text-align: center;">
-                    <a href="mailto:wang_yff@outlook.com" class="fa fa-envelope" style="color:rgb(66, 79, 92);"></a>
-                    <a href="https://github.com/itpyi" class="fa fa-github" style="color:rgb(66, 79, 92);"></a>
-                </p>
-            </div>
-            <div class="column left"> 
-                <h2> About Me </h2>
-                <p>
-                    I am a PhD student majoring in theoretical physics in Institute for Advanced Study, Tsinghua University. My interests include quantum information and quantum computation, cold atomic physics and condensed matter physics. My two major academic goals are realizing fault-tolerant quantum computation on cold atomic platforms, and understanding more about quantum information.
-                </p>
-            </div>
-        </section>
-        <section id="research">
-            <h2>Research Interests</h2>
-            <p>To be translated.</p>
-            <p></p>
         </section>
         
+        <!-- 研究兴趣 -->
+        <section id="research">
+            <h2>Research</h2>
+                <h3>Fault-tolerant Quantum Computation</h3>
+                <p>Fault-tolerant quantum computation aims to realize practical quantum logic circuits based on noisy hardware.</p>
+                <h3>Topological Phases of Matter</h3>
+                <p>Many profound phenomena in physics originate from the topological properties of systems.</p>
+                <h3>Quantum Simulation</h3>
+                <p>Studying physical models on highly controllable atom-laser platforms.</p>
+        </section>
+        
+        <!-- 个人履历 -->
         <section id="experience">
             <h2>Résumé</h2>
-            <ul>
-                <li>2006-2012, Shaanfeng School, Lintong District, Xi'an. Primary school.</li>
-                <li>2012-2018, The High School Affiliated to Shaanxi Normal University. Junior and senior high school.</li>
-                <li>2018-2022, Schoold of Physics, Peking University. Bachelor of Science in physics.</li>
-                <li>2022-now, Institute for Advanced Study, Tsinghua University. Condensed matter theory. Advised by Prof. Yingfei Gu.</li>
-            </ul>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2022 - Now</div>
+                    <div class="timeline-content">
+                        <h3>Institute for Advanced Study, Tsinghua University</h3>
+                        <p>PhD candidate in theoretical physics</p>
+                        <p>Advisor: Prof. Gu Yingfei</p>
+                        <p>Research fields: condensed matter theory, quantum computation</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2018 - 2022</div>
+                    <div class="timeline-content">
+                        <h3>School of Physics, Peking University</h3>
+                        <p>Bachelor in physics</p>
+                        <p>Researed on quantum simulation in optical lattices advised by Prof. Chen Xuzong</p>
+                        <p>Thesis: Quantum Simulation of Lattice Gauge Theory</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2012 - 2018</div>
+                    <div class="timeline-content">
+                        <h3>The High School Affiliated to Shaanxi Normal University</h3>
+                        <p>Junior and senior high school</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2006 - 2012</div>
+                    <div class="timeline-content">
+                        <h3>Shaanfeng School, Lintong District, Xi'an</h3>
+                        <p>Primary school, now demolished</p>
+                    </div>
+                </div>
+            </div>
         </section>
         
-    
+        <!-- 学术论文 -->
         <section id="publication">
-            <h2>Publications</h2>    
-            <ul>
-                <li id="pub2312"><b>WYF</b>, Yixu Wang, Yu-An Chen, Wenjun Zhang, Tao Zhang, Jiazhong Hu, Wenlan Chen, Yingfei Gu, and Zi-Wen Liu. "Efficient fault-tolerant implementations of non-Clifford gates with reconfigurable atom arrays." <a href="https://arxiv.org/abs/2312.09111"><i> arXiv preprint arXiv:2312.09111</i> (2023)</a>.</li>
-            </ul>
+            <h2>Publications</h2>
+            <div class="publication-item">
+                <h3>Efficient fault-tolerant implementations of non-Clifford gates with reconfigurable atom arrays</h3>
+                <div class="publication-authors"><b>Wang Yifei</b>, Yixu Wang, Yu-An Chen, Wenjun Zhang, Tao Zhang, Jiazhong Hu, Wenlan Chen, Yingfei Gu, and Zi-Wen Liu</div>
+                <div class="publication-journal"><i>npj Quantum Information (2024)</i> </div>
+                <a href="https://www.nature.com/articles/s41534-024-00945-3" class="publication-link" target="_blank">Publised Version</a>
+                <a href="https://arxiv.org/abs/2312.09111" class="publication-link" target="_blank">arXiv Version</a>
+            </div>
+            <div class="publication-item">
+                <h3>Magic teleportation with generalized lattice surgery</h3>
+                <div class="publication-authors"><b>Yifei Wang</b>, Yingfei Gu</div>
+                <div class="publication-journal"><i>	arXiv:2503.19758 [quant-ph]</i> </div>
+                <!-- <a href="https://www.nature.com/articles/s41534-024-00945-3" class="publication-link" target="_blank">查看论文</a> -->
+                <a href="https://arxiv.org/abs/2503.19758" class="publication-link" target="_blank">arXiv Version</a>
+            </div>
         </section>
-<footer>
-    <div class="footer-container">
-    <p>© itpyi 2024, published with <a href="https://pages.github.com">Github Pages</a>.</p>
-    </div>
-</footer>
+    </main>
 
-<script>
-    function myFunction() {
-      var x = document.getElementById("myTopnav");
-      if (x.className === "topnav") {
-        x.className += " responsive";
-      } else {
-        x.className = "topnav";
-      }
-    }
-</script>
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="copyright">
+                <p>© itpyi 2025, This page is published with <a href="https://pages.github.com" style="color: #ffcc00; text-decoration: underline;">Github Pages</a></p>
+            </div>
+        </div>
+    </footer>
 
+    <script>
+        // 移动端导航切换
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // 点击导航链接时关闭菜单
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition - headerOffset;
+                    
+                    window.scrollBy({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
