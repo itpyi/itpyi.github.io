@@ -15,7 +15,8 @@
 
 @font-face {
   font-family: 'CustomFont';
-  src: url('title2.woff') format('truetype');
+  src: url('fonts/WangHanZongCuMingTiFan-1-subset.woff2') format('truetype');
+  /* src: url('title2.woff') format('truetype'); */
   font-style: normal;
   font-weight: normal;
 }
@@ -151,6 +152,7 @@ header h1 {
     margin-left: 30px;
     font-weight: 400;
     letter-spacing: 2px;
+    /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
     text-align: end;
 }
@@ -161,6 +163,7 @@ header h2 {
     opacity: 0.9;
     margin-top: 80px;
     padding-right: 10px;
+    /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
     text-align: end;
 }
