@@ -1,3 +1,4 @@
 .vscode/
 *.ttf
 .DS_Store
+*.bak
