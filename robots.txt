@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://itpyi.github.io/sitemap.xml
