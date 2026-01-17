@@ -426,19 +426,23 @@ p {
 footer {
     background-color: var(--primary-color);
     color: var(--light-text);
-    padding: 40px 20px;
-    text-align: center;
+    padding: 40px 0; /* 修改 padding，左右留给内部容器控制 */
+    /* text-align: center; */ /* 移除居中 */
 }
 
 .footer-content {
-    max-width: 800px;
+    max-width: 900px; /* 与 main 保持一致 */
     margin: 0 auto;
+    padding: 0 20px; /* 与 main 左右 padding 保持一致 */
+    text-align: left; /* 左对齐 */
 }
 
 .footer-content p { 
-    margin-bottom: 20px;
+    margin-bottom: 8px; /* 减小段落间距，原为 20px */
+    line-height: 1.4;   /* 减小行高 */
     opacity: 0.8;
     color:#fff;
+    font-size: 0.9rem; /* 确保字体稍小 */
 }
 
 .copyright {

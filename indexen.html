@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal website of Wang Yifei (itpyi). PhD candidate in theoretical physics at IAS, Tsinghua University. Researching fault-tolerant quantum computing, topological states of matter, and quantum simulation.">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>itpyi's website</title>
@@ -43,7 +45,7 @@
             <h2>About Me</h2>
             <div class="profile-section">
                 <div class="profile-img">
-                    <img src="avatar.JPG" alt="王逸飞">
+                    <img src="avatar.jpg" alt="Wang Yifei">
                     <div class="profile-info">
                     <h3>Wang Yifei</h3>
                     <p>PhD candidate in theoretical physics<br>Institute for Advanced Study, Tsinghua University</p>
@@ -146,49 +148,12 @@
     <footer>
         <div class="footer-content">
             <div class="copyright">
-                <p>Last Updated: 10 Oct. 2025</p>
-                <p>© itpyi 2025, This page is published with <a href="https://pages.github.com" style="color: #ffcc00; text-decoration: underline;">Github Pages</a></p>
+                <p>Last Updated: 17 Jan. 2026</p>
+                <p>&copy; 2026 itpyi. Hosted on <a href="https://pages.github.com" style="color: #ffcc00; text-decoration: underline;">GitHub Pages</a>.</p>
             </div>
         </div>
     </footer>
 
-    <script>
-        // 移动端导航切换
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navLinks = document.getElementById('navLinks');
-        
-        mobileToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-        
-        // 点击导航链接时关闭菜单
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-        
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerOffset = 80;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition - headerOffset;
-                    
-                    window.scrollBy({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
