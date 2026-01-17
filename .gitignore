@@ -1,5 +1,5 @@
 .vscode/
-*.ttf
+assets/fonts/*.ttf
 .DS_Store
 *.bak
 .idea/

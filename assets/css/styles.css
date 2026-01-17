@@ -15,8 +15,8 @@
 
 @font-face {
   font-family: 'CustomFont';
-    src: url('fonts/jhlst-subset.woff2') format('woff2');
-  /* src: url('title2.woff') format('truetype'); */
+    src: url('../fonts/jhlst-subset.woff2') format('woff2');
+  /* src: url('../fonts/title2.woff') format('truetype'); */
   font-style: normal;
   font-weight: normal;
     font-display: swap;
