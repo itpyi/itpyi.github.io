@@ -196,7 +196,7 @@ header h2 {
 
 header h2 .lead-circle {
     display: inline-block;
-    transform: translateX(-0.05em);
+    transform: translateX(-0.05em) translateY(-0.1em);
 }
 
 
@@ -349,6 +349,16 @@ p {
     color: #444;
 }
 
+.body-list {
+    margin: 0 0 15px;
+    padding-left: 0;
+    list-style-position: inside;
+}
+
+.body-list li {
+    margin-bottom: 6px;
+}
+
 
 
 /* 履历部分 */
@@ -419,6 +429,19 @@ p {
 }
 
 .timeline-content a:hover {
+    color: var(--accent-color);
+    text-decoration-color: var(--accent-color);
+}
+
+.link-body {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-decoration-color: rgba(26, 58, 95, 0.4);
+    text-underline-offset: 3px;
+    transition: all 0.3s ease;
+}
+
+.link-body:hover {
     color: var(--accent-color);
     text-decoration-color: var(--accent-color);
 }

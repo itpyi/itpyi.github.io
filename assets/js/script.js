@@ -38,3 +38,34 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// 页脚注入（统一维护）
+const footerElement = document.getElementById('siteFooter');
+if (footerElement) {
+    const footerLang = footerElement.dataset.footer || 'zh';
+    const footerPath = `assets/partials/footer-${footerLang}.html`;
+    fetch(footerPath)
+        .then(response => response.text())
+        .then(html => {
+            footerElement.innerHTML = html;
+        })
+        .catch(() => {
+            // 保持静默，避免影响页面其他功能
+        });
+}
+
+// 子页面导航栏注入（统一维护）
+const subnavElement = document.getElementById('siteSubnav');
+if (subnavElement) {
+    const subnavLang = subnavElement.dataset.subnav || 'zh';
+    const subnavTitle = subnavElement.dataset.subnavTitle || '';
+    const subnavPath = `assets/partials/subnav-${subnavLang}.html`;
+    fetch(subnavPath)
+        .then(response => response.text())
+        .then(html => {
+            subnavElement.innerHTML = html.replace('{{TITLE}}', subnavTitle);
+        })
+        .catch(() => {
+            // 保持静默，避免影响页面其他功能
+        });
+}
