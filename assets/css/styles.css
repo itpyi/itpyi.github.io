@@ -224,6 +224,17 @@ header h2 .lead-circle {
     text-align: center;
 }
 
+.en h2.quote {
+    text-align: left;
+}
+
+.en h2.quote .quote-author {
+    display: block;
+    margin-top: 12px;
+    text-align: right;
+    font-weight: 400;
+}
+
 /* 主要内容区域 */
 main {
     max-width: 900px;
