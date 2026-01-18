@@ -634,6 +634,17 @@ footer {
     section h2 {
         font-size: 1.8rem;
     }
+
+    /* 新增：在平板和大手机尺寸就提前缩小英文 Quote */
+    .en h1 {
+        font-size: 2.2rem; /* 稍微缩小 */
+    }
+
+    .en h2 {
+        font-size: 1.1rem; /* 确保不撑爆 */
+        padding: 0 20px;
+        margin-top: 40px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -653,17 +664,17 @@ footer {
         font-size: 1.1rem;
     }
 
-    /* 新增：英文首页特调，避免 Quote 撑爆屏幕 */
+    /* 手机端进一步缩小 */
     .en h1 {
-        font-size: 1.8rem; /* 稍微缩小英文标题 */
-        margin-top: 10vh; /* 在手机上给顶部留出更多空间，防止也没遮挡 */
+        font-size: 1.8rem;
+        margin-top: 10vh; /* 恢复：保留视觉上的偏高效果 */
     }
 
     .en h2 {
-        font-size: 0.95rem; /* 显著缩小英文 Quote 字号 */
-        margin-top: 30px; /* 减小 Quote 之间的间距 */
-        padding: 0 15px; /* 增加左右内边距，防止贴边 */
-        line-height: 1.5; /* 优化行高 */
+        font-size: 0.9rem; /* 实际上 0.95rem 可能还有点大，改为 0.9rem */
+        padding: 0 15px;
+        line-height: 1.5;
+        margin-top: 25px; /* 收紧间距 */
     }
     
     .profile-info h3 {
