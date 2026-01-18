@@ -1,6 +1,7 @@
 :root {
     --primary-color: #1a3a5f;
     --secondary-color: #2c5d92;
+    --accent-color: #d4a11d;
     --light-bg: #f8f9fa;
     --dark-text: #333;
     --light-text: #fff;
@@ -107,7 +108,7 @@ img {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: var(--light-text);
+    background-color: var(--accent-color);
     transition: width 0.3s ease;
 }
 
@@ -132,7 +133,22 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-color), #0a2540);
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.04) 0px,
+            rgba(255, 255, 255, 0.04) 1px,
+            rgba(255, 255, 255, 0) 1px,
+            rgba(255, 255, 255, 0) 24px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.035) 0px,
+            rgba(255, 255, 255, 0.035) 1px,
+            rgba(255, 255, 255, 0) 1px,
+            rgba(255, 255, 255, 0) 24px
+        ),
+        linear-gradient(135deg, var(--primary-color), #0a2540);
     color: var(--light-text);
     text-align: center;
     padding: 30px 20px;
@@ -150,7 +166,7 @@ header {
     position: relative;
     z-index: 2;
     writing-mode: vertical-rl; 
-    direction: rtl;
+    direction: ltr;
     margin: 0 auto;
     padding: 40px 0;
 }
@@ -163,7 +179,7 @@ header h1 {
     letter-spacing: 2px;
     /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
-    text-align: end;
+    text-align: start;
 }
 
 header h2 {
@@ -174,7 +190,13 @@ header h2 {
     padding-right: 10px;
     /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
-    text-align: end;
+    text-align: start;
+    text-orientation: upright;
+}
+
+header h2 .lead-circle {
+    display: inline-block;
+    transform: translateX(-0.05em);
 }
 
 
@@ -222,6 +244,16 @@ section h2 {
     position: relative;
     border-bottom: 2px solid var(--border-color);
     font-weight: 500;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-color);
 }
 
 section h3 {
@@ -293,11 +325,14 @@ section h3 {
     color: var(--primary-color);
     font-size: 1.3rem;
     border: 1px solid var(--primary-color);
+    transition: all 0.3s ease;
 }
 
 .social-links a:hover {
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
     color: white;
+    transform: translateY(-2px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -330,7 +365,7 @@ p {
     top: 5px;
     height: calc(100% - 10px);
     width: 2px;
-    background-color: var(--secondary-color);
+    background-color: var(--accent-color);
 }
 
 .timeline-item {
@@ -348,12 +383,13 @@ p {
     height: 16px;
     border-radius: 50%;
     background-color: white;
-    border: 3px solid var(--primary-color);
+    border: 3px solid var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(212, 161, 29, 0.1);
 }
 
 .timeline-year {
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-size: 1.1rem;
     margin-bottom: 5px;
 }
@@ -379,10 +415,12 @@ p {
     text-decoration: underline;
     text-decoration-color: rgba(26, 58, 95, 0.4);
     text-underline-offset: 3px;
+    transition: all 0.3s ease;
 }
 
 .timeline-content a:hover {
-    text-decoration-color: var(--primary-color);
+    color: var(--accent-color);
+    text-decoration-color: var(--accent-color);
 }
 
 /* 论文部分 */
@@ -411,15 +449,15 @@ p {
 .publication-link {
     display: inline-block;
     padding: 6px 12px;
-    color: var(--primary-color);
+    color: var(--accent-color);
     border-radius: 4px;
     font-weight: 500;
     margin-top: 10px;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--accent-color);
 }
 
 .publication-link:hover {
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
     color: white;
 }
 
@@ -494,6 +532,11 @@ footer {
     .nav-links a {
         padding: 12px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links a::after {
+        height: 3px;
+        background-color: var(--accent-color);
     }
     
     .mobile-toggle {
