@@ -652,6 +652,19 @@ footer {
     header h2 {
         font-size: 1.1rem;
     }
+
+    /* 新增：英文首页特调，避免 Quote 撑爆屏幕 */
+    .en h1 {
+        font-size: 1.8rem; /* 稍微缩小英文标题 */
+        margin-top: 10vh; /* 在手机上给顶部留出更多空间，防止也没遮挡 */
+    }
+
+    .en h2 {
+        font-size: 0.95rem; /* 显著缩小英文 Quote 字号 */
+        margin-top: 30px; /* 减小 Quote 之间的间距 */
+        padding: 0 15px; /* 增加左右内边距，防止贴边 */
+        line-height: 1.5; /* 优化行高 */
+    }
     
     .profile-info h3 {
         font-size: 1.6rem;
