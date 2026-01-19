@@ -205,6 +205,10 @@ header h2 .lead-circle {
   direction: ltr;
 }
 
+.h1-container.en {
+    margin-top: -80px;
+}
+
 .en h1{
     font-size: 3rem;
     margin-bottom: 15px;
@@ -645,6 +649,10 @@ footer {
         padding: 0 20px;
         margin-top: 40px;
     }
+
+    .h1-container.en {
+        margin-top: -60px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -667,7 +675,7 @@ footer {
     /* 手机端进一步缩小 */
     .en h1 {
         font-size: 1.8rem;
-        margin-top: 10vh; /* 恢复：保留视觉上的偏高效果 */
+        margin-top: 0;
     }
 
     .en h2 {
@@ -675,6 +683,10 @@ footer {
         padding: 0 15px;
         line-height: 1.5;
         margin-top: 25px; /* 收紧间距 */
+    }
+
+    .h1-container.en {
+        margin-top: -30px;
     }
     
     .profile-info h3 {
