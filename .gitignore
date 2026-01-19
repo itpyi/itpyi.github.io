@@ -19,3 +19,4 @@ pnpm-debug.log*
 *.swo
 .env
 .env.*
+assets/images/avatar.jpg
