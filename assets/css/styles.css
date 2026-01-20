@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
+
 :root {
-    --primary-color: #1a3a5f;
-    --secondary-color: #2c5d92;
+    --primary-color: #0f2e1d;
+    --secondary-color: #1e4b32;
     --accent-color: #d4a11d;
     --light-bg: #f8f9fa;
     --dark-text: #333;
@@ -133,22 +135,7 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            rgba(255, 255, 255, 0.04) 0px,
-            rgba(255, 255, 255, 0.04) 1px,
-            rgba(255, 255, 255, 0) 1px,
-            rgba(255, 255, 255, 0) 24px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.035) 0px,
-            rgba(255, 255, 255, 0.035) 1px,
-            rgba(255, 255, 255, 0) 1px,
-            rgba(255, 255, 255, 0) 24px
-        ),
-        linear-gradient(135deg, var(--primary-color), #0a2540);
+    background: linear-gradient(135deg, var(--primary-color), #05110a);
     color: var(--light-text);
     text-align: center;
     padding: 30px 20px;
@@ -214,17 +201,18 @@ header h2 .lead-circle {
     margin-bottom: 15px;
     font-weight: 400;
     letter-spacing: 2px;
-    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Fredericka the Great', cursive, sans-serif;
     text-align: center;
     margin-left: 0;
 }
 
 .en h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 300;
     /* opacity: 0.9; */
     margin-top: 50px; /* 调整间距 */
-    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Playwrite GB S', cursive, sans-serif;
+    /* font-style: italic; */
     text-align: center;
 }
 
@@ -241,47 +229,47 @@ header h2 .lead-circle {
 
 /* 延迟反转淡入动画 */
 .fade-in-1 {
-    animation: fadeIn 1.5s ease-in forwards;
+    animation: fadeIn 0.5s ease-in forwards;
     opacity: 0;
 }
 
 .fade-in-2 {
-    animation: fadeIn 1.5s ease-in forwards;
+    animation: fadeIn 0.5s ease-in forwards;
     opacity: 0;
-    animation-delay: 1.2s; /* 中文版第二句出现快一点 */
+    animation-delay: 0.2s; /* 中文版第二句出现快一点 */
 }
 
 /* 英文版特供：需要更长的停顿来制造反转幽默 */
 /* 修改：英文版 fade-in-2 现在是第一句 Quote，让它紧跟标题出来，或者稍微慢一点点 */
 .en .fade-in-2 {
-    animation-delay: 1.2s; /* 和中文节奏保持一致，标题出完出第一句 */
+    animation-delay: 0.4s; /* 和中文节奏保持一致，标题出完出第一句 */
 }
 
 /* 修改：英文版 fade-in-3 现在是反转句，需要长延迟 */
 .en .fade-in-3 {
-    animation-delay: 4.5s; /* 1.2s (上一句开始) + 1.5s (上一句淡入) + 阅读时间 -> 设为 4.5s 左右比较稳 */
+    animation-delay: 1.5s; /* 1.2s (上一句开始) + 1.5s (上一句淡入) + 阅读时间 -> 设为 4.5s 左右比较稳 */
 }
 
 .fade-in-3 {
-    animation: fadeIn 1.5s ease-in forwards;
+    animation: fadeIn 0.5s ease-in forwards;
     opacity: 0;
-    animation-delay: 2.4s;
+    animation-delay: 0.6s;
 }
 
 .fade-in-4 {
-    animation: fadeIn 1.5s ease-in forwards;
+    animation: fadeIn 0.5s ease-in forwards;
     opacity: 0;
-    animation-delay: 3.6s;
+    animation-delay: 0.8s;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px); /* 稍微从下方升起，增加动感 */
+        /* transform: translateY(20px); */ /* Remove upward motion for blackboard theme */
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        /* transform: translateY(0); */
     }
 }
 
