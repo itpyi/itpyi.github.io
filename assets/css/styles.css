@@ -354,11 +354,11 @@ section h2::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     color: var(--primary-color);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     border: 1px solid var(--primary-color);
     transition: all 0.3s ease;
 }
@@ -448,7 +448,7 @@ p {
 
 /* 論文列表（简洁风格，用于主页） */
 .pub-list {
-    list-style: decimal;
+    list-style: disc;
     padding-left: 1.5em;
     margin: 0;
 }
@@ -493,7 +493,7 @@ p {
 }
 
 .list-link:hover {
-    opacity: 0.75;
+    color: var(--primary-color);
 }
 
 /* 页脚 */
@@ -626,12 +626,6 @@ footer {
 
     .h1-container.en {
         margin-top: -30px;
-    }
-    
-    .social-links a {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
     }
     
     .edu-item {
