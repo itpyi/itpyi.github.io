@@ -15,6 +15,25 @@ if (mobileToggle && navLinks) {
     });
 }
 
+// 滚动时高亮当前导航链接
+const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+if (navAnchors.length > 0) {
+    const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navAnchors.forEach(a => {
+                    a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+                });
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    document.querySelectorAll('section[id]').forEach(section => {
+        sectionObserver.observe(section);
+    });
+}
+
 // 平滑滚动
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {

@@ -41,7 +41,7 @@ a {
 
 a:focus-visible,
 button:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline: 2px solid var(--accent-color);
     outline-offset: 3px;
 }
 
@@ -112,7 +112,8 @@ img {
     transition: width 0.3s ease;
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
     width: 100%;
 }
 
@@ -308,6 +309,14 @@ section h2::after {
     font-weight: 600;
     margin-bottom: 10px;
     color: var(--primary-color);
+}
+
+/* 旁注/注释段落 */
+.note {
+    font-size: 0.9rem;
+    color: var(--gray-text);
+    font-style: italic;
+    margin-top: 20px;
 }
 
 /* 研究兴趣小标题 */
