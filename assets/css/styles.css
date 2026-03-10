@@ -286,7 +286,7 @@ section {
 }
 
 section h2 {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     color: var(--primary-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -344,11 +344,26 @@ section h3 {
     text-align: center;
 }
 
-.profile-info h3 {
-    font-size: 1.6rem;
+.profile-name {
+    font-size: 1.1rem;
+    font-weight: 600;
     margin-bottom: 10px;
     color: var(--primary-color);
-    font-weight: 500;
+}
+
+/* 研究兴趣小标题 */
+.research-topic {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin-top: 20px;
+    margin-bottom: 6px;
+}
+
+/* 论文链接分隔符 */
+.pub-sep {
+    color: var(--gray-text);
+    margin: 0 2px;
 }
 
 .profile-info p {
@@ -410,77 +425,46 @@ p {
 
 
 
-/* 履历部分 */
-.timeline {
-    position: relative;
-    padding-left: 30px;
-    margin-top: 40px;
+/* 教育背景部分（简洁列表） */
+.edu-list {
+    margin-top: 10px;
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 5px;
-    height: calc(100% - 10px);
-    width: 2px;
-    background-color: var(--accent-color);
+.edu-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 2px 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    align-items: start;
 }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
-    padding-left: 30px;
+.edu-item:last-child {
+    border-bottom: none;
 }
 
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: white;
-    border: 3px solid var(--accent-color);
-    box-shadow: 0 0 0 2px rgba(212, 161, 29, 0.1);
+.edu-year {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    padding-top: 3px;
+    white-space: nowrap;
 }
 
-.timeline-year {
-    font-weight: 700;
-    color: var(--accent-color);
-    font-size: 1.1rem;
-    margin-bottom: 5px;
+.edu-institution {
+    font-weight: 600;
+    margin-bottom: 4px;
 }
 
-.timeline-content {
-    padding: 15px 0;
+.edu-details p {
+    margin-bottom: 4px;
+    font-size: 1rem;
+    color: #444;
 }
 
-.timeline-content h3 {
-    font-size: 1.3rem;
-    margin-top: 0px;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-.timeline-content p {
+.edu-details p:last-child {
     margin-bottom: 0;
-    /* line-height: 1.6; */
 }
 
-.timeline-content a {
-    color: var(--primary-color);
-    text-decoration: underline;
-    text-decoration-color: rgba(26, 58, 95, 0.4);
-    text-underline-offset: 3px;
-    transition: all 0.3s ease;
-}
-
-.timeline-content a:hover {
-    color: var(--accent-color);
-    text-decoration-color: var(--accent-color);
-}
 
 .link-body {
     color: var(--primary-color);
@@ -531,6 +515,49 @@ p {
 .publication-link:hover {
     background-color: var(--accent-color);
     color: white;
+}
+
+/* 论文列表（简洁风格，用于主页） */
+.pub-list {
+    list-style: decimal;
+    padding-left: 1.5em;
+    margin: 0;
+}
+
+.pub-list-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.6;
+}
+
+.pub-list-item:last-child {
+    border-bottom: none;
+}
+
+.pub-list-title {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.pub-list-meta {
+    color: var(--gray-text);
+    font-size: 0.95em;
+    margin-bottom: 4px;
+}
+
+.pub-list-links {
+    font-size: 0.9em;
+}
+
+.pub-list-link {
+    color: var(--accent-color);
+    text-decoration: underline;
+    margin-right: 10px;
+}
+
+.pub-list-link:hover {
+    opacity: 0.75;
 }
 
 /* 页脚 */
@@ -624,7 +651,7 @@ footer {
     }
     
     section h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     /* 新增：在平板和大手机尺寸就提前缩小英文 Quote */
@@ -677,12 +704,8 @@ footer {
         margin-top: -30px;
     }
     
-    .profile-info h3 {
-        font-size: 1.6rem;
-    }
-    
     section h2 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
     
     .social-links a {
@@ -691,7 +714,7 @@ footer {
         font-size: 1.2rem;
     }
     
-    .timeline {
-        padding-left: 20px;
+    .edu-item {
+        grid-template-columns: 90px 1fr;
     }
 }
