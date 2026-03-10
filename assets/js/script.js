@@ -1,19 +1,11 @@
-// 移动端导航切换
-const mobileToggle = document.getElementById('mobileToggle');
-const navLinks = document.getElementById('navLinks');
-
-if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-
-    // 点击导航链接时关闭菜单
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-        });
-    });
-}
+// 移动端导航切换（使用事件委托，兼容异步注入的子页面导航栏）
+document.addEventListener('click', e => {
+    if (e.target.closest('#mobileToggle')) {
+        document.getElementById('navLinks')?.classList.toggle('active');
+    } else if (e.target.closest('.nav-links a')) {
+        document.getElementById('navLinks')?.classList.remove('active');
+    }
+});
 
 // 滚动时高亮当前导航链接
 const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
