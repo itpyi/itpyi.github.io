@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
 
 :root {
     --primary-color: #0f2e1d;
@@ -290,6 +290,7 @@ section h2::after {
 .profile-img {
     display: grid;
     justify-content: center;
+    row-gap: 20px;
 }
 
 .profile-img img {
@@ -339,7 +340,7 @@ section h2::after {
 .profile-info p {
     font-size: 1rem;
     color: var(--gray-text);
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .social-links {
@@ -384,8 +385,7 @@ p {
 
 .body-list {
     margin: 0 0 15px;
-    padding-left: 0;
-    list-style-position: inside;
+    padding-left: 1.5em;
 }
 
 .body-list li {
