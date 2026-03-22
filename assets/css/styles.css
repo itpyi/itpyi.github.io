@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
     --primary-color: #0f2e1d;
@@ -201,7 +203,7 @@ header h2 .lead-circle {
     margin-bottom: 15px;
     font-weight: 400;
     letter-spacing: 2px;
-    font-family: 'Fredericka the Great', cursive, sans-serif;
+    font-family: 'Cinzel', serif;
     text-align: center;
     margin-left: 0;
 }
@@ -211,7 +213,7 @@ header h2 .lead-circle {
     font-weight: 300;
     /* opacity: 0.9; */
     margin-top: 50px; /* 调整间距 */
-    font-family: 'Playwrite GB S', cursive, sans-serif;
+    font-family: 'Cinzel', serif;
     /* font-style: italic; */
     text-align: center;
 }
