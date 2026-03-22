@@ -18,7 +18,7 @@
             </div>
             <div class="nav-links" id="navLinks">
                 <a href="#research">研究兴趣</a>
-                <a href="#experience">个人履历</a>
+                <a href="#education">教育背景</a>
                 <a href="#publication">学术论文</a>
                 <a href="#miscellaneous">其他</a>
                 <a href="https://itpyi.site/blog">博客</a>
@@ -49,7 +49,7 @@
                 <div class="profile-img">
                     <img src="assets/images/avatar.svg" alt="王逸飞">
                     <div class="profile-info">
-                    <h3>王逸飞</h3>
+                    <div class="profile-name">王逸飞</div>
                     <p>理论物理学博士研究生<br>清华大学高等研究院</p>
                     <div class="social-links">
                         <a href="mailto:wang_yff@outlook.com" aria-label="Email">
@@ -73,48 +73,48 @@
         <!-- 研究兴趣 -->
         <section id="research">
             <h2>研究兴趣</h2>
-                <h3>容错量子计算</h3>
+                <p class="research-topic">容错量子计算</p>
                 <p>容错量子计算旨在基于有噪声的硬件实现实用的量子逻辑线路，这里仍有很多值得探究的理论和工程问题。工程问题包括和实际平台结合，设计更高效的容错方案，例如如何更高效地制备精确的魔态。理论问题包括研究纠错码内部深刻的数学结构和物理图像，例如纠错码参数与同调代数、代数几何结构的联系，例如纠错码的拓扑纠缠熵等。</p>
                 <p>对于该主题的思考，可参阅博客有关<a class="link-body" href="https://itpyi.github.io/blog/tags/%E9%87%8F%E5%AD%90%E7%BA%A0%E9%94%99-quantum-error-correction/" target="_blank" rel="noopener">量子纠错</a>的文章。</p>
-                <h3>拓扑量子物态</h3>
+                <p class="research-topic">拓扑量子物态</p>
                 <p>物理学中很多深刻的现象源自系统的拓扑性质。拓扑量子物态最迷人的性质在于，一些全局的拓扑性质精确地决定了量子态基态和激发的结构，使系统展现出奇特的纠缠和准粒子性质。这些性质从物理上看，是从多体相互作用演生出的新奇物理，从量子信息的视角看，也能给容错量子计算提供很多启发。</p>
-                <h3>量子模拟</h3>
+                <p class="research-topic">量子模拟</p>
                 <p>量子模拟旨在在高度可控的原子-激光平台上研究物理模型。能够精确地操控单个原子并调节原子间相互作用是人类现代科学最耀眼的成就之一。精确可调的原子-光系统让我们可以在更纯净的条件下模拟很多量子模型，光镊-原子阵列体系也是当下量子计算最有竞争力的实现方案之一。</p>
         </section>
         
-        <!-- 个人履历 -->
-        <section id="experience">
-            <h2>个人履历</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-year">2022 - 至今</div>
-                    <div class="timeline-content">
-                        <h3>清华大学高等研究院</h3>
+        <!-- 教育背景 -->
+        <section id="education">
+            <h2>教育背景</h2>
+            <div class="edu-list">
+                <div class="edu-item">
+                    <div class="edu-year">2022 – 至今</div>
+                    <div class="edu-details">
+                        <div class="edu-institution">清华大学高等研究院</div>
                         <p>理论物理学博士研究生</p>
                         <p>导师：顾颖飞研究员</p>
                         <p>研究方向：凝聚态理论、量子计算</p>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2018 - 2022</div>
-                    <div class="timeline-content">
-                        <h3>北京大学物理学院</h3>
+                <div class="edu-item">
+                    <div class="edu-year">2018 – 2022</div>
+                    <div class="edu-details">
+                        <div class="edu-institution">北京大学物理学院</div>
                         <p>物理学学士</p>
                         <p>师从陈徐宗教授研究基于光晶格体系的量子模拟</p>
                         <p>毕业论文：<a class="link-body" href="assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf" target="_blank" rel="noopener">格点规范理论的量子模拟</a></p>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2012 - 2018</div>
-                    <div class="timeline-content">
-                        <h3>陕西师范大学附属中学</h3>
+                <div class="edu-item">
+                    <div class="edu-year">2012 – 2018</div>
+                    <div class="edu-details">
+                        <div class="edu-institution">陕西师范大学附属中学</div>
                         <p>初中和高中</p>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2006 - 2012</div>
-                    <div class="timeline-content">
-                        <h3>西安市临潼区陕缝学校</h3>
+                <div class="edu-item">
+                    <div class="edu-year">2006 – 2012</div>
+                    <div class="edu-details">
+                        <div class="edu-institution">西安市临潼区陕缝学校</div>
                         <p>小学</p>
                     </div>
                 </div>
@@ -124,39 +124,41 @@
         <!-- 学术论文 -->
         <section id="publication">
             <h2>学术论文</h2>
-            <div class="publication-item">
-                <h3>Certifying Quantum States with Uniform Measurements</h3>
-                <div class="publication-authors">Liang Mao, <b>WY</b>, Yingfei Gu, Chengshu Li</div>
-                <div class="publication-journal"><i>	arXiv:2508.09259 [quant-ph]</i> </div>
-                <a href="https://arxiv.org/abs/2508.09259" class="publication-link" target="_blank">arXiv 版本</a>
-            </div>
-            <div class="publication-item">
-                <h3>Magic teleportation with generalized lattice surgery</h3>
-                <div class="publication-authors"><b>WY</b>, Yingfei Gu</div>
-                <div class="publication-journal"><i>	arXiv:2503.19758 [quant-ph]</i> </div>
-                <a href="https://arxiv.org/abs/2503.19758" class="publication-link" target="_blank">arXiv 版本</a>
-                <a href="https://github.com/itpyi/surface_magic" class="publication-link" target="_blank" rel="noopener">代码</a>
-            </div>
-            <div class="publication-item">
-                <h3>Efficient fault-tolerant implementations of non-Clifford gates with reconfigurable atom arrays</h3>
-                <div class="publication-authors"><b>WY</b>, Yixu Wang, Yu-An Chen, Wenjun Zhang, Tao Zhang, Jiazhong Hu, Wenlan Chen, Yingfei Gu, and Zi-Wen Liu</div>
-                <div class="publication-journal"><i>npj Quantum Information (2024)</i> </div>
-                <a href="https://www.nature.com/articles/s41534-024-00945-3" class="publication-link" target="_blank">期刊版本</a>
-                <a href="https://arxiv.org/abs/2312.09111" class="publication-link" target="_blank">arXiv 版本</a>
-                <a href="https://github.com/itpyi/error_msd" class="publication-link" target="_blank" rel="noopener">代码</a>
-            </div>
+            <ol class="pub-list">
+                <li class="list-item">
+                    <span class="list-title">Certifying Quantum States with Uniform Measurements</span>
+                    <div class="list-meta">Liang Mao, <b>WY</b>, Yingfei Gu, Chengshu Li &mdash; <i>arXiv:2508.09259 [quant-ph]</i></div>
+                    <div class="list-links">
+                        <a href="https://arxiv.org/abs/2508.09259" class="list-link" target="_blank">arXiv 版本</a>
+                    </div>
+                </li>
+                <li class="list-item">
+                    <span class="list-title">Magic teleportation with generalized lattice surgery</span>
+                    <div class="list-meta"><b>WY</b>, Yingfei Gu &mdash; <i>arXiv:2503.19758 [quant-ph]</i></div>
+                    <div class="list-links">
+                        <a href="https://arxiv.org/abs/2503.19758" class="list-link" target="_blank">arXiv 版本</a><span class="pub-sep"> · </span><a href="https://github.com/itpyi/surface_magic" class="list-link" target="_blank" rel="noopener">代码</a>
+                    </div>
+                </li>
+                <li class="list-item">
+                    <span class="list-title">Efficient fault-tolerant implementations of non-Clifford gates with reconfigurable atom arrays</span>
+                    <div class="list-meta"><b>WY</b>, Yixu Wang, Yu-An Chen, Wenjun Zhang, Tao Zhang, Jiazhong Hu, Wenlan Chen, Yingfei Gu, and Zi-Wen Liu &mdash; <i>npj Quantum Information (2024)</i></div>
+                    <div class="list-links">
+                        <a href="https://www.nature.com/articles/s41534-024-00945-3" class="list-link" target="_blank">期刊版本</a><span class="pub-sep"> · </span><a href="https://arxiv.org/abs/2312.09111" class="list-link" target="_blank">arXiv 版本</a><span class="pub-sep"> · </span><a href="https://github.com/itpyi/error_msd" class="list-link" target="_blank" rel="noopener">代码</a>
+                    </div>
+                </li>
+            </ol>
         </section>
 
         <!-- 其他 -->
         <section id="miscellaneous">
             <h2>其他内容</h2>
-                <h3><a href="opensource.html">🔗开源项目与资源</a></h3>
+                <p><a class="link-body" href="opensource.html"><strong>🔗开源项目与资源</strong></a></p>
                 <p>包括如下内容：</p>
                 <ul class="body-list">
                     <li>Typst 排版系统的模板和包。</li>
                     <li>已发表论文中用到的代码和数据。</li>
                 </ul>
-                <h3><a href="about.html">🔗关于本站</a></h3>
+                <p><a class="link-body" href="about.html"><strong>🔗关于本站</strong></a></p>
                 <p>关于本站的内容的一些个人化评论。</p>
         </section>
     </main>

@@ -4,10 +4,9 @@
 
 :root {
     --primary-color: #0f2e1d;
-    --secondary-color: #1e4b32;
     --accent-color: #C05746;
-    --light-bg: #f8f9fa;
     --dark-text: #333;
+    --body-text: #444;
     --light-text: #fff;
     --gray-text: #6c757d;
     --border-color: #eaeaea;
@@ -20,11 +19,10 @@
 }
 
 @font-face {
-  font-family: 'CustomFont';
+    font-family: 'CustomFont';
     src: url('../fonts/jhlst-subset.woff2') format('woff2');
-  /* src: url('../fonts/title2.woff') format('truetype'); */
-  font-style: normal;
-  font-weight: normal;
+    font-style: normal;
+    font-weight: normal;
     font-display: swap;
 }
 
@@ -45,7 +43,7 @@ a {
 
 a:focus-visible,
 button:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline: 2px solid var(--accent-color);
     outline-offset: 3px;
 }
 
@@ -116,7 +114,8 @@ img {
     transition: width 0.3s ease;
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
     width: 100%;
 }
 
@@ -140,8 +139,7 @@ header {
     background: linear-gradient(135deg, var(--primary-color), #05110a);
     color: var(--light-text);
     text-align: center;
-    padding: 30px 20px;
-    padding-top: 100px;
+    padding: 100px 20px 30px;
 }
 
 
@@ -166,7 +164,6 @@ header h1 {
     margin-left: 30px;
     font-weight: 400;
     letter-spacing: 2px;
-    /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
     text-align: start;
 }
@@ -175,9 +172,8 @@ header h2 {
     font-size: 1.5rem;
     font-weight: 300;
     opacity: 0.9;
-    margin-top: 50px; /* 调整间距 */
+    margin-top: 50px;
     padding-right: 10px;
-    /* font-family: 'Noto Serif TC', serif; */
     font-family: 'CustomFont', serif;
     text-align: start;
     text-orientation: upright;
@@ -230,49 +226,23 @@ header h2 .lead-circle {
 }
 
 /* 延迟反转淡入动画 */
-.fade-in-1 {
+.fade-in-1, .fade-in-2, .fade-in-3, .fade-in-4 {
     animation: fadeIn 0.5s ease-in forwards;
     opacity: 0;
 }
 
-.fade-in-2 {
-    animation: fadeIn 0.5s ease-in forwards;
-    opacity: 0;
-    animation-delay: 0.2s; /* 中文版第二句出现快一点 */
-}
+/* 中文版延迟 */
+.fade-in-2 { animation-delay: 0.2s; }
+.fade-in-3 { animation-delay: 0.6s; }
+.fade-in-4 { animation-delay: 0.8s; }
 
 /* 英文版特供：需要更长的停顿来制造反转幽默 */
-/* 修改：英文版 fade-in-2 现在是第一句 Quote，让它紧跟标题出来，或者稍微慢一点点 */
-.en .fade-in-2 {
-    animation-delay: 0.4s; /* 和中文节奏保持一致，标题出完出第一句 */
-}
-
-/* 修改：英文版 fade-in-3 现在是反转句，需要长延迟 */
-.en .fade-in-3 {
-    animation-delay: 1.5s; /* 1.2s (上一句开始) + 1.5s (上一句淡入) + 阅读时间 -> 设为 4.5s 左右比较稳 */
-}
-
-.fade-in-3 {
-    animation: fadeIn 0.5s ease-in forwards;
-    opacity: 0;
-    animation-delay: 0.6s;
-}
-
-.fade-in-4 {
-    animation: fadeIn 0.5s ease-in forwards;
-    opacity: 0;
-    animation-delay: 0.8s;
-}
+.en .fade-in-2 { animation-delay: 0.4s; }
+.en .fade-in-3 { animation-delay: 1.5s; }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        /* transform: translateY(20px); */ /* Remove upward motion for blackboard theme */
-    }
-    to {
-        opacity: 1;
-        /* transform: translateY(0); */
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 /* 主要内容区域 */
@@ -288,7 +258,7 @@ section {
 }
 
 section h2 {
-    font-size: 2.2rem;
+    font-size: 1.5rem;
     color: var(--primary-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -307,14 +277,6 @@ section h2::after {
     background-color: var(--accent-color);
 }
 
-section h3 {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    margin-top: 20px;
-    color: var(--primary-color);
-    font-weight: 500;
-}
-
 /* 简介部分 */
 .profile-section {
     display: grid;
@@ -325,13 +287,14 @@ section h3 {
     padding: 20px 0;
 }
 
-.profile-section div{
+.profile-section div {
     direction: ltr;
 }
 
 .profile-img {
     display: grid;
     justify-content: center;
+    row-gap: 20px;
 }
 
 .profile-img img {
@@ -346,17 +309,42 @@ section h3 {
     text-align: center;
 }
 
-.profile-info h3 {
-    font-size: 1.6rem;
+.profile-name {
+    font-size: 1.1rem;
+    font-weight: 600;
     margin-bottom: 10px;
     color: var(--primary-color);
-    font-weight: 500;
+}
+
+/* 旁注/注释段落 */
+.note {
+    font-size: 0.9rem;
+    color: var(--gray-text);
+    font-style: italic;
+    margin-top: 20px;
+}
+
+/* 研究兴趣小标题 */
+.research-topic {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin-top: 28px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent-color);
+}
+
+/* 论文链接分隔符 */
+.pub-sep {
+    color: var(--gray-text);
+    margin: 0 2px;
 }
 
 .profile-info p {
     font-size: 1rem;
     color: var(--gray-text);
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .social-links {
@@ -370,11 +358,11 @@ section h3 {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     color: var(--primary-color);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     border: 1px solid var(--primary-color);
     transition: all 0.3s ease;
 }
@@ -395,15 +383,13 @@ section h3 {
 
 p {
     font-size: 1rem;
-    /* line-height: 1.6; */
     margin-bottom: 15px;
-    color: #444;
+    color: var(--body-text);
 }
 
 .body-list {
     margin: 0 0 15px;
-    padding-left: 0;
-    list-style-position: inside;
+    padding-left: 1.5em;
 }
 
 .body-list li {
@@ -412,82 +398,49 @@ p {
 
 
 
-/* 履历部分 */
-.timeline {
-    position: relative;
-    padding-left: 30px;
-    margin-top: 40px;
+/* 教育背景部分（简洁列表） */
+.edu-list {
+    margin-top: 10px;
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 5px;
-    height: calc(100% - 10px);
-    width: 2px;
-    background-color: var(--accent-color);
+.edu-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 2px 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    align-items: start;
 }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
-    padding-left: 30px;
+.edu-item:last-child {
+    border-bottom: none;
 }
 
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: white;
-    border: 3px solid var(--accent-color);
-    box-shadow: 0 0 0 2px rgba(212, 161, 29, 0.1);
+.edu-year {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    padding-top: 3px;
+    white-space: nowrap;
 }
 
-.timeline-year {
-    font-weight: 700;
-    color: var(--accent-color);
-    font-size: 1.1rem;
-    margin-bottom: 5px;
+.edu-institution {
+    font-weight: 600;
+    margin-bottom: 4px;
 }
 
-.timeline-content {
-    padding: 15px 0;
+.edu-details p {
+    margin-bottom: 4px;
 }
 
-.timeline-content h3 {
-    font-size: 1.3rem;
-    margin-top: 0px;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-.timeline-content p {
+.edu-details p:last-child {
     margin-bottom: 0;
-    /* line-height: 1.6; */
 }
 
-.timeline-content a {
-    color: var(--primary-color);
-    text-decoration: underline;
-    text-decoration-color: rgba(26, 58, 95, 0.4);
-    text-underline-offset: 3px;
-    transition: all 0.3s ease;
-}
-
-.timeline-content a:hover {
-    color: var(--accent-color);
-    text-decoration-color: var(--accent-color);
-}
 
 .link-body {
     color: var(--primary-color);
     text-decoration: underline;
-    text-decoration-color: rgba(26, 58, 95, 0.4);
+    text-decoration-color: color-mix(in srgb, var(--primary-color) 40%, transparent);
     text-underline-offset: 3px;
     transition: all 0.3s ease;
 }
@@ -497,57 +450,68 @@ p {
     text-decoration-color: var(--accent-color);
 }
 
-/* 论文部分 */
-.publication-item {
-    padding: 20px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color); /* 统一用变量 */
+/* 論文列表（简洁风格，用于主页） */
+.pub-list {
+    list-style: disc;
+    padding-left: 1.5em;
+    margin: 0;
 }
 
-.publication-item h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    font-weight: 500;
+/* 开源项目列表（用于 opensource.html） */
+.proj-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.publication-authors {
-    /* font-style: italic; */
-    color: var(--gray-text);
-    margin-bottom: 10px;
+/* 通用条目样式（pub-list 和 proj-list 共用） */
+.list-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.6;
 }
 
-.publication-journal {
-    margin-bottom: 10px;
+.list-item:last-child {
+    border-bottom: none;
 }
 
-.publication-link {
-    display: inline-block;
-    padding: 6px 12px;
+.list-title {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.list-meta {
+    color: var(--body-text);
+    margin-bottom: 4px;
+}
+
+.list-links {
+    font-size: 0.95em;
+}
+
+.list-link {
     color: var(--accent-color);
-    border-radius: 4px;
-    font-weight: 500;
-    margin-top: 10px;
-    border: 1px solid var(--accent-color);
+    text-decoration: underline;
+    margin-right: 10px;
 }
 
-.publication-link:hover {
-    background-color: var(--accent-color);
-    color: white;
+.list-link:hover {
+    color: var(--primary-color);
 }
 
 /* 页脚 */
 footer {
     background-color: var(--primary-color);
     color: var(--light-text);
-    padding: 40px 0; /* 修改 padding，左右留给内部容器控制 */
-    /* text-align: center; */ /* 移除居中 */
+    padding: 40px 0;
 }
 
 .footer-content {
-    max-width: 900px; /* 与 main 保持一致 */
+    max-width: 900px;
     margin: 0 auto;
-    padding: 0 20px; /* 与 main 左右 padding 保持一致 */
-    text-align: left; /* 左对齐 */
+    padding: 0 20px;
+    text-align: left;
 }
 
 .footer-content p { 
@@ -559,19 +523,12 @@ footer {
 }
 
 .copyright {
-    /* margin-top: 30px; */
-    /* padding-top: 20px; */
-    /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
     font-size: 0.9rem;
     opacity: 0.7;
 }
 
 /* 响应式设计 */
 @media (max-width: 992px) {
-    header h1 {
-        font-size: 3rem;
-    }
-    
     header h2 {
         font-size: 1.5rem;
     }
@@ -625,10 +582,6 @@ footer {
         font-size: 1.3rem;
     }
     
-    section h2 {
-        font-size: 1.8rem;
-    }
-
     /* 新增：在平板和大手机尺寸就提前缩小英文 Quote */
     .en h1 {
         font-size: 2.2rem; /* 稍微缩小 */
@@ -679,21 +632,7 @@ footer {
         margin-top: -30px;
     }
     
-    .profile-info h3 {
-        font-size: 1.6rem;
-    }
-    
-    section h2 {
-        font-size: 1.6rem;
-    }
-    
-    .social-links a {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-    
-    .timeline {
-        padding-left: 20px;
+    .edu-item {
+        grid-template-columns: 90px 1fr;
     }
 }
