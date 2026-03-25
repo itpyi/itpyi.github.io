@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
+/* 1. 引入 Google Fonts 的 霞鹜文楷 (400正体) */
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap');
+
 
 :root {
     --primary-color: #0f2e1d;
@@ -52,6 +55,17 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+
+/* 2. 设置 em 样式 */
+em {
+  /* 优先西文默认衬线斜体，后接霞鹜文楷 */
+  font-family: "EB Garamond", "Times New Roman", "LXGW WenKai TC", serif;
+  font-style: italic;
+  font-synthesis: none;
+}
+
+
 
 /* 导航栏样式 */
 .topnav {
@@ -498,6 +512,34 @@ p {
 
 .list-link:hover {
     color: var(--primary-color);
+}
+
+/* 书单列表（用于 booklist.html） */
+.book-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.book-item {
+    padding-left: 2em;
+    text-indent: -2em;
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: var(--body-text);
+}
+
+.book-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .book-item {
+        padding-left: 1.5em;
+        text-indent: -1.5em;
+        font-size: 0.95rem;
+    }
 }
 
 /* 页脚 */
