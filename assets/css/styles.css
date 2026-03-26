@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
 /* 1. 引入 Google Fonts 的 霞鹜文楷 (400正体) */
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Charis+SIL:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+SC:wght@500&family=Noto+Serif+TC:wght@500&display=swap');
 
 :root {
     --primary-color: #0f2e1d;
@@ -60,7 +60,7 @@ img {
 /* 2. 设置 em 样式 */
 em {
   /* 优先西文默认衬线斜体，后接霞鹜文楷 */
-  font-family: "EB Garamond", "Times New Roman", "LXGW WenKai TC", serif;
+  font-family: "Charis SIL", "Times New Roman", "LXGW WenKai TC", serif;
   font-style: italic;
   font-synthesis: none;
 }
@@ -527,6 +527,7 @@ p {
     margin-bottom: 15px;
     line-height: 1.6;
     color: var(--body-text);
+    font-family: "Charis SIL", "Noto Serif SC", "Noto Serif TC", serif;
 }
 
 .book-item:last-child {
