@@ -53,8 +53,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // 页脚注入（统一维护）
 const footerElement = document.getElementById('siteFooter');
 if (footerElement) {
-    const footerLang = footerElement.dataset.footer || 'zh';
-    const footerPath = `assets/partials/footer-${footerLang}.html`;
+    const footerPath = 'assets/partials/footer.html';
     fetch(footerPath)
         .then(response => response.text())
         .then(html => {
@@ -68,9 +67,8 @@ if (footerElement) {
 // 子页面导航栏注入（统一维护）
 const subnavElement = document.getElementById('siteSubnav');
 if (subnavElement) {
-    const subnavLang = subnavElement.dataset.subnav || 'zh';
     const subnavTitle = subnavElement.dataset.subnavTitle || '';
-    const subnavPath = `assets/partials/subnav-${subnavLang}.html`;
+    const subnavPath = 'assets/partials/subnav.html';
     fetch(subnavPath)
         .then(response => response.text())
         .then(html => {
@@ -80,3 +78,196 @@ if (subnavElement) {
             // 保持静默，避免影响页面其他功能
         });
 }
+
+// ========================================
+// Language Switcher Functionality
+// ========================================
+
+// Toggle language menu visibility
+document.addEventListener('click', e => {
+    const langButton = e.target.closest('.lang-button');
+    const langSwitcher = e.target.closest('.lang-switcher');
+    
+    if (langButton) {
+        // Toggle the dropdown menu for this switcher
+        const switcher = langButton.closest('.lang-switcher');
+        const isActive = switcher.classList.contains('active');
+        
+        // Close all other open menus
+        document.querySelectorAll('.lang-switcher.active').forEach(s => {
+            if (s !== switcher) s.classList.remove('active');
+        });
+        
+        // Toggle current menu
+        switcher.classList.toggle('active', !isActive);
+    } else if (!langSwitcher) {
+        // Click outside - close all menus
+        document.querySelectorAll('.lang-switcher.active').forEach(s => {
+            s.classList.remove('active');
+        });
+    }
+});
+
+// Handle language menu item clicks
+document.addEventListener('click', e => {
+    const menuItem = e.target.closest('.lang-menu li');
+    if (!menuItem) return;
+    
+    const targetLang = menuItem.dataset.lang;
+    if (!targetLang) return;
+    
+    // Find the parent section
+    const section = menuItem.closest('.lang-switchable');
+    if (!section) return;
+    
+    // Update menu active state
+    const menu = menuItem.closest('.lang-menu');
+    menu.querySelectorAll('li').forEach(li => {
+        li.classList.toggle('active', li === menuItem);
+    });
+    
+    // Switch content visibility
+    section.querySelectorAll('.lang-content').forEach(content => {
+        if (content.dataset.lang === targetLang) {
+            content.classList.add('active');
+            content.style.display = 'block';
+        } else {
+            content.classList.remove('active');
+            content.style.display = 'none';
+        }
+    });
+    
+    // Switch h2 title visibility
+    section.querySelectorAll('.section-header h2').forEach(h2 => {
+        if (h2.dataset.lang === targetLang) {
+            h2.style.display = 'block';
+        } else {
+            h2.style.display = 'none';
+        }
+    });
+    
+    // Close the menu
+    menuItem.closest('.lang-switcher').classList.remove('active');
+});
+
+// ========================================
+// Global Language Switcher Functionality
+// ========================================
+
+// Function to switch global language
+function switchGlobalLanguage(targetLang) {
+    // 1. Update HTML lang attribute
+    document.documentElement.lang = targetLang === 'zh' ? 'zh-Hans' : 'en';
+    
+    // 2. Update meta description
+    const metaDescriptions = document.querySelectorAll('meta[name="description"]');
+    metaDescriptions.forEach(meta => {
+        if (meta.dataset.lang === targetLang) {
+            // Move this meta to be the active one by updating the first meta tag
+            const firstMeta = document.querySelector('meta[name="description"]');
+            if (firstMeta && meta.hasAttribute('content')) {
+                firstMeta.setAttribute('content', meta.getAttribute('content'));
+            }
+        }
+    });
+    
+    // 3. Update page title
+    const titleElements = document.querySelectorAll('head title[data-lang]');
+    titleElements.forEach(title => {
+        if (title.dataset.lang === targetLang) {
+            document.title = title.textContent;
+        }
+    });
+    
+    // 4. Switch all data-lang elements (except meta, title, and menu items)
+    document.querySelectorAll('[data-lang]').forEach(elem => {
+        // Skip meta and title tags as they're handled specially
+        if (elem.tagName === 'META' || elem.tagName === 'TITLE') return;
+        
+        // Skip language menu items (both section and global menus)
+        if (elem.tagName === 'LI' && (elem.closest('.lang-menu') || elem.closest('.global-lang-menu'))) return;
+        
+        if (elem.dataset.lang === targetLang) {
+            elem.style.display = '';
+        } else {
+            elem.style.display = 'none';
+        }
+    });
+    
+    // 5. Update all lang-switchable sections
+    document.querySelectorAll('.lang-switchable').forEach(section => {
+        // Check if this section has the target language
+        const hasTargetLang = section.querySelector(`.lang-content[data-lang="${targetLang}"]`);
+        const langToShow = hasTargetLang ? targetLang : 'zh'; // Fallback to Chinese if target lang not available
+        
+        // Switch content
+        section.querySelectorAll('.lang-content').forEach(content => {
+            if (content.dataset.lang === langToShow) {
+                content.classList.add('active');
+                content.style.display = 'block';
+            } else {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            }
+        });
+        
+        // Switch section header titles
+        section.querySelectorAll('.section-header h2').forEach(h2 => {
+            if (h2.dataset.lang === langToShow) {
+                h2.style.display = 'block';
+            } else {
+                h2.style.display = 'none';
+            }
+        });
+        
+        // Update section's language menu active state
+        section.querySelectorAll('.lang-menu li').forEach(li => {
+            li.classList.toggle('active', li.dataset.lang === langToShow);
+        });
+    });
+    
+    // 6. Update global language menu active state
+    document.querySelectorAll('.global-lang-menu li').forEach(li => {
+        li.classList.toggle('active', li.dataset.lang === targetLang);
+    });
+}
+
+// Toggle global language menu visibility
+document.addEventListener('click', e => {
+    const globalLangButton = e.target.closest('.global-lang-button');
+    const globalLangSwitcher = e.target.closest('.global-lang-switcher');
+    
+    if (globalLangButton) {
+        // Toggle the dropdown menu for global switcher
+        const switcher = globalLangButton.closest('.global-lang-switcher');
+        const isActive = switcher.classList.contains('active');
+        
+        // Close all other open menus (both global and section)
+        document.querySelectorAll('.global-lang-switcher.active, .lang-switcher.active').forEach(s => {
+            if (s !== switcher) s.classList.remove('active');
+        });
+        
+        // Toggle current menu
+        switcher.classList.toggle('active', !isActive);
+    } else if (!globalLangSwitcher) {
+        // Click outside - close global language menu
+        document.querySelectorAll('.global-lang-switcher.active').forEach(s => {
+            s.classList.remove('active');
+        });
+    }
+});
+
+// Handle global language menu item clicks
+document.addEventListener('click', e => {
+    const menuItem = e.target.closest('.global-lang-menu li');
+    if (!menuItem) return;
+    
+    const targetLang = menuItem.dataset.lang;
+    if (!targetLang) return;
+    
+    // Switch to the selected language
+    switchGlobalLanguage(targetLang);
+    
+    // Close the menu
+    menuItem.closest('.global-lang-switcher').classList.remove('active');
+});
