@@ -4,7 +4,7 @@
 # 用法：./font-subset.sh 输入字体.ttf [输出字体.woff2]
 
 # 设置需要保留的字符（复制您的文本到这里）
-TEXT="飛飛的個人主頁子曰君子不器孟子曰我知言我善養吾浩然之氣荀子曰君子能則寬容易直以開道人不能則恭敬繜絀以畏事人小人能則倨傲僻違以驕溢人不能則妬嫉怨誹以傾覆人故曰君子能則人榮學焉不能則人樂告之小人能則人賤學焉不能則人羞告之"
+TEXT="攬月閣子曰君子不器孟子曰我知言我善養吾浩然之氣荀子曰君子能則寬容易直以開道人不能則恭敬繜絀以畏事人小人能則倨傲僻違以驕溢人不能則妬嫉怨誹以傾覆人故曰君子能則人榮學焉不能則人樂告之小人能則人賤學焉不能則人羞告之"
 
 # 检查参数
 if [ $# -lt 1 ]; then
@@ -49,14 +49,34 @@ pyftsubset "$INPUT_FONT" \
 # 检查结果
 if [ $? -eq 0 ] && [ -f "$TEMP_FILE" ]; then
     mv "$TEMP_FILE" "$OUTPUT_FONT"
-    ORIG_SIZE=$(stat -c%s "$INPUT_FONT")
-    NEW_SIZE=$(stat -c%s "$OUTPUT_FONT")
+    
+    # 兼容 macOS 和 Linux 的 stat 命令
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        ORIG_SIZE=$(stat -f%z "$INPUT_FONT")
+        NEW_SIZE=$(stat -f%z "$OUTPUT_FONT")
+    else
+        ORIG_SIZE=$(stat -c%s "$INPUT_FONT")
+        NEW_SIZE=$(stat -c%s "$OUTPUT_FONT")
+    fi
+    
     RATIO=$((100 * NEW_SIZE / ORIG_SIZE))
+    
+    # 简单的字节格式化函数（兼容macOS）
+    format_size() {
+        local size=$1
+        if [ $size -ge 1048576 ]; then
+            echo "$((size / 1048576))MB"
+        elif [ $size -ge 1024 ]; then
+            echo "$((size / 1024))KB"
+        else
+            echo "${size}B"
+        fi
+    }
     
     echo "------------------------------------------------"
     echo "成功生成字体子集: $OUTPUT_FONT"
-    echo "原始大小: $(numfmt --to=iec $ORIG_SIZE)"
-    echo "子集大小: $(numfmt --to=iec $NEW_SIZE) (缩减 ${RATIO}%)"
+    echo "原始大小: $(format_size $ORIG_SIZE)"
+    echo "子集大小: $(format_size $NEW_SIZE) (缩减 ${RATIO}%)"
     echo "包含字符数: ${#TEXT}"
     echo "------------------------------------------------"
 else
