@@ -67,12 +67,16 @@ if (footerElement) {
 // 子页面导航栏注入（统一维护）
 const subnavElement = document.getElementById('siteSubnav');
 if (subnavElement) {
-    const subnavTitle = subnavElement.dataset.subnavTitle || '';
+    const subnavTitleZh = subnavElement.dataset.subnavTitleZh || subnavElement.dataset.subnavTitle || '';
+    const subnavTitleEn = subnavElement.dataset.subnavTitleEn || subnavElement.dataset.subnavTitle || '';
     const subnavPath = 'assets/partials/subnav.html';
     fetch(subnavPath)
         .then(response => response.text())
         .then(html => {
-            subnavElement.innerHTML = html.replace('{{TITLE}}', subnavTitle);
+            // Replace both language placeholders
+            html = html.replace('{{TITLE_ZH}}', subnavTitleZh);
+            html = html.replace('{{TITLE_EN}}', subnavTitleEn);
+            subnavElement.innerHTML = html;
         })
         .catch(() => {
             // 保持静默，避免影响页面其他功能
