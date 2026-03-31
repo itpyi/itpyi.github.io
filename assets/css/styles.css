@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredericka+the+Great&family=Playwrite+GB+S:wght@100..400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
 /* 1. 引入 Google Fonts 的 霞鹜文楷 (400正体) */
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&family=Noto+Serif+TC:wght@500&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Charis+SIL:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+SC:wght@500&family=Noto+Serif+TC:wght@500&display=swap');
 
 
@@ -63,7 +63,7 @@ img {
 /* 2. 设置 em 样式 */
 em {
   /* 优先西文默认衬线斜体，后接霞鹜文楷 */
-  font-family: "Charis SIL", "Times New Roman", "LXGW WenKai TC", serif;
+  font-family: "Noto Serif", "Times New Roman", "LXGW WenKai TC", serif;
   font-style: italic;
   font-synthesis: none;
 }
@@ -296,36 +296,7 @@ header h2 .lead-circle {
     margin-top: -80px;
 }
 
-.en h1{
-    font-size: 3rem;
-    margin-bottom: 15px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    font-family: 'Cinzel', serif;
-    text-align: center;
-    margin-left: 0;
-}
 
-.en h2 {
-    font-size: 1.3rem;
-    font-weight: 300;
-    /* opacity: 0.9; */
-    margin-top: 50px; /* 调整间距 */
-    font-family: 'Cinzel', serif;
-    /* font-style: italic; */
-    text-align: center;
-}
-
-.en h2.quote {
-    text-align: left;
-}
-
-.en h2.quote .quote-author {
-    display: block;
-    margin-top: 12px;
-    text-align: right;
-    font-weight: 400;
-}
 
 /* 延迟反转淡入动画 */
 .fade-in-1, .fade-in-2, .fade-in-3, .fade-in-4 {
@@ -338,9 +309,6 @@ header h2 .lead-circle {
 .fade-in-3 { animation-delay: 0.6s; }
 .fade-in-4 { animation-delay: 0.8s; }
 
-/* 英文版特供：需要更长的停顿来制造反转幽默 */
-.en .fade-in-2 { animation-delay: 0.4s; }
-.en .fade-in-3 { animation-delay: 1.5s; }
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -484,7 +452,7 @@ section h2::after {
 }
 
 p {
-    font-family: 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
+    font-family: 'Noto Serif', 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
     font-size: 1rem;
     margin-bottom: 15px;
     color: var(--body-text);
@@ -616,7 +584,7 @@ p {
     margin-bottom: 15px;
     line-height: 1.6;
     color: var(--body-text);
-    font-family: "Charis SIL", "Noto Serif SC", "Noto Serif TC", serif;
+    font-family: "Noto Serif", "Charis SIL", "Noto Serif SC", "Noto Serif TC", serif;
 }
 
 .book-item:last-child {
