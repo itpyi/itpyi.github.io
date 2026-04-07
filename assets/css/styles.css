@@ -553,6 +553,7 @@ p {
 }
 
 .list-meta {
+    font-family: 'Noto Serif', 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
     color: var(--body-text);
     margin-bottom: 4px;
 }
