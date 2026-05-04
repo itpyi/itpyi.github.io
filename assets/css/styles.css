@@ -572,6 +572,21 @@ p {
     color: var(--primary-color);
 }
 
+/* 普通正文列表样式（不影响带类名的专用列表） */
+main section ul:not([class]) {
+    list-style: disc;
+    padding-left: 1.5em;
+    margin: 0;
+}
+
+main section ul:not([class]) li {
+    margin-bottom: 8px;
+}
+
+main section ul:not([class]) li:last-child {
+    margin-bottom: 0;
+}
+
 /* 书单列表（用于 booklist.html） */
 .book-list {
     list-style: none;
