@@ -1,0 +1,851 @@
+{
+  "sections": [
+    {
+      "title": "2026",
+      "books": [
+        {
+          "title": "監視與懲罰：監獄的誕生",
+          "author": "米歇爾·傅柯著，王紹中譯，黃敏原審訂",
+          "year": "2020",
+          "publisher": "時報文化。讀完",
+          "readDate": "2026.5"
+        },
+        {
+          "title": "衣柜",
+          "author": "奥尔加·托卡尔丘克著，赵祯、崔晓静译",
+          "year": "2020",
+          "publisher": "浙江文艺出版社",
+          "readDate": "2026.5"
+        },
+        {
+          "title": "秦汉帝国：中国古代帝国之兴亡",
+          "author": "西嶋定生著，顾姗姗译",
+          "year": "2017",
+          "publisher": "社会科学文献出版社",
+          "readDate": "2026.4"
+        },
+        {
+          "title": "白日尽头",
+          "author": "燕妮·埃彭贝克著，胡烨译",
+          "year": "2023",
+          "publisher": "云南人民出版社",
+          "readDate": "2026.4"
+        },
+        {
+          "title": "昨日的世界",
+          "author": "斯蒂芬·茨威格著，吴秀杰译",
+          "year": "2024",
+          "publisher": "九州出版社",
+          "readDate": "2026.3"
+        },
+        {
+          "title": "深沉的玫瑰",
+          "author": "博尔赫斯著，王永年译",
+          "year": "2016",
+          "publisher": "上海译文出版社",
+          "readDate": "2026.3"
+        },
+        {
+          "title": "绚烂辉煌的世界帝国：隋唐时代",
+          "author": "气贺泽保规著，石晓军译",
+          "year": "2014",
+          "publisher": "广西师范大学出版社",
+          "readDate": "2026.3"
+        },
+        {
+          "title": "东晋门阀政治",
+          "author": "田余庆著",
+          "year": "2012",
+          "publisher": "北京大学出版社",
+          "readDate": "2026.2"
+        }
+      ]
+    },
+    {
+      "title": "2025",
+      "books": [
+        {
+          "title": "中國思想史",
+          "author": "錢穆著",
+          "year": "2011",
+          "publisher": "九州出版社",
+          "readDate": ""
+        },
+        {
+          "title": "魏晋南北朝",
+          "author": "川胜义雄著，林晓光译",
+          "year": "2022",
+          "publisher": "九州出版社",
+          "readDate": ""
+        },
+        {
+          "title": "黑毡上的北魏皇帝",
+          "author": "罗新著",
+          "year": "2021",
+          "publisher": "上海三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "The Righteous Mind: Why Good People Are Divided by Politics and Religion",
+          "author": "by Jonathan Haidt",
+          "year": "2012",
+          "publisher": "Pantheon Books",
+          "readDate": ""
+        },
+        {
+          "title": "中国文化与中国的兵",
+          "author": "雷海宗著",
+          "year": "2024",
+          "publisher": "天津人民出版社",
+          "readDate": ""
+        },
+        {
+          "title": "美国历史十五讲",
+          "author": "何顺果著",
+          "year": "2024",
+          "publisher": "北京大学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "雍正王朝之大义觉迷",
+          "author": "史景迁著，温洽溢、吴家恒译",
+          "year": "2011",
+          "publisher": "广西师范大学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "春秋左傳注（第一卷）",
+          "author": "楊伯峻注",
+          "year": "2009",
+          "publisher": "中華書局",
+          "readDate": ""
+        },
+        {
+          "title": "The book of goose",
+          "author": "by Yiyun Li",
+          "year": "2022",
+          "publisher": "Farrar, Straus and Giroux",
+          "readDate": ""
+        },
+        {
+          "title": "看不见的城市",
+          "author": "伊塔洛·卡尔维诺著，张密译",
+          "year": "2012",
+          "publisher": "译林出版社",
+          "readDate": ""
+        },
+        {
+          "title": "元朝理财记",
+          "author": "郭建龙著",
+          "year": "2024",
+          "publisher": "中信出版集团",
+          "readDate": ""
+        },
+        {
+          "title": "红星照耀中国",
+          "author": "埃德加·斯诺著，董乐山译",
+          "year": "2016",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "奥兰多",
+          "author": "弗吉尼亚·伍尔夫著，侯毅凌译",
+          "year": "2021",
+          "publisher": "天津人民出版社",
+          "readDate": ""
+        }
+      ]
+    },
+    {
+      "title": "2024",
+      "books": [
+        {
+          "title": "战争与和平",
+          "author": "列夫·托尔斯泰著，娄自良译",
+          "year": "2011",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "沙之书",
+          "author": "博尔赫斯著，王永年译",
+          "year": "2015",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "三星堆之惑",
+          "author": "许宏著",
+          "year": "2022",
+          "publisher": "郑州大学出版社",
+          "readDate": ""
+        }
+      ]
+    },
+    {
+      "title": "2023",
+      "books": [
+        {
+          "title": "失明症漫记",
+          "author": "若泽·萨拉马戈著，范维信译",
+          "year": "2014",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "乾隆时代的得与失",
+          "author": "张宏杰著",
+          "year": "2012",
+          "publisher": "湖南人民出版社",
+          "readDate": ""
+        },
+        {
+          "title": "紅色工程師的崛起：清華大學與中國技術官僚階級的起源",
+          "author": "安舟（Joel Andreas）著，何大明譯，董一格譯校",
+          "year": "2017",
+          "publisher": "香港中文大學出版社",
+          "readDate": ""
+        },
+        {
+          "title": "富种起源：人类是怎么变富的",
+          "author": "吴乐旻著，聂鸿飞译",
+          "year": "2023",
+          "publisher": "中信出版集团",
+          "readDate": ""
+        },
+        {
+          "title": "翦商：殷周之变与华夏新生",
+          "author": "李硕著",
+          "year": "2022",
+          "publisher": "广西师范大学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "汉语的本质和历史",
+          "author": "高本汉著，聂鸿飞译",
+          "year": "2010",
+          "publisher": "商务印书馆",
+          "readDate": ""
+        },
+        {
+          "title": "小径分叉的花园",
+          "author": "博尔赫斯著，王永年译",
+          "year": "2015",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "紅太陽是怎樣升起的：延安整風運動的來龍去脈",
+          "author": "高華著",
+          "year": "2000",
+          "publisher": "香港中文大學出版社",
+          "readDate": ""
+        },
+        {
+          "title": "波峰与波谷：秦汉魏晋南北朝的政治文明",
+          "author": "阎步克著",
+          "year": "2017",
+          "publisher": "北京大学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "台湾四百年",
+          "author": "许倬云著",
+          "year": "2013",
+          "publisher": "浙江人民出版社",
+          "readDate": ""
+        },
+        {
+          "title": "To Explain the World: The Discovery of Modern Science",
+          "author": "by Steven Weinberg",
+          "year": "2015",
+          "publisher": "HarperCollins Publishers",
+          "readDate": ""
+        }
+      ]
+    },
+    {
+      "title": "2018 - 2022",
+      "books": [
+        {
+          "title": "额尔古纳河右岸",
+          "author": "迟子建著",
+          "year": "2019",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "蛙",
+          "author": "莫言著",
+          "year": "2015",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "吉尔伽美什史诗",
+          "author": "拱玉书译注",
+          "year": "2021",
+          "publisher": "商务印书馆",
+          "readDate": ""
+        },
+        {
+          "title": "欧洲的宗教与虔诚：1215-1515",
+          "author": "罗伯特·诺布尔·斯旺森著，龙秀清、张日元译",
+          "year": "2012",
+          "publisher": "上海三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "文城",
+          "author": "余华著",
+          "year": "2021",
+          "publisher": "北京十月文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "金阁寺",
+          "author": "三岛由纪夫著，陈德文译",
+          "year": "2013",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "大师和玛格丽特",
+          "author": "布尔加科夫著，高惠群译",
+          "year": "2012",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "生死秦始皇",
+          "author": "辛德勇著",
+          "year": "2019",
+          "publisher": "中华书局",
+          "readDate": ""
+        },
+        {
+          "title": "天朝的崩溃 : 鸦片战争再研究（修订版）",
+          "author": "茅海建著",
+          "year": "2014",
+          "publisher": "生活·读书·新知三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "情书",
+          "author": "岩井俊二著，穆晓芳译",
+          "year": "2018",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "语言学的邀请",
+          "author": "塞缪尔·早川、艾伦·早川著，柳之元译",
+          "year": "2015",
+          "publisher": "北京大学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "优秀的绵羊",
+          "author": "威廉·德雷谢维奇著，林杰译",
+          "year": "2016",
+          "publisher": "九州出版社",
+          "readDate": ""
+        },
+        {
+          "title": "鄧小平時代",
+          "author": "傅高義著，馮克利譯",
+          "year": "2012",
+          "publisher": "香港中文大學出版社",
+          "readDate": ""
+        },
+        {
+          "title": "被掩埋的巨人",
+          "author": "石黑一雄著，周小进译",
+          "year": "2016",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "一句顶一万句",
+          "author": "刘震云著，馮克利譯",
+          "year": "2016",
+          "publisher": "长江文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "不存在的骑士",
+          "author": "伊塔洛·卡尔维诺著，吴正仪译",
+          "year": "2012",
+          "publisher": "译林出版社",
+          "readDate": ""
+        },
+        {
+          "title": "人面桃花",
+          "author": "格非著",
+          "year": "2012",
+          "publisher": "上海文艺出版社",
+          "readDate": ""
+        }
+      ]
+    },
+    {
+      "title": "2018 及以前",
+      "books": [
+        {
+          "title": "罪与罚",
+          "author": "陀思妥耶夫斯基著，朱海观、王汶译",
+          "year": "2016",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "岛",
+          "author": "维多利亚·希斯洛普著，陈新宇译",
+          "year": "2009",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "白鹿原",
+          "author": "陈忠实著",
+          "year": "2012",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "日瓦戈医生",
+          "author": "鲍里斯·帕斯捷尔纳克著，蓝英年、张秉衡译",
+          "year": "2006",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "雪国",
+          "author": "川端康成著，叶渭渠、唐月梅译",
+          "year": "2013",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "远山淡影",
+          "author": "石黑一雄著，张晓意译",
+          "year": "2011",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
+          "title": "双城记",
+          "author": "狄更斯著，孙法理译",
+          "year": "2012",
+          "publisher": "译林出版社",
+          "readDate": ""
+        },
+        {
+          "title": "杨振宁传（增订版）",
+          "author": "杨建邺著",
+          "year": "2016",
+          "publisher": "生活·读书·新知三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "爱因斯坦传",
+          "author": "沃尔特·艾萨克森著",
+          "year": "2014",
+          "publisher": "湖南科学技术出版社",
+          "readDate": ""
+        },
+        {
+          "title": "宇宙波澜：科技与人类前途的自省",
+          "author": "弗里曼·戴森著，王一操、左立华译",
+          "year": "2015",
+          "publisher": "重庆出版社",
+          "readDate": ""
+        },
+        {
+          "title": "西厢记",
+          "author": "王实甫著",
+          "year": "2013",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "三体（三部）",
+          "author": "刘慈欣著",
+          "year": "2008-2010",
+          "publisher": "重庆出版社",
+          "readDate": ""
+        },
+        {
+          "title": "一九八四",
+          "author": "乔治·奥威尔著，孙仲旭译",
+          "year": "2009",
+          "publisher": "上海三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "围城",
+          "author": "钱钟书著",
+          "year": "2013",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "蓝袍先生（中短篇集）",
+          "author": "陈忠实著",
+          "year": "2013",
+          "publisher": "江苏文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "爱情的三部曲：雾·雨·电",
+          "author": "巴金著",
+          "year": "1988",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "家",
+          "author": "巴金著",
+          "year": "1981",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "平凡的世界",
+          "author": "路遥著",
+          "year": "2012",
+          "publisher": "北京十月文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "病隙碎笔",
+          "author": "史铁生著",
+          "year": "2013",
+          "publisher": "湖南文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "苏东坡传",
+          "author": "林语堂著，张振玉译",
+          "year": "2016",
+          "publisher": "湖南文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "杜甫传",
+          "author": "冯至著",
+          "year": "2013",
+          "publisher": "湖南文艺出版社",
+          "readDate": ""
+        },
+        {
+          "title": "一個人的聖經",
+          "author": "高行健著",
+          "year": "1999",
+          "publisher": "聯經出版",
+          "readDate": ""
+        },
+        {
+          "title": "霍乱时期的爱情",
+          "author": "加西亚·马尔克斯著，杨玲译",
+          "year": "2012",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "百年孤独",
+          "author": "加西亚·马尔克斯著，范晔译",
+          "year": "2011",
+          "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "少年维特的烦恼",
+          "author": "歌德著，杨武能译",
+          "year": "1999",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "人类的群星闪耀时：十四篇历史特写",
+          "author": "茨威格著，舒昌善译",
+          "year": "2015",
+          "publisher": "生活·读书·新知三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "文字生涯",
+          "author": "让-保尔·萨特著，沈志明译",
+          "year": "2006",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "复活",
+          "author": "列夫·托尔斯泰著，汝龙译",
+          "year": "1979",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "大卫·科波菲尔",
+          "author": "狄更斯著，庄绎传译",
+          "year": "2003",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "童年 在人间 我的大学",
+          "author": "高尔基著，刘辽逸、楼适夷、陆风译",
+          "year": "2003",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "美丽新世界",
+          "author": "阿道司·赫胥黎著，张金凤译",
+          "year": "2015",
+          "publisher": "译林出版社",
+          "readDate": ""
+        },
+        {
+          "title": "公孫龍子懸解",
+          "author": "王琯撰",
+          "year": "1992",
+          "publisher": "中華書局",
+          "readDate": ""
+        },
+        {
+          "title": "中国哲学简史",
+          "author": "冯友兰著，赵复三译",
+          "year": "2009",
+          "publisher": "生活·读书·新知三联书店",
+          "readDate": ""
+        },
+        {
+          "title": "裴洞篇",
+          "author": "柏拉图著，王太庆译",
+          "year": "2013",
+          "publisher": "商务印书馆",
+          "readDate": ""
+        },
+        {
+          "title": "会饮篇",
+          "author": "柏拉图著，王太庆译",
+          "year": "2013",
+          "publisher": "商务印书馆",
+          "readDate": ""
+        },
+        {
+          "title": "西方哲学史",
+          "author": "伯特兰·罗素著，何兆武、李约瑟（上卷）、马元德（下卷）译",
+          "year": "2001",
+          "publisher": "商务印书馆",
+          "readDate": ""
+        },
+        {
+          "title": "数学大师：从芝诺到庞加莱",
+          "author": "埃里克·坦普尔·贝尔著，徐源译",
+          "year": "2012",
+          "publisher": "上海科技教育出版社",
+          "readDate": ""
+        },
+        {
+          "title": "西方的智慧",
+          "author": "伯特兰·罗素著，伯庸译",
+          "year": "2013",
+          "publisher": "电子工业出版社",
+          "readDate": ""
+        },
+        {
+          "title": "明朝那些事儿（七部）",
+          "author": "当年明月著",
+          "year": "2006-2009",
+          "publisher": "中国友谊出版公司、中国海关出版社",
+          "readDate": ""
+        },
+        {
+          "title": "沉沦（短篇小说集）",
+          "author": "郁达夫著",
+          "year": "2012",
+          "publisher": "中国工人出版社",
+          "readDate": ""
+        },
+        {
+          "title": "风流去",
+          "author": "鲍鹏山著",
+          "year": "2009",
+          "publisher": "中国青年出版社",
+          "readDate": ""
+        },
+        {
+          "title": "世界史",
+          "author": "海斯、穆恩、韦兰、卡尔顿·海斯著，费孝通、冰心、吴文藻译",
+          "year": "2011",
+          "publisher": "世界图书出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "九三年",
+          "author": "维克多·雨果著，马雯虹译",
+          "year": "2013",
+          "publisher": "北方文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "海上劳工",
+          "author": "维克多·雨果著，许钧译",
+          "year": "2012",
+          "publisher": "译林出版社",
+          "readDate": ""
+        },
+        {
+          "title": "巴黎圣母院",
+          "author": "维克多·雨果著，李玉民译",
+          "year": "2007",
+          "publisher": "中国少年出版社",
+          "readDate": ""
+        },
+        {
+          "title": "悲惨世界",
+          "author": "维克多·雨果著，李丹、方于译",
+          "year": "1992",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "白银时代",
+          "author": "王小波著",
+          "year": "1997",
+          "publisher": "花城出版社",
+          "readDate": ""
+        },
+        {
+          "title": "绿毛水怪",
+          "author": "王小波著",
+          "year": "2012",
+          "publisher": "上海文化出版社",
+          "readDate": ""
+        },
+        {
+          "title": "青春之歌",
+          "author": "杨沫著",
+          "year": "1958",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "名人传",
+          "author": "罗曼·罗兰，张冠尧、艾珉译",
+          "year": "2003",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "繁星·春水",
+          "author": "冰心著",
+          "year": "1998",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "骆驼祥子",
+          "author": "老舍著",
+          "year": "1995",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "茶馆",
+          "author": "老舍著",
+          "year": "2003",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "芙蓉镇",
+          "author": "古华著",
+          "year": "2006",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "城南旧事",
+          "author": "林海音著",
+          "year": "2000",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "格列佛游记",
+          "author": "斯威夫特著，张健译",
+          "year": "1979",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "海底两万里",
+          "author": "儒勒·凡尔纳著，赵克非译",
+          "year": "2004",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "水浒传",
+          "author": "施耐庵、罗贯中著",
+          "year": "1997",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "西游记",
+          "author": "吴承恩著",
+          "year": "1980",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        }
+      ]
+    },
+    {
+      "title": "随性常读书目",
+      "books": [
+        {
+          "title": "古文辭類篹",
+          "author": "姚鼐编，黃鳴標點",
+          "year": "2022",
+          "publisher": "中華書局",
+          "readDate": ""
+        },
+        {
+          "title": "莊子今注今譯",
+          "author": "陳鼓應撰",
+          "year": "2009",
+          "publisher": "中華書局",
+          "readDate": ""
+        },
+        {
+          "title": "四書章句集注",
+          "author": "朱熹撰",
+          "year": "1983",
+          "publisher": "中華書局",
+          "readDate": ""
+        },
+        {
+          "title": "楚辭今注",
+          "author": "湯炳正、李大明、李誠、熊良智撰",
+          "year": "2012",
+          "publisher": "上海古籍出版社",
+          "readDate": ""
+        },
+        {
+          "title": "詩經注析（全二冊）",
+          "author": "程俊英、蔣見元撰",
+          "year": "1991",
+          "publisher": "中華書局",
+          "readDate": ""
+        }
+      ]
+    }
+  ]
+}
