@@ -41,7 +41,7 @@
     parts.push('，' + escapeHtml(book.author));
     parts.push('，' + escapeHtml(book.year) + '，' + escapeHtml(book.publisher));
     if (book.readDate) {
-      parts.push('——' + escapeHtml(book.readDate));
+      parts.push('&mdash;' + escapeHtml(book.readDate)+ '。');
     } else {
       parts.push('。');
     }
