@@ -4,6 +4,13 @@
       "title": "2026",
       "books": [
         {
+          "title": "莊子今注今譯（上）",
+          "author": "陳鼓應注譯",
+          "year": "2009",
+          "publisher": "中華書局",
+          "readDate": "2026.6"
+        },
+        {
           "title": "烽火与流星：萧梁王朝的文学与文化",
           "author": "田晓菲著",
           "year": "2022",
@@ -821,13 +828,6 @@
           "title": "古文辭類篹",
           "author": "姚鼐编，黃鳴標點",
           "year": "2022",
-          "publisher": "中華書局",
-          "readDate": ""
-        },
-        {
-          "title": "莊子今注今譯",
-          "author": "陳鼓應撰",
-          "year": "2009",
           "publisher": "中華書局",
           "readDate": ""
         },
