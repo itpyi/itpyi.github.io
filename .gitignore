@@ -9,6 +9,8 @@ assets/fonts/*.ttf
 .bundle/
 vendor/
 node_modules/
+.superpowers/
+.worktrees/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
