@@ -54,14 +54,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const footerElement = document.getElementById('siteFooter');
 if (footerElement) {
     const footerPath = 'assets/partials/footer.html';
+
+    const syncHomepageFooterHeight = () => {
+        const homepageShell = document.querySelector('.homepage-shell');
+        if (!homepageShell || !footerElement) return;
+        const footerHeight = footerElement.offsetHeight;
+        document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+    };
+
     fetch(footerPath)
         .then(response => response.text())
         .then(html => {
             footerElement.innerHTML = html;
+            syncHomepageFooterHeight();
         })
         .catch(() => {
             // 保持静默，避免影响页面其他功能
         });
+
+    window.addEventListener('resize', syncHomepageFooterHeight);
 }
 
 // 子页面导航栏注入（统一维护）
@@ -275,3 +286,27 @@ document.addEventListener('click', e => {
     // Close the menu
     menuItem.closest('.global-lang-switcher').classList.remove('active');
 });
+
+// ========================================
+// Homepage entrance transition
+// ========================================
+
+const homepageShell = document.querySelector('.homepage-shell');
+const coverEnterZone = document.querySelector('.cover-enter-zone');
+
+if (homepageShell && coverEnterZone) {
+    const enterHomepage = () => {
+        if (homepageShell.classList.contains('home-entered')) return;
+        homepageShell.classList.add('home-entered');
+        coverEnterZone.setAttribute('aria-hidden', 'true');
+        coverEnterZone.blur();
+    };
+
+    coverEnterZone.addEventListener('click', enterHomepage);
+    coverEnterZone.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            enterHomepage();
+        }
+    });
+}
