@@ -16,6 +16,8 @@
 --border-color: #D4C9A8; /* 牙色：增强存在感，用于模拟古籍装订的骨架线 */
 --background-color: #F0E9D7; /* 宣纸：提高净度，去掉了原版的“脏感”，更护眼 */
 --surface-color: #F7F3E8; /* 云帛：新增容器色，用于卡片或侧边栏，拉开层级 */
+--nav-height: 70px;
+--footer-height: 138px;
 }
 
 * {
@@ -40,6 +42,11 @@ body {
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
     /* -webkit-font-smoothing: antialiased; */
+}
+
+html,
+body.homepage-shell {
+    height: 100%;
 }
 
 a {
@@ -87,7 +94,7 @@ em {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    height: 70px;
+    height: var(--nav-height);
 }
 
 /* Right side container for nav links and language switcher */
@@ -461,6 +468,8 @@ p {
 .body-list {
     margin: 0 0 15px;
     padding-left: 1.5em;
+    font-family: 'Noto Serif', 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
+    color: var(--body-text);
 }
 
 .body-list li {
@@ -519,6 +528,197 @@ p {
 .link-body:hover {
     color: var(--accent-color);
     text-decoration-color: var(--accent-color);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.homepage-shell {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.homepage-shell .topnav {
+    z-index: 1100;
+}
+
+.homepage-main {
+    position: relative;
+    height: calc(100vh - var(--nav-height) - var(--footer-height));
+    margin-top: var(--nav-height);
+}
+
+.home-cover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: calc(100vh - var(--footer-height));
+    z-index: 900;
+    overflow: hidden;
+    background: transparent;
+}
+
+.home-cover .h1-container {
+    pointer-events: none;
+}
+
+.home-cover-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: var(--primary-color);
+    z-index: 0;
+    transition: transform 0.9s ease;
+    will-change: transform;
+}
+
+.home-cover-panel-left {
+    left: 0;
+}
+
+.home-cover-panel-right {
+    right: 0;
+}
+
+.cover-enter-zone {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.cover-enter-zone:focus-visible {
+    outline: 0;
+}
+
+.cover-enter-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 34px;
+    transform: translateX(-50%);
+    font-size: 0.92rem;
+    letter-spacing: 0.06em;
+    color: rgba(245, 240, 230, 0.84);
+    white-space: nowrap;
+}
+
+.home-split {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    background: var(--background-color);
+}
+
+.route-panel {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 32px 36px;
+    position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden;
+}
+
+.route-panel + .route-panel {
+    border-left: 1px solid rgba(43, 43, 43, 0.12);
+}
+
+.route-panel-inner {
+    max-width: 360px;
+    display: grid;
+    grid-template-rows: minmax(4.4rem, auto) auto;
+    row-gap: 14px;
+    width: min(100%, 360px);
+    min-width: 0;
+}
+
+.route-panel-academic .route-panel-inner {
+    margin-left: auto;
+}
+
+.route-panel-general .route-panel-inner {
+    margin-right: auto;
+}
+
+.route-title {
+    display: flex;
+    align-items: flex-end;
+    font-family: 'Noto Serif', 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--primary-color);
+    overflow-wrap: anywhere;
+}
+
+.route-copy {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--body-text);
+    font-family: 'Noto Serif', 'Charis SIL', 'Noto Serif SC', 'Noto Serif TC', serif;
+    overflow-wrap: anywhere;
+}
+
+.route-panel:hover,
+.route-panel:focus-visible {
+    background: rgba(27, 49, 68, 0.05);
+}
+
+.route-panel:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -8px;
+}
+
+.route-panel-academic::after,
+.route-panel-general::after {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border: 1px solid rgba(43, 43, 43, 0.08);
+    pointer-events: none;
+}
+
+.homepage-shell.home-entered .home-cover-panel-left {
+    transform: translateX(-100%);
+}
+
+.homepage-shell.home-entered .home-cover-panel-right {
+    transform: translateX(100%);
+}
+
+.homepage-shell.home-entered .home-cover .h1-container {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.homepage-shell.home-entered .cover-enter-zone {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.homepage-shell.home-entered .home-cover {
+    pointer-events: none;
+}
+
+.cv-section .proj-list,
+.cv-section .edu-list {
+    margin-top: 16px;
 }
 
 /* 論文列表（简洁风格，用于主页） */
@@ -621,6 +821,7 @@ footer {
     background-color: var(--primary-color);
     color: var(--light-text);
     padding: 40px 0;
+    min-height: var(--footer-height);
 }
 
 .footer-content {
@@ -663,7 +864,7 @@ footer {
     .nav-links {
         display: none;
         position: absolute;
-        top: 70px;
+        top: var(--nav-height);
         left: 0;
         right: 0;
         background-color: var(--primary-color);
@@ -738,6 +939,38 @@ footer {
     .h1-container.en {
         margin-top: -60px;
     }
+
+    .home-split {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .route-panel {
+        padding: 24px 22px;
+    }
+
+    .route-panel + .route-panel {
+        border-left: 1px solid rgba(43, 43, 43, 0.12);
+        border-top: 0;
+    }
+
+    .route-panel-inner {
+        max-width: 100%;
+        grid-template-rows: minmax(3.4rem, auto) auto;
+    }
+
+    .route-title {
+        font-size: 1.9rem;
+    }
+
+    .route-copy {
+        font-size: 0.8rem;
+        line-height: 1.42;
+    }
+
+    .cover-enter-hint {
+        bottom: 22px;
+        font-size: 0.85rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -776,6 +1009,47 @@ footer {
     
     .edu-item {
         grid-template-columns: 90px 1fr;
+    }
+
+    .route-title {
+        font-size: 1.55rem;
+    }
+
+    .route-copy {
+        display: block;
+        font-size: 0.74rem;
+        line-height: 1.36;
+    }
+
+    .route-panel-academic::after,
+    .route-panel-general::after {
+        inset: 14px;
+    }
+
+    .route-panel-inner {
+        grid-template-rows: minmax(2.6rem, auto) auto;
+        row-gap: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    .route-panel {
+        padding: 20px 16px;
+    }
+
+    .route-title {
+        font-size: 1.32rem;
+        line-height: 0.98;
+    }
+
+    .route-copy {
+        font-size: 0.68rem;
+        line-height: 1.3;
+    }
+
+    .route-panel-academic::after,
+    .route-panel-general::after {
+        inset: 12px;
     }
 }
 
