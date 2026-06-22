@@ -4,6 +4,13 @@
       "title": "2026",
       "books": [
         {
+          "title": "尤力乌斯·凯撒",
+          "author": "莎士比亚著，傅浩译",
+          "year": "2015",
+          "publisher": "外语教学与研究出版社",
+          "readDate": "2026.6"
+        },
+        {
           "title": "庄子哲学",
           "author": "王博著",
           "year": "2020",
@@ -396,7 +403,7 @@
         },
         {
           "title": "一句顶一万句",
-          "author": "刘震云著，馮克利譯",
+          "author": "刘震云著",
           "year": "2016",
           "publisher": "长江文艺出版社",
           "readDate": ""
