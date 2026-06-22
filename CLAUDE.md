@@ -76,3 +76,4 @@ CSS custom properties in `:root` define a traditional Chinese aesthetic:
 4. **Keep the language architecture extensible** — don't collapse to a simple zh/en binary; pages may add more languages per section (e.g. about.html has fr and la).
 5. **Do not deduplicate content across pages** — the overlap between academics and general is intentional.
 6. **Commit in meaningful chunks** with descriptive messages. End with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
+7. **Deployment workflow**: After making content changes, update the "last updated" date in `assets/partials/footer.html` (both `data-lang="zh"` and `data-lang="en"` lines) to the current date. Ask the user for approval before committing and pushing.
