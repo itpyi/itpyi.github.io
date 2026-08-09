@@ -4,6 +4,27 @@
       "title": "2026",
       "books": [
         {
+          "title": "SPQR: A History of Ancient Rome",
+          "author": "by Mary Beard",
+          "year": "2015",
+          "publisher": "Profile Books Ltd",
+          "readDate": "2026.8"
+        },
+        {
+          "title": "少年來了",
+          "author": "韓江著，尹嘉玄译",
+          "year": "2023",
+          "publisher": "漫遊者文化",
+          "readDate": "2026.7"
+        },
+        {
+          "title": "你的夏天还好吗",
+          "author": "金爱烂著，薛舟译",
+          "year": "2017",
+          "publisher": "人民文学出版社",
+          "readDate": "2026.7"
+        },
+        {
           "title": "悲剧的诞生：尼采美学文选",
           "author": "尼采著，周国平译",
           "year": "2017",
@@ -416,6 +437,13 @@
           "readDate": ""
         },
         {
+          "title": "不能承受的生命之轻",
+          "author": "米兰·昆德拉著，许均译",
+          "year": "2014",
+          "publisher": "上海译文出版社",
+          "readDate": ""
+        },
+        {
           "title": "一句顶一万句",
           "author": "刘震云著",
           "year": "2016",
@@ -449,10 +477,24 @@
           "readDate": ""
         },
         {
+          "title": "幸福之路",
+          "author": "伯特兰·罗素著，傅雷译",
+          "year": "2017",
+          "publisher": "江苏凤凰文艺出版社",
+          "readDate": ""
+        },
+        {
           "title": "岛",
           "author": "维多利亚·希斯洛普著，陈新宇译",
           "year": "2009",
           "publisher": "南海出版公司",
+          "readDate": ""
+        },
+        {
+          "title": "追风筝的人",
+          "author": "卡勒德·胡塞尼著，李继宏译",
+          "year": "2006",
+          "publisher": "上海人民出版社",
           "readDate": ""
         },
         {
@@ -467,6 +509,13 @@
           "author": "鲍里斯·帕斯捷尔纳克著，蓝英年、张秉衡译",
           "year": "2006",
           "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "古都",
+          "author": "川端康成著，叶渭渠、唐月梅译",
+          "year": "2014",
+          "publisher": "南海出版公司",
           "readDate": ""
         },
         {
@@ -666,6 +715,13 @@
           "readDate": ""
         },
         {
+          "title": "乌合之众：大众心理研究",
+          "author": "古斯塔夫·勒庞著，冯克利译",
+          "year": "2016",
+          "publisher": "中央编译出版社",
+          "readDate": ""
+        },
+        {
           "title": "中国哲学简史",
           "author": "冯友兰著，赵复三译",
           "year": "2009",
@@ -739,7 +795,7 @@
           "title": "九三年",
           "author": "维克多·雨果著，马雯虹译",
           "year": "2013",
-          "publisher": "北方文学出版社",
+          "publisher": "北方文艺出版社",
           "readDate": ""
         },
         {
@@ -753,13 +809,20 @@
           "title": "巴黎圣母院",
           "author": "维克多·雨果著，李玉民译",
           "year": "2007",
-          "publisher": "中国少年出版社",
+          "publisher": "中国少年儿童出版社",
           "readDate": ""
         },
         {
           "title": "悲惨世界",
           "author": "维克多·雨果著，李丹、方于译",
           "year": "1992",
+          "publisher": "人民文学出版社",
+          "readDate": ""
+        },
+        {
+          "title": "高老头",
+          "author": "巴尔扎克著，张冠尧译",
+          "year": "2002",
           "publisher": "人民文学出版社",
           "readDate": ""
         },
