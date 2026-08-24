@@ -4,6 +4,13 @@
       "title": "2026",
       "books": [
         {
+          "title": "卡利古拉",
+          "author": "加缪著，李玉民译",
+          "year": "2013",
+          "publisher": "上海译文出版社",
+          "readDate": "2026.8"
+        },
+        {
           "title": "SPQR: A History of Ancient Rome",
           "author": "by Mary Beard",
           "year": "2015",
