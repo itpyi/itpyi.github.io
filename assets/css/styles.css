@@ -708,6 +708,13 @@ p {
     color: var(--primary-color);
 }
 
+/* 论文列表：避免默认有序列表序号悬挂到内容区外 */
+.pub-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 /* 普通正文列表样式（不影响带类名的专用列表） */
 main section ul:not([class]) {
     list-style: disc;
