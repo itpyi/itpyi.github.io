@@ -56,12 +56,17 @@
 
   function render(items) {
     return '<ol class="pub-list">' + items.map(function (item) {
-      var links = '<a href="https://arxiv.org/abs/' + encodeURIComponent(item.arxiv) + '" class="list-link" target="_blank" rel="noopener">arXiv</a>';
+      var journalName = escapeHtml(item.journal);
+      var isArxivPreprint = /^arXiv preprint/i.test(item.journal || '');
       if (item.journal_url && item.journal && !/^arXiv preprint/i.test(item.journal)) {
-        links += '<span class="pub-sep"> · </span><a href="' + escapeHtml(item.journal_url) + '" class="list-link" target="_blank" rel="noopener">Journal</a>';
+        journalName = '<a class="link-body" href="' + escapeHtml(item.journal_url) + '" target="_blank" rel="noopener">' + journalName + '</a>';
       }
-      var venue = item.journal + (item.volume ? ', ' + item.volume : '') + (item.number ? '(' + item.number + ')' : '') + (item.pages ? ', ' + item.pages : '') + ' (' + item.year + ')';
-      return '<li class="list-item"><span class="list-title">' + escapeHtml(item.title) + '</span><div class="list-meta">' + authors(item.author) + ' — <i>' + escapeHtml(venue) + '</i></div><div class="list-links">' + links + '</div></li>';
+      if (isArxivPreprint && item.arxiv) {
+        journalName = '<a class="link-body" href="https://arxiv.org/abs/' + encodeURIComponent(item.arxiv) + '" target="_blank" rel="noopener">' + journalName + '</a>';
+      }
+      var venue = journalName + (item.volume ? ', ' + escapeHtml(item.volume) : '') + (item.number ? '(' + escapeHtml(item.number) + ')' : '') + (item.pages ? ', ' + escapeHtml(item.pages) : '') + (item.year ? ' (' + escapeHtml(item.year) + ')' : '');
+      var arxiv = item.arxiv && !isArxivPreprint ? ' · <a class="link-body" href="https://arxiv.org/abs/' + encodeURIComponent(item.arxiv) + '" target="_blank" rel="noopener">arXiv:' + escapeHtml(item.arxiv) + '</a>' : '';
+      return '<li class="list-item"><span class="list-title">' + escapeHtml(item.title) + '</span><div class="list-meta">' + authors(item.author) + ' — <i>' + venue + arxiv + '</i></div></li>';
     }).join('') + '</ol>';
   }
 }());
