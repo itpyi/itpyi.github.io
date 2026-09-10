@@ -1,0 +1,34 @@
+[
+  {
+    "year": {"zh": "2022 – 至今", "en": "2022 – Now"},
+    "institution": {"zh": "{{ site.institute.zh }}", "en": "{{ site.institute.en }}"},
+    "details": {
+      "zh": ["理论物理学博士研究生", "研究方向：凝聚态理论、量子计算"],
+      "en": ["PhD candidate in theoretical physics", "Research fields: condensed matter theory, quantum computation"]
+    }
+  },
+  {
+    "year": {"zh": "2018 – 2022", "en": "2018 – 2022"},
+    "institution": {"zh": "北京大学物理学院", "en": "School of Physics, Peking University"},
+    "details": {
+      "zh": ["物理学学士", "毕业论文：[格点规范理论的量子模拟](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)"],
+      "en": ["Bachelor in physics", "Thesis: [Quantum Simulation of Lattice Gauge Theory (in Chinese)](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)"]
+    }
+  },
+  {
+    "year": {"zh": "2012 – 2018", "en": "2012 – 2018"},
+    "institution": {"zh": "陕西师范大学附属中学", "en": "The High School Affiliated to Shaanxi Normal University"},
+    "details": {
+      "zh": ["初中和高中"],
+      "en": ["Junior and senior high school"]
+    }
+  },
+  {
+    "year": {"zh": "2006 – 2012", "en": "2006 – 2012"},
+    "institution": {"zh": "西安市临潼区陕缝学校", "en": "Shaanfeng School, Lintong District, Xi'an"},
+    "details": {
+      "zh": ["小学"],
+      "en": ["Primary school, now demolished"]
+    }
+  }
+]

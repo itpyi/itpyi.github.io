@@ -1,0 +1,112 @@
+{
+  "academics_items": ["atomisa", "surface-magic", "error-msd", "academics-typst"],
+  "projects": {
+    "atomisa": {
+      "title": {"zh": "AtomISA — AOD 原子运动可视化", "en": "AtomISA — AOD Atom Motion Visualization"},
+      "summary": {
+        "zh": "基于浏览器的交互式模拟器，用于 AOD 原子运动（AAM）模型——中性原子量子计算平台中的原子重排过程。纯 HTML + JavaScript，无需依赖。",
+        "en": "Interactive browser-based simulator for AOD Atom Motion (AAM), a model of atom rearrangement in neutral-atom quantum computing platforms. Visualises pickup, motion, and offload phases with real-time canvas animation. Pure HTML + JavaScript, no dependencies."
+      },
+      "notes": {"zh": [], "en": []},
+      "links": [
+        {"label": {"zh": "GitHub Repo", "en": "GitHub Repo"}, "url": "https://github.com/itpyi/AtomISA"},
+        {"label": {"zh": "在线演示", "en": "Live Demo"}, "url": "https://itpyi.github.io/AtomISA"}
+      ]
+    },
+    "surface-magic": {
+      "title": {"zh": "surface_magic", "en": "surface_magic"},
+      "summary": {
+        "zh": "基于格手术的门传输模拟，包含线路级噪声模拟与态矢量分析。",
+        "en": "Simulation of surgery-based gate teleportation, including circuit-level noise simulation and state-vector analysis."
+      },
+      "notes": {
+        "zh": ["对应论文：[arXiv:2503.19758](https://arxiv.org/abs/2503.19758)"],
+        "en": ["Related paper: [arXiv:2503.19758](https://arxiv.org/abs/2503.19758)"]
+      },
+      "links": [
+        {"label": {"zh": "GitHub Repo", "en": "GitHub Repo"}, "url": "https://github.com/itpyi/surface_magic"}
+      ],
+      "page_en": {
+        "title": "Simulation of surgery-based gate teleportation",
+        "metas": [
+          "Includes circuit-level noise simulation using [Stim](https://github.com/quantumlib/Stim) and a state-vector analysis of using S gates as a proxy for T gates.",
+          "Related to [arXiv:2503.19758](https://arxiv.org/abs/2503.19758)."
+        ],
+        "links": [
+          {"label": "GitHub Repo", "url": "https://github.com/itpyi/surface_magic"}
+        ]
+      }
+    },
+    "error-msd": {
+      "title": {"zh": "error_msd", "en": "error_msd"},
+      "summary": {
+        "zh": "物理层魔态提纯态矢量模拟。",
+        "en": "State-vector simulation for physical-level magic state distillation."
+      },
+      "notes": {
+        "zh": ["对应论文：[arXiv:2312.09111](https://arxiv.org/abs/2312.09111)"],
+        "en": ["Related paper: [arXiv:2312.09111](https://arxiv.org/abs/2312.09111)"]
+      },
+      "links": [
+        {"label": {"zh": "GitHub Repo", "en": "GitHub Repo"}, "url": "https://github.com/itpyi/error_msd"}
+      ],
+      "page_en": {
+        "title": "Physical-level magic state distillation simulation",
+        "metas": [
+          "State-vector simulation for magic state distillation at the physical level.",
+          "Related to [arXiv:2312.09111](https://arxiv.org/abs/2312.09111)."
+        ],
+        "links": [
+          {"label": "GitHub Repo", "url": "https://github.com/itpyi/error_msd"}
+        ]
+      }
+    },
+    "academics-typst": {
+      "title": {"zh": "Typst templates and packages", "en": "Typst templates and packages"},
+      "summary": {
+        "zh": "包括 hetvid、ega-numbering、fig-plucker 等模板与包。",
+        "en": "Includes hetvid, ega-numbering, fig-plucker, and related writing/plotting tools."
+      },
+      "notes": {"zh": [], "en": []},
+      "links": [
+        {"label": "hetvid", "url": "https://github.com/itpyi/hetvid"},
+        {"label": "ega-numbering", "url": "https://github.com/itpyi/typst-ega-numbering"},
+        {"label": "fig-plucker", "url": "https://github.com/itpyi/typst-plot"}
+      ]
+    },
+    "hetvid": {
+      "page_en": {
+        "title": "hetvid",
+        "metas": ["A Typst template for light-weighted notes. Current version: 0.2.0."],
+        "links": [
+          {"label": "Typst Universe", "url": "https://typst.app/universe/package/hetvid/"},
+          {"label": "GitHub Repo", "url": "https://github.com/itpyi/hetvid"}
+        ]
+      }
+    },
+    "ega-numbering": {
+      "page_en": {
+        "title": "ega-numbering",
+        "metas": ["Numbering utilities for Typst. Current version: 0.1.0."],
+        "links": [
+          {"label": "Typst Universe", "url": "https://typst.app/universe/package/ega-numbering"},
+          {"label": "GitHub Repo", "url": "https://github.com/itpyi/typst-ega-numbering"}
+        ]
+      }
+    },
+    "fig-plucker": {
+      "page_en": {
+        "title": "fig-plucker",
+        "metas": ["Plotting and export helpers for Typst. Current version: 0.1.0."],
+        "links": [
+          {"label": "Typst Universe", "url": "https://typst.app/universe/package/fig-plucker"},
+          {"label": "GitHub Repo", "url": "https://github.com/itpyi/typst-plot"}
+        ]
+      }
+    }
+  },
+  "opensource_groups": [
+    {"title": "Simulation on quantum computation", "projects": ["atomisa", "surface-magic", "error-msd"]},
+    {"title": "Typst packages and templates", "projects": ["hetvid", "ega-numbering", "fig-plucker"]}
+  ]
+}
