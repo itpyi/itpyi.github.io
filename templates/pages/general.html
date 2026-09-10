@@ -1,0 +1,41 @@
+---
+title: {zh: 杂览, en: General}
+meta:
+  zh: 揽月阁的完整主页内容，包括研究、开源、阅读与教育。
+  en: The fuller homepage of Vagnius Itpivis, including research, open source, reading, and education.
+subnav: {zh: 杂览, en: General}
+sections:
+  - content: content/research.md
+    data-section-id: research
+  - content: content/opensource-teaser-general.md
+  - content: content/reading.md
+  - content: content/education-teaser.md
+  - content: content/glossary-teaser.md
+---
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" data-lang="zh" content="{{ META_ZH }}">
+    <meta name="description" data-lang="en" content="{{ META_EN }}">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <title data-lang="zh">{{ TITLE_ZH }}</title>
+    <title data-lang="en">{{ TITLE_EN }}</title>
+</head>
+<body>
+    <div id="siteSubnav" data-subnav-title-zh="{{ SUBNAV_ZH }}" data-subnav-title-en="{{ SUBNAV_EN }}"></div>
+
+    <main>
+        <div style="margin-top: 80px; margin-bottom: 40px;"></div>
+{{ SECTIONS }}
+    </main>
+
+    <footer id="siteFooter"></footer>
+
+    <script src="assets/js/script.js"></script>
+{{ EXTRA_SCRIPTS }}
+</body>
+</html>
