@@ -1,4 +1,10 @@
 {
   "url": "https://itpyi.site",
-  "lang_labels": {"zh": "汉语", "en": "English", "fr": "français", "la": "Latīnum"}
+  "lang_labels": {"zh": "汉语", "en": "English", "fr": "français", "la": "Latīnum"},
+  "lang_unavailable": {
+    "zh": "该语言版本尚未开发。",
+    "en": "This language version is not yet available.",
+    "fr": "Cette version de langue n'est pas encore disponible.",
+    "la": "Haec versio linguae nondum parata est."
+  }
 }

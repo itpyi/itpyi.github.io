@@ -29,7 +29,9 @@ Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖�
  4. 按节围栏逐节渲染，按 kind 分发：
       content         Markdown 内容节（默认）。渲染后做视觉保真后处理
                       （见 render_markdown）。可切换节（switchable: true，
-                      title 为 {语言: 标题} 字典）生成双语结构；纯节
+                      title 为 {语言: 标题} 字典）生成多语结构，语言菜单
+                      = title 的键；标题声明了某语言但正文缺失时，该语言
+                      显示「该语言版本尚未开发」占位消息。纯节
                       （switchable: false，title 为字符串）生成普通
                       <section>。
       links           相关链接节（assets/data/links.json）。
@@ -412,14 +414,25 @@ def assemble_plain_section(title, body, extra_class=None, section_id=None):
     return "\n".join(lines)
 
 
+def lang_unavailable_message(lang, site):
+    """标题声明了某语言、但正文/数据没有该语言内容时的占位消息（用对应语言
+    显示「该语言版本尚未开发」）。正常情况下不应出现，只是防止空白/崩溃的
+    稳定性兜底；site.json 的 lang_unavailable 配置各语言文案。"""
+    messages = site.get("lang_unavailable", {})
+    text = messages.get(lang) or messages.get("en") or f"Language version {lang} is not yet available."
+    return f"<p>{html.escape(text)}</p>"
+
+
 def render_content_section(sec_meta, blocks, site, page_default_class=None):
     """kind: content —— Markdown 内容节（默认 kind）。
 
     节属性：title（{语言: 标题} 字典 = 可切换节；字符串 = 纯节）、
-    switchable（默认 true）、langs（可选，覆盖语言块出现顺序——用于
-    「仅中文」等有菜单项但无正文的语言）、class、id、data-section-id。
-    页面的 section-class 作为默认 class。
-    """
+    switchable（默认 true）、langs（可选，覆盖菜单语言顺序）、class、id、
+    data-section-id。页面的 section-class 作为默认 class。
+
+    可切换节的语言菜单 = title 的键（顺序即菜单顺序）。标题声明了某语言
+    但正文没有该语言的围栏块时，该语言显示占位消息（lang_unavailable_message）
+    而不是空白；正文出现了标题没有声明的语言块则报错（明确的笔误）。"""
     title = sec_meta.get("title", "")
     switchable = sec_meta.get("switchable", True)
     extra_class = sec_meta.get("class") or page_default_class
@@ -434,14 +447,19 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
 
     if not isinstance(title, dict):
         raise BuildError("可切换节的 title 应为 {语言: 标题} 字典")
-    # 语言菜单顺序 = 语言块出现顺序；langs 属性可显式覆盖
-    langs = sec_meta.get("langs") or [lang for lang, _ in blocks]
-    if None in langs:
+    langs = sec_meta.get("langs") or list(title)
+    if None in [lang for lang, _ in blocks]:
         raise BuildError("可切换节的正文必须用 <!-- lang:xx --> 围栏分块")
+    undeclared = {lang for lang, _ in blocks} - set(langs)
+    if undeclared:
+        raise BuildError(f"节正文有语言块 {sorted(undeclared)}，但标题没有对应的语言键")
     bodies = {}
     for lang in langs:
         text = next((t for l, t in blocks if l == lang), None)
-        bodies[lang] = render_markdown(text) if text and text.strip() else None
+        if text and text.strip():
+            bodies[lang] = render_markdown(text)
+        else:
+            bodies[lang] = lang_unavailable_message(lang, site)
     return assemble_switchable_section(
         title, langs, bodies, site,
         extra_class=extra_class,
@@ -509,6 +527,12 @@ def render_projects_section(sec_meta, blocks, site, page_default_class=None):
     langs = [lang for lang, _ in blocks] or list(title)
     bodies = {}
     for lang in langs:
+        ids = data.get("academics_items", [])
+        projects = data.get("projects", {})
+        if any(lang not in projects[pid].get("title", {}) or lang not in projects[pid].get("summary", {})
+               for pid in ids):
+            bodies[lang] = lang_unavailable_message(lang, site)
+            continue
         parts = []
         text = next((t for l, t in blocks if l == lang), None)
         if text and text.strip():
@@ -583,7 +607,9 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
 
 
 def render_education_section(sec_meta, blocks, site, page_default_class=None):
-    """kind: education —— 教育经历节（assets/data/education.json，每条 zh/en）。"""
+    """kind: education —— 教育经历节（assets/data/education.json）。
+    每条数据的 year / institution / details 按语言提供；标题声明了某语言
+    但数据缺少该语言字段时，该语言显示占位消息而不是报错。"""
     path = CONTENT_DATA_DIR / "education.json"
     data = load_json(path)
     title = sec_meta.get("title")
@@ -592,6 +618,13 @@ def render_education_section(sec_meta, blocks, site, page_default_class=None):
     langs = list(title)
     bodies = {}
     for lang in langs:
+        has_all = all(
+            lang in e.get("year", {}) and lang in e.get("institution", {}) and lang in e.get("details", {})
+            for e in data
+        )
+        if not has_all:
+            bodies[lang] = lang_unavailable_message(lang, site)
+            continue
         items = []
         for e in data:
             items.append('    <div class="edu-item">')
