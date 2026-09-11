@@ -17,24 +17,32 @@ Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖�
  2. 加载 data/site.json —— 站点全局字符串（机构名、相关链接、语言显示名、
     站点 URL）。正文与数据文件里可用 {{ site.机构.语言 }} 引用其中任何值，
     例如 {{ site.institute.zh }}，实现「改一处，全站生效」。
- 3. 逐页处理 templates/pages/*.html。每个模板 = YAML front matter
-    （「页面清单」：标题、meta、子导航标题、脚本、节列表）+ HTML 骨架
-    （含 {{ 大写占位符 }}）。骨架里的节内容由本脚本生成后替换进去。
- 4. 按页面清单逐节渲染，按 kind 分发：
-      content       Markdown 内容节。正文按「语言围栏」分块：
-                    <!-- lang:zh --> … <!-- lang:en --> …
-                    <!-- page:academics lang:zh --> … 是单页覆盖块
-                    （默认块改一处全站生效；page: 块只改指定一页）。
-                    渲染后做视觉保真后处理（见 render_markdown）。
-      links         相关链接节（data/site.json 的 links 列表）。
-      publications  学术论文节：只发占位 <div data-publications>，
-                    内容由浏览器端 assets/js/publications.js 读取
-                    assets/data/publications.bib 渲染（保持现状）。
-      projects      开源项目节（academics 页视图，data/projects.json）。
-      projects_page opensource.html 整页的英文分组视图（data/projects.json）。
-      education     教育经历节（data/education.json）。
- 5. 页面组装：把标题 / meta / 子导航 / 节 / 脚本替换进骨架。任何残留的
-    未替换 {{ 占位符 }} 都会报错（宁吵勿静默）。
+ 3. 逐页处理 content/*.md —— **一个页面 = 一个 Markdown 文件**：
+      - front matter 是页面元数据（标题、meta、子导航标题、脚本列表、
+        可选的 section-class 页面默认节 class）；
+      - 正文自上而下就是页面的全部节：每个 `<!-- section {…YAML…} -->`
+        围栏开启一节，节内用 `<!-- lang:xx -->` 分语言（语言菜单顺序 =
+        语言块出现顺序）；下一节由下一个 section 围栏或文件尾界定。
+        调整节顺序 = 拖动节块；加节 = 粘贴一个节块。
+      index.md 例外：首页骨架特殊，其字符串全部来自 front matter。
+ 4. 按节围栏逐节渲染，按 kind 分发：
+      content         Markdown 内容节（默认）。渲染后做视觉保真后处理
+                      （见 render_markdown）。可切换节（switchable: true，
+                      title 为 {语言: 标题} 字典）生成双语结构；纯节
+                      （switchable: false，title 为字符串）生成普通
+                      <section>。
+      links           相关链接节（data/site.json 的 links 列表）。
+      publications    学术论文节：只发占位 <div data-publications>，
+                      内容由浏览器端 assets/js/publications.js 读取
+                      assets/data/publications.bib 渲染（保持现状）。
+      projects        开源项目节（academics 页视图，data/projects.json；
+                      节正文 = 该节的中英引导段落）。
+      projects-group  opensource.html 的英文分组视图（data/projects.json，
+                      属性 group: 0/1 指定分组，h2 标题来自数据）。
+      education       教育经历节（data/education.json）。
+ 5. 页面组装：把标题 / meta / 子导航 / 节 / 脚本替换进骨架（除 index 外
+    全部页面共用 templates/pages/page.html）。任何残留的未替换
+    {{ 占位符 }} 都会报错（宁吵勿静默）。
  6. 渲染 templates/partials/footer.html（注入「最后更新」日期与版权年份）
     到 _site/assets/partials/footer.html —— script.js 仍在浏览器端 fetch 它。
     「最后更新」日期 = content/ data/ templates/ 中最新一次提交的日期
@@ -78,8 +86,11 @@ VOID_ELEMENTS = {
     "link", "meta", "param", "source", "track", "wbr",
 }
 
-# 语言围栏：<!-- lang:zh --> 或 <!-- page:academics lang:en -->
-LANG_FENCE = re.compile(r"^<!--\s*(?:page:([\w-]+)\s+)?lang:([\w-]+)\s*-->\s*$")
+# 语言围栏：<!-- lang:zh -->
+LANG_FENCE = re.compile(r"^<!--\s+lang:([\w-]+)\s*-->\s*$")
+
+# 节围栏：<!-- section {title: {zh: 研究, en: Research}} -->（花括号内为 YAML flow map）
+SECTION_FENCE = re.compile(r"^<!--\s+section\s+(\{.*\})\s*-->\s*$")
 
 # {{ site.path }} —— 引用 site.json 中的值
 SITE_PLACEHOLDER = re.compile(r"\{\{\s*site\.([\w.]+)\s*\}\}")
@@ -161,41 +172,48 @@ def git_last_commit_date(paths):
 # ---------------------------------------------------------------- Markdown 渲染
 
 def split_lang_blocks(body):
-    """把正文按语言围栏拆成 [(page, lang, text)]；page 为 None 表示默认块。"""
+    """把节正文按语言围栏拆成 [(lang, text)]。围栏之前的内容记作 lang=None
+    （纯节允许无围栏，此时整段正文是唯一一块）。"""
     blocks = []
-    cur_page = cur_lang = None
+    cur_lang = None
     cur_lines = []
-
-    def flush():
-        nonlocal cur_page, cur_lang, cur_lines
-        if cur_lang is not None and cur_lines:
-            blocks.append((cur_page, cur_lang, "\n".join(cur_lines).strip("\n")))
-        cur_page, cur_lang, cur_lines = None, None, []
-
     for line in body.splitlines():
         m = LANG_FENCE.match(line.strip())
         if m:
+            blocks.append((cur_lang, "\n".join(cur_lines).strip("\n")))
+            cur_lang, cur_lines = m.group(1), []
+        else:
+            cur_lines.append(line)
+    blocks.append((cur_lang, "\n".join(cur_lines).strip("\n")))
+    return [(lang, text) for lang, text in blocks if text]
+
+
+def split_sections(body):
+    """把页面 md 正文按节围栏拆成 [(节属性 dict, [(lang, text)])]。"""
+    sections = []
+    cur_meta = None
+    cur_lines = []
+
+    def flush():
+        nonlocal cur_meta, cur_lines
+        if cur_meta is not None:
+            sections.append((cur_meta, split_lang_blocks("\n".join(cur_lines))))
+        cur_meta, cur_lines = None, []
+
+    for line in body.splitlines():
+        m = SECTION_FENCE.match(line.strip())
+        if m:
             flush()
-            cur_page, cur_lang = m.group(1), m.group(2)
-        elif cur_lang is not None:
+            try:
+                cur_meta = yaml.safe_load(m.group(1))
+            except yaml.YAMLError as exc:
+                raise BuildError(f"节围栏内的 YAML 无法解析：{line.strip()}（{exc}）")
+            if not isinstance(cur_meta, dict):
+                raise BuildError(f"节围栏内的 YAML 应为映射（{{…}}）：{line.strip()}")
+        elif cur_meta is not None:
             cur_lines.append(line)
     flush()
-    return blocks
-
-
-def select_block(blocks, page_id, lang):
-    """为 (page_id, lang) 选正文块：page 限定块优先于默认块；同组内后者覆盖前者。"""
-    chosen = None
-    for bpage, blang, text in blocks:
-        if blang != lang:
-            continue
-        if page_id is not None and bpage is not None and bpage != page_id:
-            continue
-        if page_id is not None and bpage == page_id:
-            chosen = text
-        elif bpage is None and chosen is None:
-            chosen = text
-    return chosen
+    return sections
 
 
 def is_external_link(href):
@@ -422,70 +440,59 @@ def assemble_plain_section(title, body, extra_class=None, section_id=None):
     return "\n".join(lines)
 
 
-def render_content_section(entry, page_id, site, deps):
-    """kind: content —— Markdown 内容节。
+def render_content_section(sec_meta, blocks, site, page_default_class=None):
+    """kind: content —— Markdown 内容节（默认 kind）。
 
-    页面清单可覆盖 md 自带 front matter 的以下键：
-      switchable（默认 true，false 为纯节）、class、id、data-section-id、bare。
+    节属性：title（{语言: 标题} 字典 = 可切换节；字符串 = 纯节）、
+    switchable（默认 true）、langs（可选，覆盖语言块出现顺序——用于
+    「仅中文」等有菜单项但无正文的语言）、class、id、data-section-id。
+    页面的 section-class 作为默认 class。
     """
-    path = ROOT / entry["content"]
-    deps.add(path)
-    meta, body_text = load_front_matter(path)
-    meta = substitute_meta(meta, site)
-
-    title = meta.get("title", "")
-    switchable = meta.get("switchable", entry.get("switchable", True))
-    bare = meta.get("bare", entry.get("bare", False))
-    blocks = split_lang_blocks(body_text)
+    title = sec_meta.get("title", "")
+    switchable = sec_meta.get("switchable", True)
+    extra_class = sec_meta.get("class") or page_default_class
 
     if not switchable:
-        # 纯节：标题为字符串；正文取第一个围栏块（无围栏时取全文）
+        # 纯节：标题为字符串；正文取第一个语言块（无围栏时即整段正文）
         if not isinstance(title, str):
-            raise BuildError(f"{path.name} 是纯节，title 应为字符串而非多语言字典")
-        text = blocks[0][2] if blocks else body_text
+            raise BuildError("纯节（switchable: false）的 title 应为字符串")
+        text = blocks[0][1] if blocks else ""
         body = render_markdown(text, site) if text.strip() else ""
-        if bare:
-            return body
-        return assemble_plain_section(
-            title, body,
-            entry.get("class") or meta.get("class"),
-            entry.get("id"),
-        )
+        return assemble_plain_section(title, body, extra_class, sec_meta.get("id"))
 
     if not isinstance(title, dict):
-        raise BuildError(f"{path.name} 是可切换节，title 应为 {{语言: 标题}} 字典")
-    langs = meta.get("langs") or list(title)
+        raise BuildError("可切换节的 title 应为 {语言: 标题} 字典")
+    # 语言菜单顺序 = 语言块出现顺序；langs 属性可显式覆盖
+    langs = sec_meta.get("langs") or [lang for lang, _ in blocks]
+    if None in langs:
+        raise BuildError("可切换节的正文必须用 <!-- lang:xx --> 围栏分块")
     bodies = {}
     for lang in langs:
-        text = select_block(blocks, page_id, lang)
-        if text is None or not text.strip():
-            bodies[lang] = None
-        else:
-            bodies[lang] = render_markdown(text, site)
-    if bare:
-        return next((b for b in bodies.values() if b is not None), "")
+        text = next((t for l, t in blocks if l == lang), None)
+        bodies[lang] = render_markdown(text, site) if text and text.strip() else None
     return assemble_switchable_section(
         title, langs, bodies, site,
-        extra_class=entry.get("class") or meta.get("class"),
-        section_id=entry.get("id"),
-        data_section_id=entry.get("data-section-id"),
+        extra_class=extra_class,
+        section_id=sec_meta.get("id"),
+        data_section_id=sec_meta.get("data-section-id"),
     )
 
 
-def render_links_section(entry, page_id, site, deps):
+def render_links_section(sec_meta, blocks, site, page_default_class=None):
     """kind: links —— 相关链接节（data/site.json 的 links 列表）。
 
-    switchable（默认）: 双语可切换节，链接列表按语言各复制一份（与现状一致，
-    链接名是专有名词，两种语言相同）；
-    switchable: false + title 字符串: 纯节（research.html 的 More links）。
+    可切换节（title 为字典）：链接列表按语言各复制一份（与现状一致，链接名
+    是专有名词，两种语言相同）；
+    纯节（title 为字符串 + switchable: false）：research.html 的 More links。
     list_class: ul 的 class，默认 body-list；null 表示裸 ul（research.html 现状）。
     """
     links = site.get("links", [])
     if not links:
         raise BuildError("site.json 缺少 links")
-    if not entry.get("title"):
-        raise BuildError(f"{page_id} 页的 links 节缺少 title")
-    list_class = entry.get("list_class", "body-list")
+    title = sec_meta.get("title")
+    if not title:
+        raise BuildError("links 节缺少 title")
+    list_class = sec_meta.get("list_class", "body-list")
 
     def render_ul():
         cls = f' class="{list_class}"' if list_class else ""
@@ -495,48 +502,44 @@ def render_links_section(entry, page_id, site, deps):
         )
         return f"    <ul{cls}>\n{items}\n    </ul>"
 
-    title = entry.get("title")
-    if not entry.get("switchable", True):
-        return assemble_plain_section(title, render_ul(), entry.get("class"), entry.get("id"))
+    extra_class = sec_meta.get("class") or page_default_class
+    if not sec_meta.get("switchable", True):
+        return assemble_plain_section(title, render_ul(), extra_class, sec_meta.get("id"))
     langs = list(title)
     return assemble_switchable_section(
         title, langs, {lang: render_ul() for lang in langs}, site,
-        entry.get("class"), entry.get("id"),
+        extra_class, sec_meta.get("id"),
     )
 
 
-def render_publications_section(entry, page_id, site, deps):
+def render_publications_section(sec_meta, blocks, site, page_default_class=None):
     """kind: publications —— 学术论文节。只发占位 <div data-publications>，
     浏览器端 publications.js 读取 assets/data/publications.bib 渲染（保持现状）。"""
-    if not entry.get("title"):
-        raise BuildError(f"{page_id} 页的 publications 节缺少 title")
-    title = entry["title"]
+    title = sec_meta.get("title")
+    if not title:
+        raise BuildError("publications 节缺少 title")
     langs = list(title)
     return assemble_switchable_section(
         title, langs, {lang: "<div data-publications></div>" for lang in langs},
-        site, entry.get("class"), entry.get("id"),
+        site, sec_meta.get("class") or page_default_class, sec_meta.get("id"),
     )
 
 
-def render_projects_section(entry, page_id, site, deps):
-    """kind: projects —— 开源项目节（academics 页的平铺视图，双语）。"""
+def render_projects_section(sec_meta, blocks, site, page_default_class=None):
+    """kind: projects —— 开源项目节（academics 页的平铺视图，双语）。
+    节正文 = 该节的中英引导段落；其后接 projects.json 的 academics 列表。"""
     path = DATA_DIR / "projects.json"
-    deps.add(path)
     data = load_json(path)
-    if not entry.get("title"):
-        raise BuildError(f"{page_id} 页的 projects 节缺少 title")
-    title = entry["title"]
-    langs = list(title)
+    title = sec_meta.get("title")
+    if not title:
+        raise BuildError("projects 节缺少 title")
+    langs = [lang for lang, _ in blocks] or list(title)
     bodies = {}
     for lang in langs:
         parts = []
-        if entry.get("intro"):
-            ipath = ROOT / entry["intro"]
-            deps.add(ipath)
-            _, intro_body = load_front_matter(ipath)
-            text = select_block(split_lang_blocks(intro_body), page_id, lang)
-            if text and text.strip():
-                parts.append(render_markdown(text, site))
+        text = next((t for l, t in blocks if l == lang), None)
+        if text and text.strip():
+            parts.append(render_markdown(text, site))
         ul = ['    <ul class="proj-list">']
         for pid in data.get("academics_items", []):
             proj = data["projects"][pid]
@@ -554,69 +557,66 @@ def render_projects_section(entry, page_id, site, deps):
         ul.append("    </ul>")
         parts.append("\n".join(ul))
         bodies[lang] = "\n".join(parts)
-    return assemble_switchable_section(title, langs, bodies, site, entry.get("class"), entry.get("id"))
+    return assemble_switchable_section(
+        title, langs, bodies, site,
+        sec_meta.get("class") or page_default_class, sec_meta.get("id"),
+    )
 
 
-def render_projects_page(entry, page_id, site, deps):
-    """kind: projects_page —— opensource.html 整页：两个分组纯节（英文视图）。
+def render_projects_group(sec_meta, blocks, site, page_default_class=None):
+    """kind: projects-group —— opensource.html 的英文分组纯节。
+    属性 group: 0/1 指定 projects.json 的 opensource_groups 下标；
+    h2 标题来自数据；节正文（如有）放在 h2 之前（页面引导段落）。
     每个项目取 page_en 字段（缺省时回退 title.en / summary.en / links）。"""
     path = DATA_DIR / "projects.json"
-    deps.add(path)
     data = load_json(path)
+    groups = data.get("opensource_groups", [])
+    group_idx = sec_meta.get("group")
+    if group_idx is None or not (0 <= group_idx < len(groups)):
+        raise BuildError(f"projects-group 节的 group 应为 0~{len(groups) - 1} 之间的整数")
+    group = groups[group_idx]
     projects = data["projects"]
 
-    intro_html = ""
-    if entry.get("intro"):
-        ipath = ROOT / entry["intro"]
-        deps.add(ipath)
-        _, intro_body = load_front_matter(ipath)
-        blocks = split_lang_blocks(intro_body)
-        text = blocks[0][2] if blocks else intro_body
-        intro_html = render_markdown(text, site)
-
-    sections = []
-    for idx, group in enumerate(data.get("opensource_groups", [])):
-        parts = []
-        if idx == 0 and intro_html:
-            parts.append(intro_html)
-        parts.append(f'    <h2>{group["title"]}</h2>')
-        ul = ['    <ul class="proj-list">']
-        for pid in group["projects"]:
-            proj = projects[pid]
-            view = proj.get("page_en", {})
-            ptitle = view.get("title", proj.get("title", {}).get("en", pid))
-            metas = view.get("metas", [proj.get("summary", {}).get("en", "")])
-            links = view.get("links")
-            if links is None:
-                links = [
-                    {"label": l["label"].get("en", l["label"]) if isinstance(l["label"], dict) else l["label"],
-                     "url": l["url"]}
-                    for l in proj.get("links", [])
-                ]
-            ul.append('        <li class="list-item">')
-            ul.append(f'            <span class="list-title">{ptitle}</span>')
-            for m in metas:
-                ul.append(f'            <div class="list-meta">{render_meta(m, site)}</div>')
-            ul.append('            <div class="list-links">')
-            for l in links:
-                ul.append(f'                <a href="{l["url"]}" class="list-link" target="_blank" rel="noopener">{l["label"]}</a>')
-            ul.append('            </div>')
-            ul.append('        </li>')
-        ul.append("    </ul>")
-        parts.append("\n".join(ul))
-        sections.append("\n".join(["<section>", *parts, "</section>"]))
-    return "\n".join(sections)
+    parts = []
+    text = blocks[0][1] if blocks else ""
+    if text.strip():
+        parts.append(render_markdown(text, site))
+    parts.append(f'    <h2>{group["title"]}</h2>')
+    ul = ['    <ul class="proj-list">']
+    for pid in group["projects"]:
+        proj = projects[pid]
+        view = proj.get("page_en", {})
+        ptitle = view.get("title", proj.get("title", {}).get("en", pid))
+        metas = view.get("metas", [proj.get("summary", {}).get("en", "")])
+        links = view.get("links")
+        if links is None:
+            links = [
+                {"label": l["label"].get("en", l["label"]) if isinstance(l["label"], dict) else l["label"],
+                 "url": l["url"]}
+                for l in proj.get("links", [])
+            ]
+        ul.append('        <li class="list-item">')
+        ul.append(f'            <span class="list-title">{ptitle}</span>')
+        for m in metas:
+            ul.append(f'            <div class="list-meta">{render_meta(m, site)}</div>')
+        ul.append('            <div class="list-links">')
+        for l in links:
+            ul.append(f'                <a href="{l["url"]}" class="list-link" target="_blank" rel="noopener">{l["label"]}</a>')
+        ul.append('            </div>')
+        ul.append('        </li>')
+    ul.append("    </ul>")
+    parts.append("\n".join(ul))
+    return assemble_plain_section("", "\n".join(parts), sec_meta.get("class") or page_default_class, sec_meta.get("id"))
 
 
-def render_education_section(entry, page_id, site, deps):
+def render_education_section(sec_meta, blocks, site, page_default_class=None):
     """kind: education —— 教育经历节（data/education.json，每条 zh/en）。
     institution / year / details 支持 {{ site.* }} 引用。"""
     path = DATA_DIR / "education.json"
-    deps.add(path)
     data = load_json(path)
-    if not entry.get("title"):
-        raise BuildError(f"{page_id} 页的 education 节缺少 title")
-    title = entry["title"]
+    title = sec_meta.get("title")
+    if not title:
+        raise BuildError("education 节缺少 title")
     langs = list(title)
     bodies = {}
     for lang in langs:
@@ -633,7 +633,10 @@ def render_education_section(entry, page_id, site, deps):
             items.append("        </div>")
             items.append("    </div>")
         bodies[lang] = '<div class="edu-list">\n' + "\n".join(items) + "\n</div>"
-    return assemble_switchable_section(title, langs, bodies, site, entry.get("class"), entry.get("id"))
+    return assemble_switchable_section(
+        title, langs, bodies, site,
+        sec_meta.get("class") or page_default_class, sec_meta.get("id"),
+    )
 
 
 RENDERERS = {
@@ -641,7 +644,7 @@ RENDERERS = {
     "links": render_links_section,
     "publications": render_publications_section,
     "projects": render_projects_section,
-    "projects_page": render_projects_page,
+    "projects-group": render_projects_group,
     "education": render_education_section,
 }
 
@@ -660,24 +663,35 @@ def substitute_template(html_text, values):
     return TEMPLATE_PLACEHOLDER.sub(repl, html_text)
 
 
-def render_page(template_path, site, deps):
-    """渲染一个普通页面（index.html 除外，见 render_index）。"""
-    page_id = template_path.stem
+def render_page(template_path, page_md_path, site, deps):
+    """渲染一个普通页面（index.md 除外，见 render_index）：页面 md 提供
+    元数据（front matter）与全部节（正文节围栏），模板只提供骨架。
+    除 index 外全部页面共用 templates/pages/page.html。"""
+    page_id = page_md_path.stem
+    deps.add(page_md_path)
     deps.add(template_path)
-    manifest, skeleton = load_front_matter(template_path)
+    deps.add(DATA_DIR / "site.json")
+    manifest, body = load_front_matter(page_md_path)
     manifest = substitute_meta(manifest, site)
+    skeleton = template_path.read_text(encoding="utf-8")
 
     def field(key, lang):
         value = manifest.get(key, "")
         return value.get(lang, "") if isinstance(value, dict) else value
 
+    page_default_class = manifest.get("section-class")
     sections = []
-    for entry in manifest.get("sections", []):
-        kind = entry.get("kind", "content")
+    for sec_meta, blocks in split_sections(body):
+        sec_meta = substitute_meta(sec_meta, site)
+        kind = sec_meta.get("kind", "content")
+        if kind == "education":
+            deps.add(DATA_DIR / "education.json")
+        if kind in ("projects", "projects-group"):
+            deps.add(DATA_DIR / "projects.json")
         renderer = RENDERERS.get(kind)
         if renderer is None:
             raise BuildError(f"{page_id} 页面的节 kind 未知：{kind!r}")
-        sections.append(renderer(entry, page_id, site, deps))
+        sections.append(renderer(sec_meta, blocks, site, page_default_class))
 
     scripts = manifest.get("scripts", [])
     extra_scripts = "\n".join(f'    <script src="{s}"></script>' for s in scripts)
@@ -702,6 +716,7 @@ def render_index(template_path, site, deps):
     front matter。"""
     page_id = "index"
     deps.add(template_path)
+    deps.add(DATA_DIR / "site.json")
     skeleton = template_path.read_text(encoding="utf-8")
     index_path = CONTENT_DIR / "index.md"
     deps.add(index_path)
@@ -819,16 +834,17 @@ def main():
     if "url" not in site:
         raise BuildError("data/site.json 缺少 url 字段")
 
-    # 3-5. 逐页渲染
+    # 3-5. 逐页渲染（一个页面 = 一个 content/*.md）
     page_deps = {}
-    for template_path in sorted(PAGES_DIR.glob("*.html")):
-        deps = page_deps.setdefault(template_path.stem, set())
-        if template_path.stem == "index":
-            result = render_index(template_path, site, deps)
+    for md_path in sorted(CONTENT_DIR.glob("*.md")):
+        page = md_path.stem
+        deps = page_deps.setdefault(page, set())
+        if page == "index":
+            result = render_index(PAGES_DIR / "index.html", site, deps)
         else:
-            result = render_page(template_path, site, deps)
-        (out / template_path.name).write_text(result, encoding="utf-8")
-        print(f"  {template_path.name}")
+            result = render_page(PAGES_DIR / "page.html", md_path, site, deps)
+        (out / f"{page}.html").write_text(result, encoding="utf-8")
+        print(f"  {page}.html")
 
     # 7. 静态拷贝 assets（含 publications.bib、books.json、subnav.html 原样）
     shutil.copytree(ASSETS_DIR, out / "assets", dirs_exist_ok=True)

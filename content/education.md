@@ -1,8 +1,11 @@
 ---
-title: 评论
-switchable: false
-langs: [zh]
+title: {zh: 教育背景, en: Education}
+meta: {zh: 教育, en: Educational background}
+subnav: {zh: 教育背景, en: Education}
 ---
+<!-- section {kind: education, title: {zh: 列表, en: List}} -->
+
+<!-- section {title: 评论, switchable: false} -->
 <!-- lang:zh -->
 学者主页写教育经历，一般从大学写起。而我从小学写起，因为我最喜欢讲的一个故事就是我读书读了两千年。
 
