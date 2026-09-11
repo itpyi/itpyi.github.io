@@ -1,16 +1,4 @@
 {
   "url": "https://itpyi.site",
-  "owner": "itpyi",
-  "site_name": {"zh": "揽月阁", "en": "Vagnius Itpivis"},
-  "institute": {
-    "zh": "清华大学杨振宁高等研究院",
-    "en": "Chen-Ning Yang Institute for Advanced Study, Tsinghua University"
-  },
-  "lang_labels": {"zh": "汉语", "en": "English", "fr": "français", "la": "Latīnum"},
-  "links": [
-    {"label": "ORCID", "url": "https://orcid.org/0009-0003-1126-1628"},
-    {"label": "SciRate", "url": "https://scirate.com/wang-yifei"},
-    {"label": "Google Scholar", "url": "https://scholar.google.com/citations?user=dwTYUPwAAAAJ"},
-    {"label": "Stack Exchange", "url": "https://stackexchange.com/users/17951034/itpyi"}
-  ]
+  "lang_labels": {"zh": "汉语", "en": "English", "fr": "français", "la": "Latīnum"}
 }

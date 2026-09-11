@@ -14,9 +14,10 @@ Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖�
 流水线（按顺序执行，任何一步出错都立即报错退出）：
 
  1. 解析命令行参数（--output，默认 _site），清空旧输出目录。
- 2. 加载 data/site.json —— 站点全局字符串（机构名、相关链接、语言显示名、
-    站点 URL）。正文与数据文件里可用 {{ site.机构.语言 }} 引用其中任何值，
-    例如 {{ site.institute.zh }}，实现「改一处，全站生效」。
+ 2. 加载 data/site.json —— 唯一的纯构建期配置（站点 URL、语言显示名）。
+    内容数据（教育经历、开源项目、相关链接、书单、出版物 bib）都放在
+    assets/data/ —— 内容不是构建期配置，会随维护更新，且 publications.bib
+    与 books.json 本来就需要在浏览器端被 fetch，同处最自然。
  3. 逐页处理 content/*.md —— **一个页面 = 一个 Markdown 文件**：
       - front matter 是页面元数据（标题、meta、子导航标题、脚本列表、
         可选的 section-class 页面默认节 class）；
@@ -31,15 +32,15 @@ Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖�
                       title 为 {语言: 标题} 字典）生成双语结构；纯节
                       （switchable: false，title 为字符串）生成普通
                       <section>。
-      links           相关链接节（data/site.json 的 links 列表）。
+      links           相关链接节（assets/data/links.json）。
       publications    学术论文节：只发占位 <div data-publications>，
                       内容由浏览器端 assets/js/publications.js 读取
                       assets/data/publications.bib 渲染（保持现状）。
-      projects        开源项目节（academics 页视图，data/projects.json；
+      projects        开源项目节（academics 页视图，assets/data/projects.json；
                       节正文 = 该节的中英引导段落）。
-      projects-group  opensource.html 的英文分组视图（data/projects.json，
+      projects-group  opensource.html 的英文分组视图（assets/data/projects.json，
                       属性 group: 0/1 指定分组，h2 标题来自数据）。
-      education       教育经历节（data/education.json）。
+      education       教育经历节（assets/data/education.json）。
  5. 页面组装：把标题 / meta / 子导航 / 节 / 脚本替换进骨架（除 index 外
     全部页面共用 templates/pages/page.html）。任何残留的未替换
     {{ 占位符 }} 都会报错（宁吵勿静默）。
@@ -78,8 +79,9 @@ ROOT = Path(__file__).resolve().parent
 PAGES_DIR = ROOT / "templates" / "pages"
 PARTIALS_DIR = ROOT / "templates" / "partials"
 CONTENT_DIR = ROOT / "content"
-DATA_DIR = ROOT / "data"
+DATA_DIR = ROOT / "data"                    # 纯构建期配置（site.json）
 ASSETS_DIR = ROOT / "assets"
+CONTENT_DATA_DIR = ASSETS_DIR / "data"      # 站点内容数据（教育/项目/链接/书单/bib）
 
 VOID_ELEMENTS = {
     "area", "base", "br", "col", "embed", "hr", "img", "input",
@@ -91,9 +93,6 @@ LANG_FENCE = re.compile(r"^<!--\s+lang:([\w-]+)\s*-->\s*$")
 
 # 节围栏：<!-- section {title: {zh: 研究, en: Research}} -->（花括号内为 YAML flow map）
 SECTION_FENCE = re.compile(r"^<!--\s+section\s+(\{.*\})\s*-->\s*$")
-
-# {{ site.path }} —— 引用 site.json 中的值
-SITE_PLACEHOLDER = re.compile(r"\{\{\s*site\.([\w.]+)\s*\}\}")
 
 # 模板骨架中的 {{ 大写占位符 }}
 TEMPLATE_PLACEHOLDER = re.compile(r"\{\{\s*([A-Z][A-Z0-9_]*)\s*\}\}")
@@ -124,33 +123,6 @@ def load_front_matter(path):
         body = raw[end + 4:].lstrip("\n")
         return metadata, body
     return {}, raw
-
-
-def substitute_site(text, site):
-    """把正文/数据里的 {{ site.path }} 替换成 site.json 中的对应字符串。"""
-
-    def repl(m):
-        node = site
-        for key in m.group(1).split("."):
-            if not isinstance(node, dict) or key not in node:
-                raise BuildError(f"site.json 中没有键 site.{m.group(1)}")
-            node = node[key]
-        if not isinstance(node, str):
-            raise BuildError(f"site.{m.group(1)} 不是字符串，无法替换进文本")
-        return node
-
-    return SITE_PLACEHOLDER.sub(repl, text)
-
-
-def substitute_meta(obj, site):
-    """递归替换 YAML front matter / JSON 数据中所有字符串里的 {{ site.* }}。"""
-    if isinstance(obj, str):
-        return substitute_site(obj, site)
-    if isinstance(obj, list):
-        return [substitute_meta(x, site) for x in obj]
-    if isinstance(obj, dict):
-        return {k: substitute_meta(v, site) for k, v in obj.items()}
-    return obj
 
 
 def git_last_commit_date(paths):
@@ -309,9 +281,9 @@ def _is_raw_html_line(line):
     return line.startswith("<") and line.endswith(">")
 
 
-def render_markdown(text, site):
-    """{{ site.* }} 替换 → 轻量 Markdown → HTML → 视觉保真后处理。"""
-    lines = substitute_site(text, site).split("\n")
+def render_markdown(text):
+    """轻量 Markdown → HTML → 视觉保真后处理。"""
+    lines = text.split("\n")
     blocks = []
     para = []
 
@@ -353,10 +325,10 @@ def _postprocess(html_text):
     return "".join(parser.out)
 
 
-def render_meta(text, site):
+def render_meta(text):
     """渲染单段文本（list-meta 里的内容）：与 render_markdown 相同，但剥掉外层
     <p>。契约：JSON 中的 summary / notes / metas 字段必须是恰好一段。"""
-    html_text = render_markdown(text, site)
+    html_text = render_markdown(text)
     if html_text.startswith("<p>") and html_text.endswith("</p>"):
         inner = html_text[3:-4]
         if "<p>" not in inner:
@@ -457,7 +429,7 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
         if not isinstance(title, str):
             raise BuildError("纯节（switchable: false）的 title 应为字符串")
         text = blocks[0][1] if blocks else ""
-        body = render_markdown(text, site) if text.strip() else ""
+        body = render_markdown(text) if text.strip() else ""
         return assemble_plain_section(title, body, extra_class, sec_meta.get("id"))
 
     if not isinstance(title, dict):
@@ -469,7 +441,7 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
     bodies = {}
     for lang in langs:
         text = next((t for l, t in blocks if l == lang), None)
-        bodies[lang] = render_markdown(text, site) if text and text.strip() else None
+        bodies[lang] = render_markdown(text) if text and text.strip() else None
     return assemble_switchable_section(
         title, langs, bodies, site,
         extra_class=extra_class,
@@ -486,9 +458,10 @@ def render_links_section(sec_meta, blocks, site, page_default_class=None):
     纯节（title 为字符串 + switchable: false）：research.html 的 More links。
     list_class: ul 的 class，默认 body-list；null 表示裸 ul（research.html 现状）。
     """
-    links = site.get("links", [])
+    path = CONTENT_DATA_DIR / "links.json"
+    links = load_json(path)
     if not links:
-        raise BuildError("site.json 缺少 links")
+        raise BuildError("assets/data/links.json 为空")
     title = sec_meta.get("title")
     if not title:
         raise BuildError("links 节缺少 title")
@@ -528,7 +501,7 @@ def render_publications_section(sec_meta, blocks, site, page_default_class=None)
 def render_projects_section(sec_meta, blocks, site, page_default_class=None):
     """kind: projects —— 开源项目节（academics 页的平铺视图，双语）。
     节正文 = 该节的中英引导段落；其后接 projects.json 的 academics 列表。"""
-    path = DATA_DIR / "projects.json"
+    path = CONTENT_DATA_DIR / "projects.json"
     data = load_json(path)
     title = sec_meta.get("title")
     if not title:
@@ -539,15 +512,15 @@ def render_projects_section(sec_meta, blocks, site, page_default_class=None):
         parts = []
         text = next((t for l, t in blocks if l == lang), None)
         if text and text.strip():
-            parts.append(render_markdown(text, site))
+            parts.append(render_markdown(text))
         ul = ['    <ul class="proj-list">']
         for pid in data.get("academics_items", []):
             proj = data["projects"][pid]
             ul.append('        <li class="list-item">')
             ul.append(f'            <span class="list-title">{proj["title"][lang]}</span>')
-            ul.append(f'            <div class="list-meta">{render_meta(proj["summary"][lang], site)}</div>')
+            ul.append(f'            <div class="list-meta">{render_meta(proj["summary"][lang])}</div>')
             for note in proj.get("notes", {}).get(lang, []):
-                ul.append(f'            <div class="list-meta">{render_meta(note, site)}</div>')
+                ul.append(f'            <div class="list-meta">{render_meta(note)}</div>')
             ul.append('            <div class="list-links">')
             for l in proj.get("links", []):
                 label = l["label"] if isinstance(l["label"], str) else l["label"][lang]
@@ -568,7 +541,7 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
     属性 group: 0/1 指定 projects.json 的 opensource_groups 下标；
     h2 标题来自数据；节正文（如有）放在 h2 之前（页面引导段落）。
     每个项目取 page_en 字段（缺省时回退 title.en / summary.en / links）。"""
-    path = DATA_DIR / "projects.json"
+    path = CONTENT_DATA_DIR / "projects.json"
     data = load_json(path)
     groups = data.get("opensource_groups", [])
     group_idx = sec_meta.get("group")
@@ -580,7 +553,7 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
     parts = []
     text = blocks[0][1] if blocks else ""
     if text.strip():
-        parts.append(render_markdown(text, site))
+        parts.append(render_markdown(text))
     parts.append(f'    <h2>{group["title"]}</h2>')
     ul = ['    <ul class="proj-list">']
     for pid in group["projects"]:
@@ -598,7 +571,7 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
         ul.append('        <li class="list-item">')
         ul.append(f'            <span class="list-title">{ptitle}</span>')
         for m in metas:
-            ul.append(f'            <div class="list-meta">{render_meta(m, site)}</div>')
+            ul.append(f'            <div class="list-meta">{render_meta(m)}</div>')
         ul.append('            <div class="list-links">')
         for l in links:
             ul.append(f'                <a href="{l["url"]}" class="list-link" target="_blank" rel="noopener">{l["label"]}</a>')
@@ -610,9 +583,8 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
 
 
 def render_education_section(sec_meta, blocks, site, page_default_class=None):
-    """kind: education —— 教育经历节（data/education.json，每条 zh/en）。
-    institution / year / details 支持 {{ site.* }} 引用。"""
-    path = DATA_DIR / "education.json"
+    """kind: education —— 教育经历节（assets/data/education.json，每条 zh/en）。"""
+    path = CONTENT_DATA_DIR / "education.json"
     data = load_json(path)
     title = sec_meta.get("title")
     if not title:
@@ -622,14 +594,12 @@ def render_education_section(sec_meta, blocks, site, page_default_class=None):
     for lang in langs:
         items = []
         for e in data:
-            year = substitute_site(e["year"][lang], site)
-            inst = substitute_site(e["institution"][lang], site)
             items.append('    <div class="edu-item">')
-            items.append(f'        <div class="edu-year">{year}</div>')
+            items.append(f'        <div class="edu-year">{e["year"][lang]}</div>')
             items.append('        <div class="edu-details">')
-            items.append(f'            <div class="edu-institution">{inst}</div>')
+            items.append(f'            <div class="edu-institution">{e["institution"][lang]}</div>')
             for detail in e["details"][lang]:
-                items.append("            " + render_markdown(detail, site).strip("\n"))
+                items.append("            " + render_markdown(detail).strip("\n"))
             items.append("        </div>")
             items.append("    </div>")
         bodies[lang] = '<div class="edu-list">\n' + "\n".join(items) + "\n</div>"
@@ -672,7 +642,6 @@ def render_page(template_path, page_md_path, site, deps):
     deps.add(template_path)
     deps.add(DATA_DIR / "site.json")
     manifest, body = load_front_matter(page_md_path)
-    manifest = substitute_meta(manifest, site)
     skeleton = template_path.read_text(encoding="utf-8")
 
     def field(key, lang):
@@ -682,12 +651,13 @@ def render_page(template_path, page_md_path, site, deps):
     page_default_class = manifest.get("section-class")
     sections = []
     for sec_meta, blocks in split_sections(body):
-        sec_meta = substitute_meta(sec_meta, site)
         kind = sec_meta.get("kind", "content")
+        if kind == "links":
+            deps.add(CONTENT_DATA_DIR / "links.json")
         if kind == "education":
-            deps.add(DATA_DIR / "education.json")
+            deps.add(CONTENT_DATA_DIR / "education.json")
         if kind in ("projects", "projects-group"):
-            deps.add(DATA_DIR / "projects.json")
+            deps.add(CONTENT_DATA_DIR / "projects.json")
         renderer = RENDERERS.get(kind)
         if renderer is None:
             raise BuildError(f"{page_id} 页面的节 kind 未知：{kind!r}")
@@ -721,7 +691,6 @@ def render_index(template_path, site, deps):
     index_path = CONTENT_DIR / "index.md"
     deps.add(index_path)
     manifest, _ = load_front_matter(index_path)
-    manifest = substitute_meta(manifest, site)
 
     def field(key, lang):
         value = manifest.get(key, "")
@@ -853,7 +822,7 @@ def main():
     #    覆盖上一步拷贝进来的旧 assets/partials/footer.html
     fallback_date = datetime.date.today().isoformat()
     footer_date = (
-        git_last_commit_date([CONTENT_DIR, DATA_DIR, ROOT / "templates"])
+        git_last_commit_date([CONTENT_DIR, DATA_DIR, ROOT / "templates", CONTENT_DATA_DIR])
         or fallback_date
     )
     (out / "assets" / "partials" / "footer.html").write_text(

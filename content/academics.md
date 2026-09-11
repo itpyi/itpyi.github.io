@@ -9,13 +9,13 @@ section-class: cv-section
 ---
 <!-- section {title: {zh: 研究, en: Research}} -->
 <!-- lang:zh -->
-{{ site.institute.zh }}理论物理博士研究生，当前主要关注容错量子计算、拓扑量子物态与量子模拟。
+清华大学杨振宁高等研究院理论物理博士研究生，当前主要关注容错量子计算、拓扑量子物态与量子模拟。
 
 - 拓扑量子码上的容错方案设计
 - 量子元胞自动机的分类
 - 原子阵列量子计算的架构设计
 <!-- lang:en -->
-PhD candidate in theoretical physics at the {{ site.institute.en }}, currently working on fault-tolerant quantum computing, topological phases of matter, and quantum simulation.
+PhD candidate in theoretical physics at the Chen-Ning Yang Institute for Advanced Study, Tsinghua University, currently working on fault-tolerant quantum computing, topological phases of matter, and quantum simulation.
 
 - Fault-tolerant design on topological codes
 - Classification of quantum cellular automata

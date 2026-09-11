@@ -1,7 +1,7 @@
 ---
 meta:
-  zh: '王逸飞 (itpyi) 的个人主页。{{ site.institute.zh }}理论物理博士研究生，关注容错量子计算、拓扑量子物态与量子模拟。'
-  en: 'Personal homepage of Wang Yifei (itpyi). PhD candidate in theoretical physics at the {{ site.institute.en }}, researching fault-tolerant quantum computing, topological states of matter, and quantum simulation.'
+  zh: 王逸飞 (itpyi) 的个人主页。清华大学杨振宁高等研究院理论物理博士研究生，关注容错量子计算、拓扑量子物态与量子模拟。
+  en: Personal homepage of Wang Yifei (itpyi). PhD candidate in theoretical physics at the Chen-Ning Yang Institute for Advanced Study, Tsinghua University, researching fault-tolerant quantum computing, topological states of matter, and quantum simulation.
 title: {zh: 揽月阁, en: Vagnius Itpivis}
 logo: {zh: 揽月阁, en: Vagnius Itpivis}
 enter_hint: {zh: 点击任意位置以进入, en: Click anywhere to enter}
