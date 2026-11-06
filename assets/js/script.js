@@ -66,6 +66,7 @@ if (footerElement) {
         .then(response => response.text())
         .then(html => {
             footerElement.innerHTML = html;
+            switchGlobalLanguage(getGlobalLanguage());
             syncHomepageFooterHeight();
         })
         .catch(() => {
@@ -88,6 +89,7 @@ if (subnavElement) {
             html = html.replace('{{TITLE_ZH}}', subnavTitleZh);
             html = html.replace('{{TITLE_EN}}', subnavTitleEn);
             subnavElement.innerHTML = html;
+            switchGlobalLanguage(getGlobalLanguage());
         })
         .catch(() => {
             // 保持静默，避免影响页面其他功能
@@ -169,15 +171,28 @@ document.addEventListener('click', e => {
 // Global Language Switcher Functionality
 // ========================================
 
+const DEFAULT_LANGUAGE = 'zh';
+
+function getGlobalLanguage() {
+    return document.documentElement.dataset.globalLanguage || DEFAULT_LANGUAGE;
+}
+
+function pageSupportsLanguage(language) {
+    return Boolean(document.querySelector(`head title[data-lang="${language}"]`));
+}
+
 // Function to switch global language
 function switchGlobalLanguage(targetLang) {
+    const languageToShow = pageSupportsLanguage(targetLang) ? targetLang : DEFAULT_LANGUAGE;
+    document.documentElement.dataset.globalLanguage = languageToShow;
+
     // 1. Update HTML lang attribute
-    document.documentElement.lang = targetLang === 'zh' ? 'zh-Hans' : 'en';
+    document.documentElement.lang = languageToShow === 'zh' ? 'zh-Hans' : languageToShow;
     
     // 2. Update meta description
     const metaDescriptions = document.querySelectorAll('meta[name="description"]');
     metaDescriptions.forEach(meta => {
-        if (meta.dataset.lang === targetLang) {
+        if (meta.dataset.lang === languageToShow) {
             // Move this meta to be the active one by updating the first meta tag
             const firstMeta = document.querySelector('meta[name="description"]');
             if (firstMeta && meta.hasAttribute('content')) {
@@ -189,7 +204,7 @@ function switchGlobalLanguage(targetLang) {
     // 3. Update page title
     const titleElements = document.querySelectorAll('head title[data-lang]');
     titleElements.forEach(title => {
-        if (title.dataset.lang === targetLang) {
+        if (title.dataset.lang === languageToShow) {
             document.title = title.textContent;
         }
     });
@@ -202,7 +217,7 @@ function switchGlobalLanguage(targetLang) {
         // Skip language menu items (both section and global menus)
         if (elem.tagName === 'LI' && (elem.closest('.lang-menu') || elem.closest('.global-lang-menu'))) return;
         
-        if (elem.dataset.lang === targetLang) {
+        if (elem.dataset.lang === languageToShow) {
             elem.style.display = '';
         } else {
             elem.style.display = 'none';
@@ -212,8 +227,8 @@ function switchGlobalLanguage(targetLang) {
     // 5. Update all lang-switchable sections
     document.querySelectorAll('.lang-switchable').forEach(section => {
         // Check if this section has the target language
-        const hasTargetLang = section.querySelector(`.lang-content[data-lang="${targetLang}"]`);
-        const langToShow = hasTargetLang ? targetLang : 'zh'; // Fallback to Chinese if target lang not available
+        const hasTargetLang = section.querySelector(`.lang-content[data-lang="${languageToShow}"]`);
+        const langToShow = hasTargetLang ? languageToShow : DEFAULT_LANGUAGE; // Fallback to Chinese if target lang not available
         
         // Switch content
         section.querySelectorAll('.lang-content').forEach(content => {
@@ -243,8 +258,15 @@ function switchGlobalLanguage(targetLang) {
     
     // 6. Update global language menu active state
     document.querySelectorAll('.global-lang-menu li').forEach(li => {
-        li.classList.toggle('active', li.dataset.lang === targetLang);
+        li.classList.toggle('active', li.dataset.lang === languageToShow);
     });
+}
+
+// Read the target page's requested global language. Pages which do not offer
+// that language fall back to Chinese in switchGlobalLanguage().
+const requestedLanguage = new URLSearchParams(window.location.search).get('lang');
+if (requestedLanguage) {
+    switchGlobalLanguage(requestedLanguage);
 }
 
 // Toggle global language menu visibility
@@ -270,6 +292,39 @@ document.addEventListener('click', e => {
             s.classList.remove('active');
         });
     }
+});
+
+// Keep language consistent across internal page links. A link inside a
+// language-switchable block follows that block's current language; every
+// other link follows the current global page language.
+function getLinkSourceLanguage(link) {
+    const section = link.closest('.lang-switchable');
+    if (section) {
+        return section.querySelector('.lang-content.active')?.dataset.lang
+            || section.querySelector('.lang-menu li.active')?.dataset.lang
+            || DEFAULT_LANGUAGE;
+    }
+
+    return getGlobalLanguage();
+}
+
+function isInternalPageLink(url) {
+    return url.origin === window.location.origin
+        && url.pathname.toLowerCase().endsWith('.html');
+}
+
+document.addEventListener('click', e => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    const link = e.target.closest('a[href]');
+    if (!link || link.target || link.hasAttribute('download')) return;
+    if (link.getAttribute('href').trim().startsWith('#')) return;
+
+    const targetUrl = new URL(link.href, window.location.href);
+    if (!isInternalPageLink(targetUrl)) return;
+
+    targetUrl.searchParams.set('lang', getLinkSourceLanguage(link));
+    link.href = targetUrl.href;
 });
 
 // Handle global language menu item clicks

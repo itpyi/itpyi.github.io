@@ -22,3 +22,8 @@ pnpm-debug.log*
 .env
 .env.*
 assets/images/avatar.jpg
+
+# 构建产物与本地环境
+_site/
+__pycache__/
+.venv/
