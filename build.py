@@ -6,10 +6,9 @@ build.py — 揽月阁（itpyi.site）站点构建脚本
 把 Markdown 与 JSON 数据渲染为完整 HTML 页面，输出到 _site/ 目录
 （_site/ 是纯产物，已 gitignore，可整体删除重建）。
 
-依赖（见 requirements.txt）：仅 PyYAML（解析 front matter）。
-Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖站点内容
-所需子集的轻量实现——段落、列表、链接、原始 HTML 透传。复杂样式请直接
-在正文里写原始 HTML（如 <p class="research-topic">…</p>）。
+依赖（见 requirements.txt）：PyYAML 解析 front matter，markdown-it-py 解析
+CommonMark 正文。section/lang 围栏仍由本站处理；HTML 后处理保留现有
+列表、链接样式与外链行为。研究节的 ### 沿用 research-topic 段落结构。
 
 流水线（按顺序执行，任何一步出错都立即报错退出）：
 
@@ -74,6 +73,7 @@ from pathlib import Path
 
 try:
     import yaml
+    from markdown_it import MarkdownIt
 except ImportError as exc:
     sys.exit(f"缺少构建依赖：{exc}\n请先运行：pip install -r requirements.txt")
 
@@ -250,74 +250,26 @@ class _PostProcessor(HTMLParser):
         self.out.append(f"<!--{data}-->")
 
 
-# 轻量 Markdown 渲染器（内置，无第三方依赖）。覆盖站点内容需要的子集：
-#   - 空行分段 → <p>…</p>（同一段内的换行按软换行合并为一个空格）
-#   - "- " 开头的连续行 → <ul>…</ul>
-#   - [文本](链接) → <a href="…">文本</a>（链接内不能含空格与右括号）
-#   - 以 < 开头、以 > 结尾的整行 → 原始 HTML 块，原样透传
-#     （样式化元素的逃生口，如 <p class="research-topic">…</p>）
-#   - 反斜杠转义（如 \* 输出字面星号）
-# 不支持的语法（标题、嵌套列表、表格、加粗等）请直接用原始 HTML 代替。
-
-_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)\)")
-
-_ESCAPE_RE = re.compile(r"\\([\\`*{}\[\]()#+.!_>-])")
+# CommonMark 负责正文语法，本站仅适配旧页面的展示契约。
+_MARKDOWN = MarkdownIt("commonmark", {"html": True})
+# 旧渲染器将段内软换行合并为空格；避免中文换行的展示发生变化。
+_MARKDOWN.add_render_rule("softbreak", lambda renderer, tokens, idx, options, env: " ")
 
 
-def _inline(text):
-    """行内渲染：先处理反斜杠转义，再处理 [文本](链接)，其余文本做 HTML 转义。"""
-    text = _ESCAPE_RE.sub(r"\1", text)
-    parts = []
-    pos = 0
-    for m in _LINK_RE.finditer(text):
-        parts.append(html.escape(text[pos:m.start()]))
-        parts.append(
-            f'<a href="{html.escape(m.group(2), quote=True)}">{html.escape(m.group(1))}</a>'
-        )
-        pos = m.end()
-    parts.append(html.escape(text[pos:]))
-    return "".join(parts)
+def render_markdown(text, *, research_topics=False):
+    """CommonMark → HTML → 视觉保真后处理。
 
-
-def _is_raw_html_line(line):
-    return line.startswith("<") and line.endswith(">")
-
-
-def render_markdown(text):
-    """轻量 Markdown → HTML → 视觉保真后处理。"""
-    lines = text.split("\n")
-    blocks = []
-    para = []
-
-    def flush_para():
-        if para:
-            blocks.append("<p>" + _inline(" ".join(para)) + "</p>")
-            para.clear()
-
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        if not line:
-            flush_para()
-            i += 1
-            continue
-        if line.startswith("- "):
-            flush_para()
-            items = []
-            while i < len(lines) and lines[i].strip().startswith("- "):
-                items.append("<li>" + _inline(lines[i].strip()[2:]) + "</li>")
-                i += 1
-            blocks.append("<ul>\n" + "\n".join(items) + "\n</ul>")
-            continue
-        if _is_raw_html_line(line):
-            flush_para()
-            blocks.append(line)
-            i += 1
-            continue
-        para.append(line)
-        i += 1
-    flush_para()
-    return _postprocess("\n".join(blocks))
+    研究节的三级标题仍输出原来的 p.research-topic，其余标题使用标准 HTML。
+    保留原始 HTML 支持；内容来源是仓库作者维护的 Markdown/JSON。
+    """
+    tokens = _MARKDOWN.parse(text)
+    if research_topics:
+        for token in tokens:
+            if token.type in ("heading_open", "heading_close") and token.tag == "h3":
+                token.tag = "p"
+                if token.type == "heading_open":
+                    token.attrSet("class", "research-topic")
+    return _postprocess(_MARKDOWN.renderer.render(tokens, _MARKDOWN.options, {})).strip()
 
 
 def _postprocess(html_text):
@@ -436,13 +388,14 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
     title = sec_meta.get("title", "")
     switchable = sec_meta.get("switchable", True)
     extra_class = sec_meta.get("class") or page_default_class
+    research_topics = sec_meta.get("data-section-id") == "research"
 
     if not switchable:
         # 纯节：标题为字符串；正文取第一个语言块（无围栏时即整段正文）
         if not isinstance(title, str):
             raise BuildError("纯节（switchable: false）的 title 应为字符串")
         text = blocks[0][1] if blocks else ""
-        body = render_markdown(text) if text.strip() else ""
+        body = render_markdown(text, research_topics=research_topics) if text.strip() else ""
         return assemble_plain_section(title, body, extra_class, sec_meta.get("id"))
 
     if not isinstance(title, dict):
@@ -457,7 +410,7 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
     for lang in langs:
         text = next((t for l, t in blocks if l == lang), None)
         if text and text.strip():
-            bodies[lang] = render_markdown(text)
+            bodies[lang] = render_markdown(text, research_topics=research_topics)
         else:
             bodies[lang] = lang_unavailable_message(lang, site)
     return assemble_switchable_section(

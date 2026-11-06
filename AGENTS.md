@@ -10,7 +10,7 @@ This repository is a static personal website hosted on GitHub Pages at `itpyi.si
 
 ```
 ├── build.py                     # THE build pipeline (documented step-by-step in its header)
-├── requirements.txt             # PyYAML only
+├── requirements.txt             # PyYAML + markdown-it-py
 ├── scripts/check_dom.py         # DOM structure comparator (ignores whitespace/comments)
 ├── .github/workflows/deploy.yml # build + deploy to Pages on push to main
 ├── content/                     # one markdown file per page (name = output page name)
@@ -69,7 +69,7 @@ Rules:
   - `langs` — optional explicit menu language list (defaults to the title keys).
   - `class`, `id`, `data-section-id` — passthrough attributes; `list_class` (links only, `null` = unstyled ul); `group` (projects-group only: index into projects.json `opensource_groups`).
 - **Language blocks**: `<!-- lang:xx -->` inside a section body. Any language code works (zh/en/fr/la/…). Menu labels come from `site.json` `lang_labels` (fallback: the code itself).
-- **Markdown subset**: paragraphs, `- ` lists, `[text](url)` links, raw HTML lines (escape hatch for styled elements, e.g. `<p class="research-topic">…</p>`), backslash escapes. Anything else — write raw HTML.
+- **Markdown**: CommonMark via markdown-it-py: paragraphs, headings, emphasis, links/images, ordered/unordered and nested lists, blockquotes, inline code and fenced code blocks, raw HTML, and backslash escapes. In sections with `data-section-id: research`, `### Topic` renders as the existing `<p class="research-topic">Topic</p>` to preserve presentation; elsewhere headings use standard HTML. Soft line breaks remain spaces. Tables, footnotes and math rendering are not enabled. Keep section/lang fence lines outside code examples (the page splitter processes them before Markdown).
 - **Missing-language placeholder**: when a title declares a language whose body or JSON fields are missing, the build renders «该语言版本尚未开发» in that language (texts in `site.json` `lang_unavailable`). Blocks without a language config are unaffected by global language changes (runtime fallback in script.js).
 
 ## Data Files
