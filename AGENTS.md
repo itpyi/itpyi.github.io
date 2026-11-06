@@ -108,6 +108,8 @@ Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and depl
 
 ## Rules for Changes
 
+开始任何变更前，先阅读并遵守 [WORKFLOW.md](WORKFLOW.md)：除手动局部内容更新只需 commit 记录外，变更须先有对应 issue；同一目标可沿用已有开放 issue。流程讨论入口为 [issue #1](https://github.com/itpyi/itpyi.github.io/issues/1)。
+
 1. Do not change visual behavior unless the user requests it. Generated pages must reproduce the existing DOM contracts; verify structure with `scripts/check_dom.py`.
 2. Keep `zh` as the default language; preserve the extensible language architecture and the internal-link propagation rules.
 3. Content is page-local: each page's prose lives in its own `content/*.md`; shared structured content lives in `assets/data/`.
