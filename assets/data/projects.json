@@ -31,9 +31,6 @@
         "metas": [
           "Includes circuit-level noise simulation using [Stim](https://github.com/quantumlib/Stim) and a state-vector analysis of using S gates as a proxy for T gates.",
           "Related to [arXiv:2503.19758](https://arxiv.org/abs/2503.19758)."
-        ],
-        "links": [
-          {"label": "GitHub Repo", "url": "https://github.com/itpyi/surface_magic"}
         ]
       }
     },
@@ -55,9 +52,6 @@
         "metas": [
           "State-vector simulation for magic state distillation at the physical level.",
           "Related to [arXiv:2312.09111](https://arxiv.org/abs/2312.09111)."
-        ],
-        "links": [
-          {"label": "GitHub Repo", "url": "https://github.com/itpyi/error_msd"}
         ]
       }
     },

@@ -20,6 +20,7 @@ This repository is a static personal website hosted on GitHub Pages at `itpyi.si
 ├── templates/
 │   ├── pages/page.html          # shared skeleton for all pages except index
 │   ├── pages/index.html         # homepage skeleton
+│   ├── partials/head.html       # shared head for index and ordinary pages
 │   └── partials/footer.html     # rendered with dates → _site/assets/partials/footer.html
 ├── data/
 │   └── site.json                # build configuration only: url, lang_labels, lang_unavailable
@@ -74,7 +75,7 @@ Rules:
 ## Data Files
 
 - `assets/data/education.json` — `[{year: {lang: …}, institution: {lang: …}, details: {lang: [markdown strings]}}]`.
-- `assets/data/projects.json` — projects keyed by id; `academics_items` orders the CV-page list; `opensource_groups` orders the opensource page; a project may carry a `page_en` view (title/metas/links) for the English opensource page.
+- `assets/data/projects.json` — projects keyed by id; `academics_items` orders the CV-page list; `opensource_groups` orders the opensource page; a project may carry a `page_en` view (title/metas/links) for the English opensource page. Omit `page_en.links` when it matches the shared links; the renderer inherits their English labels.
 - `assets/data/links.json` — `[{label, url}]` (labels are proper nouns, identical across languages).
 - `assets/data/publications.bib` and `books.json` — rendered client-side; the build copies them as-is.
 
@@ -99,6 +100,8 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # once
 .venv/bin/python build.py                                            # build to _site/
 python3 -m http.server 8000 -d _site                                 # local preview
 ```
+
+For an equivalent refactor, copy the built `_site/` to a temporary baseline directory before editing, rebuild, then run `python3 scripts/check_dom.py _site /path/to/baseline`. This compares all HTML files and partials and reports added or missing files; it does not replace interaction or visual checks.
 
 The pipeline is documented step by step in `build.py`'s header. The footer «最后更新于» date is derived at build time from the latest git commit touching `content/ data/ templates/ assets/data/` (fallback: build date) — never edit it by hand.
 

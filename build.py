@@ -667,6 +667,23 @@ def substitute_template(html_text, values):
     return TEMPLATE_PLACEHOLDER.sub(repl, html_text)
 
 
+def localized_field(manifest, key, lang):
+    """读取页面字段；纯字符串不随语言变化。"""
+    value = manifest.get(key, "")
+    return value.get(lang, "") if isinstance(value, dict) else value
+
+
+def render_head(manifest, deps):
+    """首页和子页面共用 head；翻译与 HTML 转义在此统一处理。"""
+    path = PARTIALS_DIR / "head.html"
+    deps.add(path)
+    values = {
+        f"{key.upper()}_{lang.upper()}": html.escape(localized_field(manifest, key, lang), quote=True)
+        for key in ("title", "meta") for lang in ("zh", "en")
+    }
+    return substitute_template(path.read_text(encoding="utf-8").rstrip("\n"), values)
+
+
 def render_page(template_path, page_md_path, site, deps):
     """渲染一个普通页面（index.md 除外，见 render_index）：页面 md 提供
     元数据（front matter）与全部节（正文节围栏），模板只提供骨架。
@@ -677,10 +694,6 @@ def render_page(template_path, page_md_path, site, deps):
     deps.add(DATA_DIR / "site.json")
     manifest, body = load_front_matter(page_md_path)
     skeleton = template_path.read_text(encoding="utf-8")
-
-    def field(key, lang):
-        value = manifest.get(key, "")
-        return value.get(lang, "") if isinstance(value, dict) else value
 
     page_default_class = manifest.get("section-class")
     sections = []
@@ -701,12 +714,9 @@ def render_page(template_path, page_md_path, site, deps):
     extra_scripts = "\n".join(f'    <script src="{s}"></script>' for s in scripts)
 
     values = {
-        "TITLE_ZH": html.escape(field("title", "zh"), quote=True),
-        "TITLE_EN": html.escape(field("title", "en"), quote=True),
-        "META_ZH": html.escape(field("meta", "zh"), quote=True),
-        "META_EN": html.escape(field("meta", "en"), quote=True),
-        "SUBNAV_ZH": html.escape(field("subnav", "zh"), quote=True),
-        "SUBNAV_EN": html.escape(field("subnav", "en"), quote=True),
+        "HEAD": render_head(manifest, deps),
+        "SUBNAV_ZH": html.escape(localized_field(manifest, "subnav", "zh"), quote=True),
+        "SUBNAV_EN": html.escape(localized_field(manifest, "subnav", "en"), quote=True),
         "SECTIONS": "\n".join(sections),
         "EXTRA_SCRIPTS": extra_scripts,
     }
@@ -725,10 +735,6 @@ def render_index(template_path, site, deps):
     index_path = CONTENT_DIR / "index.md"
     deps.add(index_path)
     manifest, _ = load_front_matter(index_path)
-
-    def field(key, lang):
-        value = manifest.get(key, "")
-        return value.get(lang, "") if isinstance(value, dict) else value
 
     quotes = manifest.get("quotes", [])
     quote_html = "\n".join(
@@ -750,16 +756,13 @@ def render_index(template_path, site, deps):
         )
 
     values = {
-        "TITLE_ZH": html.escape(field("title", "zh"), quote=True),
-        "TITLE_EN": html.escape(field("title", "en"), quote=True),
-        "META_ZH": html.escape(field("meta", "zh"), quote=True),
-        "META_EN": html.escape(field("meta", "en"), quote=True),
-        "LOGO_ZH": field("logo", "zh"),
-        "LOGO_EN": field("logo", "en"),
-        "ENTER_HINT_ZH": field("enter_hint", "zh"),
-        "ENTER_HINT_EN": field("enter_hint", "en"),
-        "SR_TITLE_ZH": field("sr_title", "zh"),
-        "SR_TITLE_EN": field("sr_title", "en"),
+        "HEAD": render_head(manifest, deps),
+        "LOGO_ZH": localized_field(manifest, "logo", "zh"),
+        "LOGO_EN": localized_field(manifest, "logo", "en"),
+        "ENTER_HINT_ZH": localized_field(manifest, "enter_hint", "zh"),
+        "ENTER_HINT_EN": localized_field(manifest, "enter_hint", "en"),
+        "SR_TITLE_ZH": localized_field(manifest, "sr_title", "zh"),
+        "SR_TITLE_EN": localized_field(manifest, "sr_title", "en"),
         "QUOTES": quote_html,
         "ROUTES": "\n".join(routes_html),
     }
