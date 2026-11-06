@@ -125,6 +125,21 @@ document.addEventListener('click', e => {
     }
 });
 
+// Shared by local and global switching; the caller decides whether to fall back.
+function switchSectionLanguage(section, language) {
+    section.querySelectorAll('.lang-content').forEach(content => {
+        const active = content.dataset.lang === language;
+        content.classList.toggle('active', active);
+        content.style.display = active ? 'block' : 'none';
+    });
+    section.querySelectorAll('.section-header h2').forEach(title => {
+        title.style.display = title.dataset.lang === language ? 'block' : 'none';
+    });
+    section.querySelectorAll('.lang-menu li').forEach(item => {
+        item.classList.toggle('active', item.dataset.lang === language);
+    });
+}
+
 // Handle language menu item clicks
 document.addEventListener('click', e => {
     const menuItem = e.target.closest('.lang-menu li');
@@ -137,31 +152,7 @@ document.addEventListener('click', e => {
     const section = menuItem.closest('.lang-switchable');
     if (!section) return;
     
-    // Update menu active state
-    const menu = menuItem.closest('.lang-menu');
-    menu.querySelectorAll('li').forEach(li => {
-        li.classList.toggle('active', li === menuItem);
-    });
-    
-    // Switch content visibility
-    section.querySelectorAll('.lang-content').forEach(content => {
-        if (content.dataset.lang === targetLang) {
-            content.classList.add('active');
-            content.style.display = 'block';
-        } else {
-            content.classList.remove('active');
-            content.style.display = 'none';
-        }
-    });
-    
-    // Switch h2 title visibility
-    section.querySelectorAll('.section-header h2').forEach(h2 => {
-        if (h2.dataset.lang === targetLang) {
-            h2.style.display = 'block';
-        } else {
-            h2.style.display = 'none';
-        }
-    });
+    switchSectionLanguage(section, targetLang);
     
     // Close the menu
     menuItem.closest('.lang-switcher').classList.remove('active');
@@ -230,30 +221,7 @@ function switchGlobalLanguage(targetLang) {
         const hasTargetLang = section.querySelector(`.lang-content[data-lang="${languageToShow}"]`);
         const langToShow = hasTargetLang ? languageToShow : DEFAULT_LANGUAGE; // Fallback to Chinese if target lang not available
         
-        // Switch content
-        section.querySelectorAll('.lang-content').forEach(content => {
-            if (content.dataset.lang === langToShow) {
-                content.classList.add('active');
-                content.style.display = 'block';
-            } else {
-                content.classList.remove('active');
-                content.style.display = 'none';
-            }
-        });
-        
-        // Switch section header titles
-        section.querySelectorAll('.section-header h2').forEach(h2 => {
-            if (h2.dataset.lang === langToShow) {
-                h2.style.display = 'block';
-            } else {
-                h2.style.display = 'none';
-            }
-        });
-        
-        // Update section's language menu active state
-        section.querySelectorAll('.lang-menu li').forEach(li => {
-            li.classList.toggle('active', li.dataset.lang === langToShow);
-        });
+        switchSectionLanguage(section, langToShow);
     });
     
     // 6. Update global language menu active state

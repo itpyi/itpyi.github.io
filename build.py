@@ -516,6 +516,19 @@ def render_publications_section(sec_meta, blocks, site, page_default_class=None)
     )
 
 
+def render_project_item(title, metas, links):
+    """两种项目视图共用条目结构；调用方准备文案和链接标签。"""
+    lines = ['        <li class="list-item">',
+             f'            <span class="list-title">{title}</span>']
+    for meta in metas:
+        lines.append(f'            <div class="list-meta">{render_meta(meta)}</div>')
+    lines.append('            <div class="list-links">')
+    for link in links:
+        lines.append(f'                <a href="{link["url"]}" class="list-link" target="_blank" rel="noopener">{link["label"]}</a>')
+    lines.extend(['            </div>', '        </li>'])
+    return "\n".join(lines)
+
+
 def render_projects_section(sec_meta, blocks, site, page_default_class=None):
     """kind: projects —— 开源项目节（academics 页的平铺视图，双语）。
     节正文 = 该节的中英引导段落；其后接 projects.json 的 academics 列表。"""
@@ -540,17 +553,13 @@ def render_projects_section(sec_meta, blocks, site, page_default_class=None):
         ul = ['    <ul class="proj-list">']
         for pid in data.get("academics_items", []):
             proj = data["projects"][pid]
-            ul.append('        <li class="list-item">')
-            ul.append(f'            <span class="list-title">{proj["title"][lang]}</span>')
-            ul.append(f'            <div class="list-meta">{render_meta(proj["summary"][lang])}</div>')
-            for note in proj.get("notes", {}).get(lang, []):
-                ul.append(f'            <div class="list-meta">{render_meta(note)}</div>')
-            ul.append('            <div class="list-links">')
-            for l in proj.get("links", []):
-                label = l["label"] if isinstance(l["label"], str) else l["label"][lang]
-                ul.append(f'                <a href="{l["url"]}" class="list-link" target="_blank" rel="noopener">{label}</a>')
-            ul.append('            </div>')
-            ul.append('        </li>')
+            links = [
+                {"label": link["label"] if isinstance(link["label"], str) else link["label"][lang],
+                 "url": link["url"]}
+                for link in proj.get("links", [])
+            ]
+            metas = [proj["summary"][lang], *proj.get("notes", {}).get(lang, [])]
+            ul.append(render_project_item(proj["title"][lang], metas, links))
         ul.append("    </ul>")
         parts.append("\n".join(ul))
         bodies[lang] = "\n".join(parts)
@@ -592,15 +601,7 @@ def render_projects_group(sec_meta, blocks, site, page_default_class=None):
                  "url": l["url"]}
                 for l in proj.get("links", [])
             ]
-        ul.append('        <li class="list-item">')
-        ul.append(f'            <span class="list-title">{ptitle}</span>')
-        for m in metas:
-            ul.append(f'            <div class="list-meta">{render_meta(m)}</div>')
-        ul.append('            <div class="list-links">')
-        for l in links:
-            ul.append(f'                <a href="{l["url"]}" class="list-link" target="_blank" rel="noopener">{l["label"]}</a>')
-        ul.append('            </div>')
-        ul.append('        </li>')
+        ul.append(render_project_item(ptitle, metas, links))
     ul.append("    </ul>")
     parts.append("\n".join(ul))
     return assemble_plain_section("", "\n".join(parts), sec_meta.get("class") or page_default_class, sec_meta.get("id"))
