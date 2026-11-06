@@ -1,6 +1,28 @@
 {
-  "academics_items": ["atomisa", "surface-magic", "error-msd", "academics-typst"],
+  "academics_items": ["magna", "atomisa", "surface-magic", "error-msd", "academics-typst"],
   "projects": {
+    "magna": {
+      "title": {"zh": "magna — 魔态工厂模拟器", "en": "magna — Magic State Factory Simulator"},
+      "summary": {
+        "zh": "通过全局张量网络收缩评估魔态工厂的接受率与输出态保真度，支持非 Clifford 门、Pauli 噪声及依赖解码器输出的经典前馈。",
+        "en": "Evaluates acceptance rates and output-state fidelities of magic state factories through global tensor-network contraction, supporting non-Clifford gates, Pauli noise, and classical feedforward conditioned on decoder outputs."
+      },
+      "notes": {
+        "zh": ["对应论文：[arXiv:2610.22315](https://arxiv.org/abs/2610.22315)"],
+        "en": ["Related paper: [arXiv:2610.22315](https://arxiv.org/abs/2610.22315)"]
+      },
+      "links": [
+        {"label": {"zh": "GitHub Repo", "en": "GitHub Repo"}, "url": "https://github.com/itpyi/magna"},
+        {"label": {"zh": "使用文档", "en": "Documentation"}, "url": "https://itpyi.github.io/magna/"}
+      ],
+      "page_en": {
+        "title": "magna — Magic State Factory Simulator",
+        "metas": [
+          "Evaluates acceptance rates and output-state fidelities of magic state factories through global tensor-network contraction, supporting non-Clifford gates, Pauli noise, and classical feedforward conditioned on decoder outputs.",
+          "Related to [arXiv:2610.22315](https://arxiv.org/abs/2610.22315)."
+        ]
+      }
+    },
     "atomisa": {
       "title": {"zh": "AtomISA — AOD 原子运动可视化", "en": "AtomISA — AOD Atom Motion Visualization"},
       "summary": {
@@ -100,7 +122,7 @@
     }
   },
   "opensource_groups": [
-    {"title": "Simulation on quantum computation", "projects": ["atomisa", "surface-magic", "error-msd"]},
+    {"title": "Simulation on quantum computation", "projects": ["magna", "atomisa", "surface-magic", "error-msd"]},
     {"title": "Typst packages and templates", "projects": ["hetvid", "ega-numbering", "fig-plucker"]}
   ]
 }
