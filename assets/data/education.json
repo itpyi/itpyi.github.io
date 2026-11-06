@@ -3,8 +3,8 @@
     "year": {"zh": "2022 – 至今", "en": "2022 – Now"},
     "institution": {"zh": "清华大学杨振宁高等研究院", "en": "Chen-Ning Yang Institute for Advanced Study, Tsinghua University"},
     "details": {
-      "zh": ["理论物理学博士研究生", "研究方向：凝聚态理论、量子计算"],
-      "en": ["PhD candidate in theoretical physics", "Research fields: condensed matter theory, quantum computation"]
+      "zh": ["理论物理学博士研究生", "研究方向：容错量子计算"],
+      "en": ["PhD candidate in theoretical physics", "Research fields: fault-tolerant quantum computation"]
     }
   },
   {

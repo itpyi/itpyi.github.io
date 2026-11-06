@@ -20,6 +20,7 @@ This repository is a static personal website hosted on GitHub Pages at `itpyi.si
 ├── templates/
 │   ├── pages/page.html          # shared skeleton for all pages except index
 │   ├── pages/index.html         # homepage skeleton
+│   ├── partials/head.html       # shared head for index and ordinary pages
 │   └── partials/footer.html     # rendered with dates → _site/assets/partials/footer.html
 ├── data/
 │   └── site.json                # build configuration only: url, lang_labels, lang_unavailable
@@ -74,7 +75,7 @@ Rules:
 ## Data Files
 
 - `assets/data/education.json` — `[{year: {lang: …}, institution: {lang: …}, details: {lang: [markdown strings]}}]`.
-- `assets/data/projects.json` — projects keyed by id; `academics_items` orders the CV-page list; `opensource_groups` orders the opensource page; a project may carry a `page_en` view (title/metas/links) for the English opensource page.
+- `assets/data/projects.json` — projects keyed by id; `academics_items` orders the CV-page list; `opensource_groups` orders the opensource page; a project may carry a `page_en` view (title/metas/links) for the English opensource page. Omit `page_en.links` when it matches the shared links; the renderer inherits their English labels.
 - `assets/data/links.json` — `[{label, url}]` (labels are proper nouns, identical across languages).
 - `assets/data/publications.bib` and `books.json` — rendered client-side; the build copies them as-is.
 
@@ -94,11 +95,31 @@ The traditional Chinese visual theme is defined by CSS custom properties in `:ro
 
 ## Build and Preview
 
+For continuous local preview on macOS, double-click `preview.command` in Finder,
+or run `./preview.command` from the repository. It creates `.venv/` and installs
+requirements on first use, then serves at `http://127.0.0.1:8000/`.
+Save content, templates, data or assets to rebuild and refresh the browser.
+Build errors appear in the terminal and a preview-only browser overlay; the last
+successful build remains available until the error is fixed. Use Ctrl+C to stop.
+If the port is busy, run `./preview.command --port 8001`.
+Changes to `preview.py` itself require restarting the preview command.
+
+```sh
+# After initial setup, run the server directly if preferred:
+.venv/bin/python preview.py
+# Production build (no preview code injected):
+.venv/bin/python build.py
+# Preview integration checks:
+python3 -m unittest discover -s scripts -p 'test_preview.py'
 ```
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # once
-.venv/bin/python build.py                                            # build to _site/
-python3 -m http.server 8000 -d _site                                 # local preview
-```
+
+The preview uses temporary `.preview-*.tmp/` directories, separate from `_site/`,
+and injects its refresh client only into HTTP responses. Neither the client nor
+the error overlay is written into production output. The server binds only to
+127.0.0.1. Browser refresh reloads the page; the URL language is retained, while
+unsaved per-block language selections return to the page's initial state.
+
+For an equivalent refactor, copy the built `_site/` to a temporary baseline directory before editing, rebuild, then run `python3 scripts/check_dom.py _site /path/to/baseline`. This compares all HTML files and partials and reports added or missing files; it does not replace interaction or visual checks.
 
 The pipeline is documented step by step in `build.py`'s header. The footer «最后更新于» date is derived at build time from the latest git commit touching `content/ data/ templates/ assets/data/` (fallback: build date) — never edit it by hand.
 

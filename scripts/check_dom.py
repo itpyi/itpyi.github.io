@@ -8,12 +8,16 @@ DOM 结构一致（script.js / styles.css 依赖这些结构）。
 
 用法：
     python3 scripts/check_dom.py _site/academics.html academics.html
+    python3 scripts/check_dom.py _site /tmp/site-before
+
+目录模式递归比较全部 HTML，包括页脚和导航片段，并检查文件增删。
 
 差异会逐条打印；完全一致（或仅允许的差异）则退出码为 0，否则为 1。
 """
 
 import sys
 from html.parser import HTMLParser
+from pathlib import Path
 
 
 class StreamParser(HTMLParser):
@@ -46,15 +50,13 @@ def parse(path):
     return parser.stream
 
 
-def main():
-    if len(sys.argv) != 3:
-        print(__doc__)
-        sys.exit(2)
-    new_stream = parse(sys.argv[1])
-    old_stream = parse(sys.argv[2])
+def compare(new_path, old_path):
+    new_stream = parse(new_path)
+    old_stream = parse(old_path)
     if new_stream == old_stream:
-        print(f"一致：{sys.argv[1]} ≈ {sys.argv[2]}（{len(new_stream)} 个节点）")
-        return
+        print(f"一致：{new_path} ≈ {old_path}（{len(new_stream)} 个节点）")
+        return True
+    print(f"存在差异：{new_path} / {old_path}")
     print(f"存在差异（新 {len(new_stream)} 节点 / 旧 {len(old_stream)} 节点）：")
     for i in range(max(len(new_stream), len(old_stream))):
         new_item = new_stream[i] if i < len(new_stream) else "<缺少>"
@@ -74,7 +76,31 @@ def main():
                     shown += 1
                 j += 1
             break
-    sys.exit(1)
+    return False
+
+
+def main():
+    if len(sys.argv) != 3:
+        print(__doc__)
+        sys.exit(2)
+    new, old = map(Path, sys.argv[1:])
+    if new.is_file() and old.is_file():
+        sys.exit(0 if compare(new, old) else 1)
+    if not (new.is_dir() and old.is_dir()):
+        sys.exit("请提供两个存在的 HTML 文件或两个构建目录。")
+    new_files = {p.relative_to(new) for p in new.rglob("*.html")}
+    old_files = {p.relative_to(old) for p in old.rglob("*.html")}
+    if not new_files or not old_files:
+        sys.exit("构建目录中没有 HTML，无法进行对比。")
+    equal = new_files == old_files
+    for path in sorted(new_files - old_files):
+        print(f"新增：{path}")
+    for path in sorted(old_files - new_files):
+        print(f"缺少：{path}")
+    for path in sorted(new_files & old_files):
+        if not compare(new / path, old / path):
+            equal = False
+    sys.exit(0 if equal else 1)
 
 
 if __name__ == "__main__":
