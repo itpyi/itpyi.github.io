@@ -1,9 +1,9 @@
 ---
-title: {zh: 履历, en: Curriculum Vitae}
+title: {zh: 学术, en: Academics}
 meta:
   zh: 王逸飞的正式履历页，包含研究、教育列表与开源项目。
   en: Formal curriculum vitae of Wang Yifei, including research, education, and open-source work.
-subnav: {zh: 履历, en: Curriculum Vitae}
+subnav: {zh: 学术, en: Academics}
 scripts: [assets/js/publications.js]
 section-class: cv-section
 ---

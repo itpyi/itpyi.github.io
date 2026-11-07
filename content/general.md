@@ -7,7 +7,7 @@ subnav: {zh: 杂览, en: General}
 ---
 <!-- section {title: {zh: 研究, en: Research}, data-section-id: research} -->
 <!-- lang:zh -->
-这是对研究兴趣的一般性介绍，供非专业访客了解。专业访客可参考[治学](academics.html)页面。
+这是对研究兴趣的一般性介绍，供非专业访客了解。专业访客可参考[学术](academics.html)页面。
 
 ### 容错量子计算
 
@@ -23,7 +23,7 @@ subnav: {zh: 杂览, en: General}
 
 量子模拟旨在在高度可控的原子-激光平台上研究物理模型。能够精确地操控单个原子并调节原子间相互作用是人类现代科学最耀眼的成就之一。精确可调的原子-光系统让我们可以在更纯净的条件下模拟很多量子模型，光镊-原子阵列体系也是当下量子计算最有竞争力的实现方案之一。
 <!-- lang:en -->
-This is a popular version. For professional details, see the [Curriculum Vitae](academics.html) page.
+This is a popular version. For professional details, see the [Academics](academics.html) page.
 
 ### Fault-Tolerant Quantum Computation
 
