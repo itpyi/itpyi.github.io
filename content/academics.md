@@ -27,14 +27,163 @@ The second thread grew out of discussions with colleagues. It began with a joint
 
 My main interests today still follow the first thread: magic-state preparation. Specifically, I am interested in devising new practical protocols, analysing the circuit structure of magic-state preparation, and developing more efficient simulators. Beyond this, I would like to explore how to incorporate realistic constraints and noise models of neutral-atom platforms more fully into fault-tolerant protocols, how to interconnect quantum computers fault-tolerantly, and how AI can assist in large-scale automated design. These are questions I hope to pursue in the near term and beyond.
 
-<!-- section {kind: links, title: {zh: 相关链接, en: Links}} -->
+<!-- section {title: {zh: 相关链接, en: Links}} -->
+<!-- lang:zh -->
+- [ORCID](https://orcid.org/0009-0003-1126-1628)
+- [SciRate](https://scirate.com/wang-yifei)
+- [Google Scholar](https://scholar.google.com/citations?user=dwTYUPwAAAAJ)
+- [Stack Exchange](https://stackexchange.com/users/17951034/itpyi)
+
+<!-- lang:en -->
+- [ORCID](https://orcid.org/0009-0003-1126-1628)
+- [SciRate](https://scirate.com/wang-yifei)
+- [Google Scholar](https://scholar.google.com/citations?user=dwTYUPwAAAAJ)
+- [Stack Exchange](https://stackexchange.com/users/17951034/itpyi)
 
 <!-- section {kind: publications, title: {zh: 学术论文, en: Publications}, id: publication} -->
 
-<!-- section {kind: projects, title: {zh: 开源, en: Open Source}} -->
+<!-- section {layout: cards, title: {zh: 开源, en: Open Source}} -->
 <!-- lang:zh -->
 详见[开源项目](opensource.html)。
+
+### magna — 魔态工厂模拟器
+
+通过全局张量网络收缩评估魔态工厂的接受率与输出态保真度，支持非 Clifford 门、Pauli 噪声及依赖解码器输出的经典前馈。
+
+对应论文：[arXiv:2610.22315](https://arxiv.org/abs/2610.22315)
+
+- [GitHub Repo](https://github.com/itpyi/magna)
+- [使用文档](https://itpyi.github.io/magna/)
+
+### AtomISA — AOD 原子运动可视化
+
+基于浏览器的交互式模拟器，用于 AOD 原子运动（AAM）模型——中性原子量子计算平台中的原子重排过程。纯 HTML + JavaScript，无需依赖。
+
+- [GitHub Repo](https://github.com/itpyi/AtomISA)
+- [在线演示](https://itpyi.github.io/AtomISA)
+
+### surface_magic
+
+基于格手术的门传输模拟，包含线路级噪声模拟与态矢量分析。
+
+对应论文：[arXiv:2503.19758](https://arxiv.org/abs/2503.19758)
+
+- [GitHub Repo](https://github.com/itpyi/surface_magic)
+
+### error_msd
+
+物理层魔态提纯态矢量模拟。
+
+对应论文：[arXiv:2312.09111](https://arxiv.org/abs/2312.09111)
+
+- [GitHub Repo](https://github.com/itpyi/error_msd)
+
+### Typst templates and packages
+
+包括 hetvid、ega-numbering、fig-plucker 等模板与包。
+
+- [hetvid](https://github.com/itpyi/hetvid)
+- [ega-numbering](https://github.com/itpyi/typst-ega-numbering)
+- [fig-plucker](https://github.com/itpyi/typst-plot)
+
 <!-- lang:en -->
 See [open source projects](opensource.html) for details.
 
-<!-- section {kind: education, title: {zh: 教育, en: Education}} -->
+### magna — Magic State Factory Simulator
+
+Evaluates acceptance rates and output-state fidelities of magic state factories through global tensor-network contraction, supporting non-Clifford gates, Pauli noise, and classical feedforward conditioned on decoder outputs.
+
+Related paper: [arXiv:2610.22315](https://arxiv.org/abs/2610.22315)
+
+- [GitHub Repo](https://github.com/itpyi/magna)
+- [Documentation](https://itpyi.github.io/magna/)
+
+### AtomISA — AOD Atom Motion Visualization
+
+Interactive browser-based simulator for AOD Atom Motion (AAM), a model of atom rearrangement in neutral-atom quantum computing platforms. Visualises pickup, motion, and offload phases with real-time canvas animation. Pure HTML + JavaScript, no dependencies.
+
+- [GitHub Repo](https://github.com/itpyi/AtomISA)
+- [Live Demo](https://itpyi.github.io/AtomISA)
+
+### surface_magic
+
+Simulation of surgery-based gate teleportation, including circuit-level noise simulation and state-vector analysis.
+
+Related paper: [arXiv:2503.19758](https://arxiv.org/abs/2503.19758)
+
+- [GitHub Repo](https://github.com/itpyi/surface_magic)
+
+### error_msd
+
+State-vector simulation for physical-level magic state distillation.
+
+Related paper: [arXiv:2312.09111](https://arxiv.org/abs/2312.09111)
+
+- [GitHub Repo](https://github.com/itpyi/error_msd)
+
+### Typst templates and packages
+
+Includes hetvid, ega-numbering, fig-plucker, and related writing/plotting tools.
+
+- [hetvid](https://github.com/itpyi/hetvid)
+- [ega-numbering](https://github.com/itpyi/typst-ega-numbering)
+- [fig-plucker](https://github.com/itpyi/typst-plot)
+
+<!-- section {layout: timeline, title: {zh: 教育, en: Education}} -->
+<!-- lang:zh -->
+### 2022 – 至今
+
+#### 清华大学杨振宁高等研究院
+
+理论物理学博士研究生
+
+研究方向：容错量子计算
+
+### 2018 – 2022
+
+#### 北京大学物理学院
+
+物理学学士
+
+毕业论文：[格点规范理论的量子模拟](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)
+
+### 2012 – 2018
+
+#### 陕西师范大学附属中学
+
+初中和高中
+
+### 2006 – 2012
+
+#### 西安市临潼区陕缝学校
+
+小学
+
+<!-- lang:en -->
+### 2022 – Now
+
+#### Chen-Ning Yang Institute for Advanced Study, Tsinghua University
+
+PhD candidate in theoretical physics
+
+Research fields: fault-tolerant quantum computation
+
+### 2018 – 2022
+
+#### School of Physics, Peking University
+
+Bachelor in physics
+
+Thesis: [Quantum Simulation of Lattice Gauge Theory (in Chinese)](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)
+
+### 2012 – 2018
+
+#### The High School Affiliated to Shaanxi Normal University
+
+Junior and senior high school
+
+### 2006 – 2012
+
+#### Shaanfeng School, Lintong District, Xi'an
+
+Primary school, now demolished
