@@ -1,1 +1,2 @@
 PyYAML>=5.4,<7
+markdown-it-py>=3,<4

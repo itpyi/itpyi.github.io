@@ -10,7 +10,7 @@ This repository is a static personal website hosted on GitHub Pages at `itpyi.si
 
 ```
 ├── build.py                     # THE build pipeline (documented step-by-step in its header)
-├── requirements.txt             # PyYAML only
+├── requirements.txt             # PyYAML + markdown-it-py
 ├── scripts/check_dom.py         # DOM structure comparator (ignores whitespace/comments)
 ├── .github/workflows/deploy.yml # build + deploy to Pages on push to main
 ├── content/                     # one markdown file per page (name = output page name)
@@ -26,17 +26,14 @@ This repository is a static personal website hosted on GitHub Pages at `itpyi.si
 │   └── site.json                # build configuration only: url, lang_labels, lang_unavailable
 ├── assets/                      # copied verbatim into _site/assets/
 │   ├── css/  js/  images/  fonts/  docs/
-│   ├── data/                    # the single home of all site CONTENT data:
+│   ├── data/                    # structured book/publication data:
 │   │   ├── publications.bib     #   publications (client-rendered by assets/js/publications.js)
-│   │   ├── books.json           #   book list (client-rendered by assets/js/booklist.js)
-│   │   ├── education.json       #   education entries (education section kind)
-│   │   ├── projects.json        #   open-source projects (projects / projects-group kinds)
-│   │   └── links.json           #   links (links section kind)
+│   │   └── books.json           #   book list (client-rendered by assets/js/booklist.js)
 │   └── partials/subnav.html     # client-side nav template ({{TITLE_ZH}} replaced at runtime)
 └── _site/                       # build output (gitignored; the deployed artifact)
 ```
 
-Content data lives together in `assets/data/` — content is not build configuration; it changes with the author's career. `data/` holds only true build configuration.
+Page prose, project cards, education timelines and links live in `content/*.md`. Prefer content/format separation over content reuse: repeated content is maintained independently on each page. Only books and publications remain structured data in `assets/data/`; `data/` holds build configuration.
 
 ## Page Format (one markdown file per page)
 
@@ -56,7 +53,7 @@ section-class: cv-section                    # optional default class for all se
 <!-- lang:en -->
 …markdown body…
 
-<!-- section {kind: links, title: {zh: 相关链接, en: Links}} -->
+<!-- section {title: {zh: 相关链接, en: Links}} -->
 ```
 
 Rules:
@@ -64,19 +61,48 @@ Rules:
 - **Sections**: `<!-- section {…} -->` opens a section; the next fence or end of file closes it. Section order in the file = order on the page; reorder by moving blocks.
 - **Section attributes** (YAML flow mapping inside the fence):
   - `title` — `{lang: text}` dictionary for switchable sections (its keys are the language menu, in that order); a plain string for non-switchable sections.
-  - `kind` — `content` (default) | `links` | `publications` | `projects` | `projects-group` | `education`.
+  - `kind` — `content` (default) | `publications`.
+  - `layout` — optional `cards` or `timeline` for content sections; no data lookup.
   - `switchable: false` — plain section without language widgets.
   - `langs` — optional explicit menu language list (defaults to the title keys).
-  - `class`, `id`, `data-section-id` — passthrough attributes; `list_class` (links only, `null` = unstyled ul); `group` (projects-group only: index into projects.json `opensource_groups`).
+  - `class`, `id`, `data-section-id` — passthrough attributes; `list_class: null` suppresses the automatic `body-list` class on ordinary Markdown lists.
 - **Language blocks**: `<!-- lang:xx -->` inside a section body. Any language code works (zh/en/fr/la/…). Menu labels come from `site.json` `lang_labels` (fallback: the code itself).
-- **Markdown subset**: paragraphs, `- ` lists, `[text](url)` links, raw HTML lines (escape hatch for styled elements, e.g. `<p class="research-topic">…</p>`), backslash escapes. Anything else — write raw HTML.
-- **Missing-language placeholder**: when a title declares a language whose body or JSON fields are missing, the build renders «该语言版本尚未开发» in that language (texts in `site.json` `lang_unavailable`). Blocks without a language config are unaffected by global language changes (runtime fallback in script.js).
+- **Markdown**: CommonMark via markdown-it-py: paragraphs, headings, emphasis, links/images, ordered/unordered and nested lists, blockquotes, inline code and fenced code blocks, raw HTML, and backslash escapes. In sections with `data-section-id: research`, `### Topic` renders as the existing `<p class="research-topic">Topic</p>` to preserve presentation; elsewhere headings use standard HTML. Soft line breaks remain spaces. Tables, footnotes and math rendering are not enabled. Keep section/lang fence lines outside code examples (the page splitter processes them before Markdown).
+- **Missing-language placeholder**: when a title declares a language whose body is missing, the build renders «该语言版本尚未开发» in that language (texts in `site.json` `lang_unavailable`). Blocks without a language config are unaffected by global language changes (runtime fallback in script.js).
+
+## Reusable display layouts
+
+Use `layout: cards` or `layout: timeline` on a normal section. Language fences and section titles work exactly as for ordinary prose. Text before the first `###` is a normal Markdown introduction. Every top-level `###` starts an entry; headings inside code fences do not start entries.
+
+Cards use a title, zero or more description paragraphs, and an optional final bullet list containing only links (no nested lists). Multiple description paragraphs remain separate metadata rows. For example:
+
+```markdown
+<!-- section {layout: cards, title: {zh: 开源, en: Open Source}} -->
+<!-- lang:zh -->
+### 示例项目
+
+项目介绍，支持 **强调** 和[正文链接](https://example.org)。
+
+- [源代码](https://example.org/repo)
+- [文档](https://example.org/docs)
+```
+
+Timelines use `###` for the year and an immediately following `####` for the institution, followed by ordinary Markdown body:
+
+```markdown
+<!-- section {layout: timeline, title: {zh: 教育, en: Education}} -->
+<!-- lang:zh -->
+### 2022 – 至今
+
+#### 示例大学
+
+博士研究生
+```
+
+The build owns the shared `proj-list` / `list-item` and `edu-list` / `edu-item` HTML structures. Do not repeat HTML wrappers or move page content into component templates. Plain sections can omit `title` and put a `##` heading after an introduction when that order is needed (see opensource.md).
 
 ## Data Files
 
-- `assets/data/education.json` — `[{year: {lang: …}, institution: {lang: …}, details: {lang: [markdown strings]}}]`.
-- `assets/data/projects.json` — projects keyed by id; `academics_items` orders the CV-page list; `opensource_groups` orders the opensource page; a project may carry a `page_en` view (title/metas/links) for the English opensource page. Omit `page_en.links` when it matches the shared links; the renderer inherits their English labels.
-- `assets/data/links.json` — `[{label, url}]` (labels are proper nouns, identical across languages).
 - `assets/data/publications.bib` and `books.json` — rendered client-side; the build copies them as-is.
 
 ## Language System
@@ -133,6 +159,6 @@ Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and depl
 
 1. Do not change visual behavior unless the user requests it. Generated pages must reproduce the existing DOM contracts; verify structure with `scripts/check_dom.py`.
 2. Keep `zh` as the default language; preserve the extensible language architecture and the internal-link propagation rules.
-3. Content is page-local: each page's prose lives in its own `content/*.md`; shared structured content lives in `assets/data/`.
+3. Content is page-local: each page's prose lives in its own `content/*.md`; only book/publication data lives in `assets/data/`; repeat other content per page rather than introducing shared content records.
 4. Make focused, meaningful commits with descriptive messages. Do not add tool- or vendor-specific co-author trailers unless explicitly requested.
 5. Pushing to `main` deploys the live site — confirm with the user before pushing.

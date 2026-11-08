@@ -4,7 +4,7 @@ cd -- "${0:A:h}"
 if [[ ! -x .venv/bin/python ]]; then
     python3 -m venv .venv || exit 1
 fi
-if ! .venv/bin/python -c 'import yaml' 2>/dev/null; then
+if ! .venv/bin/python -c 'import yaml, markdown_it' 2>/dev/null; then
     .venv/bin/python -m pip install -r requirements.txt || exit 1
 fi
 exec .venv/bin/python preview.py "$@"

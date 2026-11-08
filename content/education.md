@@ -3,7 +3,64 @@ title: {zh: 教育背景, en: Education}
 meta: {zh: 教育, en: Educational background}
 subnav: {zh: 教育背景, en: Education}
 ---
-<!-- section {kind: education, title: {zh: 列表, en: List}} -->
+<!-- section {layout: timeline, title: {zh: 列表, en: List}} -->
+<!-- lang:zh -->
+### 2022 – 至今
+
+#### 清华大学杨振宁高等研究院
+
+理论物理学博士研究生
+
+研究方向：容错量子计算
+
+### 2018 – 2022
+
+#### 北京大学物理学院
+
+物理学学士
+
+毕业论文：[格点规范理论的量子模拟](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)
+
+### 2012 – 2018
+
+#### 陕西师范大学附属中学
+
+初中和高中
+
+### 2006 – 2012
+
+#### 西安市临潼区陕缝学校
+
+小学
+
+<!-- lang:en -->
+### 2022 – Now
+
+#### Chen-Ning Yang Institute for Advanced Study, Tsinghua University
+
+PhD candidate in theoretical physics
+
+Research fields: fault-tolerant quantum computation
+
+### 2018 – 2022
+
+#### School of Physics, Peking University
+
+Bachelor in physics
+
+Thesis: [Quantum Simulation of Lattice Gauge Theory (in Chinese)](assets/docs/2022_Peking_University_Undergraduate_Thesis.pdf)
+
+### 2012 – 2018
+
+#### The High School Affiliated to Shaanxi Normal University
+
+Junior and senior high school
+
+### 2006 – 2012
+
+#### Shaanfeng School, Lintong District, Xi'an
+
+Primary school, now demolished
 
 <!-- section {title: 评论, switchable: false} -->
 <!-- lang:zh -->

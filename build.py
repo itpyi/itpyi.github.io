@@ -6,18 +6,16 @@ build.py — 揽月阁（itpyi.site）站点构建脚本
 把 Markdown 与 JSON 数据渲染为完整 HTML 页面，输出到 _site/ 目录
 （_site/ 是纯产物，已 gitignore，可整体删除重建）。
 
-依赖（见 requirements.txt）：仅 PyYAML（解析 front matter）。
-Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖站点内容
-所需子集的轻量实现——段落、列表、链接、原始 HTML 透传。复杂样式请直接
-在正文里写原始 HTML（如 <p class="research-topic">…</p>）。
+依赖（见 requirements.txt）：PyYAML 解析 front matter，markdown-it-py 解析
+CommonMark 正文。section/lang 围栏仍由本站处理；HTML 后处理保留现有
+列表、链接样式与外链行为。研究节的 ### 沿用 research-topic 段落结构。
 
 流水线（按顺序执行，任何一步出错都立即报错退出）：
 
  1. 解析命令行参数（--output，默认 _site），清空旧输出目录。
  2. 加载 data/site.json —— 唯一的纯构建期配置（站点 URL、语言显示名）。
-    内容数据（教育经历、开源项目、相关链接、书单、出版物 bib）都放在
-    assets/data/ —— 内容不是构建期配置，会随维护更新，且 publications.bib
-    与 books.json 本来就需要在浏览器端被 fetch，同处最自然。
+    仅书单与出版物保留在 assets/data/，由浏览器端读取。
+    项目、教育经历与链接直接写在各页 Markdown，允许跨页重复内容。
  3. 逐页处理 content/*.md —— **一个页面 = 一个 Markdown 文件**：
       - front matter 是页面元数据（标题、meta、子导航标题、脚本列表、
         可选的 section-class 页面默认节 class）；
@@ -34,15 +32,10 @@ Markdown 渲染器内置于本文件（render_markdown），是一个只覆盖�
                       显示「该语言版本尚未开发」占位消息。纯节
                       （switchable: false，title 为字符串）生成普通
                       <section>。
-      links           相关链接节（assets/data/links.json）。
-      publications    学术论文节：只发占位 <div data-publications>，
-                      内容由浏览器端 assets/js/publications.js 读取
-                      assets/data/publications.bib 渲染（保持现状）。
-      projects        开源项目节（academics 页视图，assets/data/projects.json；
-                      节正文 = 该节的中英引导段落）。
-      projects-group  opensource.html 的英文分组视图（assets/data/projects.json，
-                      属性 group: 0/1 指定分组，h2 标题来自数据）。
-      education       教育经历节（assets/data/education.json）。
+      publications    学术论文节：只发占位 div，publications.js 读取 bib。
+    content 节可选 layout: cards / timeline，复用展示结构；内容仍为 Markdown。
+    cards：### 标题 + 介绍段落 + 可选末尾链接列表。
+    timeline：### 年份 + #### 机构 + Markdown 正文。
  5. 页面组装：把标题 / meta / 子导航 / 节 / 脚本替换进骨架（除 index 外
     全部页面共用 templates/pages/page.html）。任何残留的未替换
     {{ 占位符 }} 都会报错（宁吵勿静默）。
@@ -74,6 +67,7 @@ from pathlib import Path
 
 try:
     import yaml
+    from markdown_it import MarkdownIt
 except ImportError as exc:
     sys.exit(f"缺少构建依赖：{exc}\n请先运行：pip install -r requirements.txt")
 
@@ -83,7 +77,7 @@ PARTIALS_DIR = ROOT / "templates" / "partials"
 CONTENT_DIR = ROOT / "content"
 DATA_DIR = ROOT / "data"                    # 纯构建期配置（site.json）
 ASSETS_DIR = ROOT / "assets"
-CONTENT_DATA_DIR = ASSETS_DIR / "data"      # 站点内容数据（教育/项目/链接/书单/bib）
+CONTENT_DATA_DIR = ASSETS_DIR / "data"      # 书单与出版物数据
 
 VOID_ELEMENTS = {
     "area", "base", "br", "col", "embed", "hr", "img", "input",
@@ -250,74 +244,110 @@ class _PostProcessor(HTMLParser):
         self.out.append(f"<!--{data}-->")
 
 
-# 轻量 Markdown 渲染器（内置，无第三方依赖）。覆盖站点内容需要的子集：
-#   - 空行分段 → <p>…</p>（同一段内的换行按软换行合并为一个空格）
-#   - "- " 开头的连续行 → <ul>…</ul>
-#   - [文本](链接) → <a href="…">文本</a>（链接内不能含空格与右括号）
-#   - 以 < 开头、以 > 结尾的整行 → 原始 HTML 块，原样透传
-#     （样式化元素的逃生口，如 <p class="research-topic">…</p>）
-#   - 反斜杠转义（如 \* 输出字面星号）
-# 不支持的语法（标题、嵌套列表、表格、加粗等）请直接用原始 HTML 代替。
-
-_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)\)")
-
-_ESCAPE_RE = re.compile(r"\\([\\`*{}\[\]()#+.!_>-])")
+# CommonMark 负责正文语法，本站仅适配旧页面的展示契约。
+_MARKDOWN = MarkdownIt("commonmark", {"html": True})
+# 旧渲染器将段内软换行合并为空格；避免中文换行的展示发生变化。
+_MARKDOWN.add_render_rule("softbreak", lambda renderer, tokens, idx, options, env: " ")
 
 
-def _inline(text):
-    """行内渲染：先处理反斜杠转义，再处理 [文本](链接)，其余文本做 HTML 转义。"""
-    text = _ESCAPE_RE.sub(r"\1", text)
-    parts = []
-    pos = 0
-    for m in _LINK_RE.finditer(text):
-        parts.append(html.escape(text[pos:m.start()]))
-        parts.append(
-            f'<a href="{html.escape(m.group(2), quote=True)}">{html.escape(m.group(1))}</a>'
-        )
-        pos = m.end()
-    parts.append(html.escape(text[pos:]))
-    return "".join(parts)
+def render_markdown(text, *, research_topics=False, layout=None, list_class="body-list"):
+    """CommonMark → HTML → 视觉保真后处理。
+
+    研究节的三级标题仍输出原来的 p.research-topic，其余标题使用标准 HTML。
+    保留原始 HTML 支持；内容来源是仓库作者维护的 Markdown。
+    """
+    tokens = _MARKDOWN.parse(text)
+    if research_topics:
+        for token in tokens:
+            if token.type in ("heading_open", "heading_close") and token.tag == "h3":
+                token.tag = "p"
+                if token.type == "heading_open":
+                    token.attrSet("class", "research-topic")
+    rendered = render_layout(tokens, layout) if layout else _render_tokens(tokens)
+    rendered = _postprocess(rendered).strip()
+    if list_class is None:
+        rendered = rendered.replace('<ul class="body-list">', '<ul>')
+    return rendered
 
 
-def _is_raw_html_line(line):
-    return line.startswith("<") and line.endswith(">")
-
-
-def render_markdown(text):
-    """轻量 Markdown → HTML → 视觉保真后处理。"""
-    lines = text.split("\n")
+def _markdown_blocks(tokens):
+    """按顶层 Markdown 块分组，不拆开嵌套列表或引用。"""
     blocks = []
-    para = []
+    start = 0
+    for i, token in enumerate(tokens):
+        if token.level == 0 and token.nesting <= 0:
+            blocks.append(tokens[start:i + 1])
+            start = i + 1
+    return blocks
 
-    def flush_para():
-        if para:
-            blocks.append("<p>" + _inline(" ".join(para)) + "</p>")
-            para.clear()
 
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        if not line:
-            flush_para()
-            i += 1
+def _render_tokens(tokens):
+    return _MARKDOWN.renderer.render(tokens, _MARKDOWN.options, {})
+
+
+def _inline_block(block):
+    return _MARKDOWN.renderer.renderInline(block[1].children or [], _MARKDOWN.options, {})
+
+
+def render_layout(tokens, layout):
+    """格式组件：### 开始条目；内容与语言均由当前页面提供。"""
+    if layout not in ('cards', 'timeline'):
+        raise BuildError(f'未知展示 layout：{layout!r}')
+    prefix, entries = [], []
+    for block in _markdown_blocks(tokens):
+        if block[0].type == 'heading_open' and block[0].tag == 'h3':
+            entries.append([block])
+        elif entries:
+            entries[-1].append(block)
+        else:
+            prefix.extend(block)
+    if not entries:
+        raise BuildError(f'{layout} 需要至少一个 ### 条目标题')
+    result = [_render_tokens(prefix)]
+    result.append('<ul class="proj-list">' if layout == 'cards' else '<div class="edu-list">')
+    for entry in entries:
+        title = _inline_block(entry[0])
+        if layout == 'timeline':
+            if len(entry) < 2 or entry[1][0].type != 'heading_open' or entry[1][0].tag != 'h4':
+                raise BuildError('timeline 的 ### 年份后需要 #### 机构')
+            result.extend(['<div class="edu-item">', f'<div class="edu-year">{title}</div>',
+                           '<div class="edu-details">',
+                           f'<div class="edu-institution">{_inline_block(entry[1])}</div>',
+                           _render_tokens([t for b in entry[2:] for t in b]), '</div></div>'])
             continue
-        if line.startswith("- "):
-            flush_para()
-            items = []
-            while i < len(lines) and lines[i].strip().startswith("- "):
-                items.append("<li>" + _inline(lines[i].strip()[2:]) + "</li>")
-                i += 1
-            blocks.append("<ul>\n" + "\n".join(items) + "\n</ul>")
-            continue
-        if _is_raw_html_line(line):
-            flush_para()
-            blocks.append(line)
-            i += 1
-            continue
-        para.append(line)
-        i += 1
-    flush_para()
-    return _postprocess("\n".join(blocks))
+        result.extend(['<li class="list-item">', f'<span class="list-title">{title}</span>'])
+        body = entry[1:]
+        links = body.pop() if body and body[-1][0].type == 'bullet_list_open' else None
+        for block in body:
+            if block[0].type != 'paragraph_open':
+                raise BuildError('cards 的介绍请使用段落，末尾可使用链接列表')
+            result.append(f'<div class="list-meta">{_inline_block(block)}</div>')
+        result.append('<div class="list-links">')
+        if links:
+            for token in links:
+                if token.type not in ('bullet_list_open', 'bullet_list_close', 'list_item_open',
+                                      'list_item_close', 'paragraph_open', 'paragraph_close', 'inline'):
+                    raise BuildError('卡片链接列表只支持链接，不支持嵌套块')
+                if token.type == 'bullet_list_open' and token.level != 0:
+                    raise BuildError('卡片链接列表不支持嵌套列表')
+                if token.type != 'inline':
+                    continue
+                inside = False
+                found = False
+                for child in token.children or []:
+                    if child.type == 'link_open':
+                        inside = found = True
+                        child.attrSet('class', 'list-link')
+                    elif child.type == 'link_close':
+                        inside = False
+                    elif not inside and (child.type != 'text' or child.content.strip()):
+                        raise BuildError('卡片链接列表每项只能包含 Markdown 链接')
+                if not found:
+                    raise BuildError('卡片链接列表每项需要 Markdown 链接')
+                result.append(_MARKDOWN.renderer.renderInline(token.children, _MARKDOWN.options, {}))
+        result.append('</div></li>')
+    result.append('</ul>' if layout == 'cards' else '</div>')
+    return '\n'.join(result)
 
 
 def _postprocess(html_text):
@@ -325,17 +355,6 @@ def _postprocess(html_text):
     parser.feed(html_text)
     parser.close()
     return "".join(parser.out)
-
-
-def render_meta(text):
-    """渲染单段文本（list-meta 里的内容）：与 render_markdown 相同，但剥掉外层
-    <p>。契约：JSON 中的 summary / notes / metas 字段必须是恰好一段。"""
-    html_text = render_markdown(text)
-    if html_text.startswith("<p>") and html_text.endswith("</p>"):
-        inner = html_text[3:-4]
-        if "<p>" not in inner:
-            return inner
-    return html_text
 
 
 # ---------------------------------------------------------------- 节渲染器
@@ -428,7 +447,8 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
 
     节属性：title（{语言: 标题} 字典 = 可切换节；字符串 = 纯节）、
     switchable（默认 true）、langs（可选，覆盖菜单语言顺序）、class、id、
-    data-section-id。页面的 section-class 作为默认 class。
+    data-section-id；layout 选择共享展示组件，list_class 可关闭列表默认类。
+    页面的 section-class 作为默认 class。
 
     可切换节的语言菜单 = title 的键（顺序即菜单顺序）。标题声明了某语言
     但正文没有该语言的围栏块时，该语言显示占位消息（lang_unavailable_message）
@@ -436,13 +456,18 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
     title = sec_meta.get("title", "")
     switchable = sec_meta.get("switchable", True)
     extra_class = sec_meta.get("class") or page_default_class
+    markdown_options = {
+        "research_topics": sec_meta.get("data-section-id") == "research",
+        "layout": sec_meta.get("layout"),
+        "list_class": sec_meta.get("list_class", "body-list"),
+    }
 
     if not switchable:
         # 纯节：标题为字符串；正文取第一个语言块（无围栏时即整段正文）
         if not isinstance(title, str):
             raise BuildError("纯节（switchable: false）的 title 应为字符串")
         text = blocks[0][1] if blocks else ""
-        body = render_markdown(text) if text.strip() else ""
+        body = render_markdown(text, **markdown_options) if text.strip() else ""
         return assemble_plain_section(title, body, extra_class, sec_meta.get("id"))
 
     if not isinstance(title, dict):
@@ -457,7 +482,7 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
     for lang in langs:
         text = next((t for l, t in blocks if l == lang), None)
         if text and text.strip():
-            bodies[lang] = render_markdown(text)
+            bodies[lang] = render_markdown(text, **markdown_options)
         else:
             bodies[lang] = lang_unavailable_message(lang, site)
     return assemble_switchable_section(
@@ -465,41 +490,6 @@ def render_content_section(sec_meta, blocks, site, page_default_class=None):
         extra_class=extra_class,
         section_id=sec_meta.get("id"),
         data_section_id=sec_meta.get("data-section-id"),
-    )
-
-
-def render_links_section(sec_meta, blocks, site, page_default_class=None):
-    """kind: links —— 相关链接节（data/site.json 的 links 列表）。
-
-    可切换节（title 为字典）：链接列表按语言各复制一份（与现状一致，链接名
-    是专有名词，两种语言相同）；
-    纯节（title 为字符串 + switchable: false）：research.html 的 More links。
-    list_class: ul 的 class，默认 body-list；null 表示裸 ul（research.html 现状）。
-    """
-    path = CONTENT_DATA_DIR / "links.json"
-    links = load_json(path)
-    if not links:
-        raise BuildError("assets/data/links.json 为空")
-    title = sec_meta.get("title")
-    if not title:
-        raise BuildError("links 节缺少 title")
-    list_class = sec_meta.get("list_class", "body-list")
-
-    def render_ul():
-        cls = f' class="{list_class}"' if list_class else ""
-        items = "\n".join(
-            f'        <li><a class="link-body" href="{l["url"]}" target="_blank" rel="noopener">{l["label"]}</a></li>'
-            for l in links
-        )
-        return f"    <ul{cls}>\n{items}\n    </ul>"
-
-    extra_class = sec_meta.get("class") or page_default_class
-    if not sec_meta.get("switchable", True):
-        return assemble_plain_section(title, render_ul(), extra_class, sec_meta.get("id"))
-    langs = list(title)
-    return assemble_switchable_section(
-        title, langs, {lang: render_ul() for lang in langs}, site,
-        extra_class, sec_meta.get("id"),
     )
 
 
@@ -516,140 +506,9 @@ def render_publications_section(sec_meta, blocks, site, page_default_class=None)
     )
 
 
-def render_project_item(title, metas, links):
-    """两种项目视图共用条目结构；调用方准备文案和链接标签。"""
-    lines = ['        <li class="list-item">',
-             f'            <span class="list-title">{title}</span>']
-    for meta in metas:
-        lines.append(f'            <div class="list-meta">{render_meta(meta)}</div>')
-    lines.append('            <div class="list-links">')
-    for link in links:
-        lines.append(f'                <a href="{link["url"]}" class="list-link" target="_blank" rel="noopener">{link["label"]}</a>')
-    lines.extend(['            </div>', '        </li>'])
-    return "\n".join(lines)
-
-
-def render_projects_section(sec_meta, blocks, site, page_default_class=None):
-    """kind: projects —— 开源项目节（academics 页的平铺视图，双语）。
-    节正文 = 该节的中英引导段落；其后接 projects.json 的 academics 列表。"""
-    path = CONTENT_DATA_DIR / "projects.json"
-    data = load_json(path)
-    title = sec_meta.get("title")
-    if not title:
-        raise BuildError("projects 节缺少 title")
-    langs = [lang for lang, _ in blocks] or list(title)
-    bodies = {}
-    for lang in langs:
-        ids = data.get("academics_items", [])
-        projects = data.get("projects", {})
-        if any(lang not in projects[pid].get("title", {}) or lang not in projects[pid].get("summary", {})
-               for pid in ids):
-            bodies[lang] = lang_unavailable_message(lang, site)
-            continue
-        parts = []
-        text = next((t for l, t in blocks if l == lang), None)
-        if text and text.strip():
-            parts.append(render_markdown(text))
-        ul = ['    <ul class="proj-list">']
-        for pid in data.get("academics_items", []):
-            proj = data["projects"][pid]
-            links = [
-                {"label": link["label"] if isinstance(link["label"], str) else link["label"][lang],
-                 "url": link["url"]}
-                for link in proj.get("links", [])
-            ]
-            metas = [proj["summary"][lang], *proj.get("notes", {}).get(lang, [])]
-            ul.append(render_project_item(proj["title"][lang], metas, links))
-        ul.append("    </ul>")
-        parts.append("\n".join(ul))
-        bodies[lang] = "\n".join(parts)
-    return assemble_switchable_section(
-        title, langs, bodies, site,
-        sec_meta.get("class") or page_default_class, sec_meta.get("id"),
-    )
-
-
-def render_projects_group(sec_meta, blocks, site, page_default_class=None):
-    """kind: projects-group —— opensource.html 的英文分组纯节。
-    属性 group: 0/1 指定 projects.json 的 opensource_groups 下标；
-    h2 标题来自数据；节正文（如有）放在 h2 之前（页面引导段落）。
-    每个项目取 page_en 字段（缺省时回退 title.en / summary.en / links）。"""
-    path = CONTENT_DATA_DIR / "projects.json"
-    data = load_json(path)
-    groups = data.get("opensource_groups", [])
-    group_idx = sec_meta.get("group")
-    if group_idx is None or not (0 <= group_idx < len(groups)):
-        raise BuildError(f"projects-group 节的 group 应为 0~{len(groups) - 1} 之间的整数")
-    group = groups[group_idx]
-    projects = data["projects"]
-
-    parts = []
-    text = blocks[0][1] if blocks else ""
-    if text.strip():
-        parts.append(render_markdown(text))
-    parts.append(f'    <h2>{group["title"]}</h2>')
-    ul = ['    <ul class="proj-list">']
-    for pid in group["projects"]:
-        proj = projects[pid]
-        view = proj.get("page_en", {})
-        ptitle = view.get("title", proj.get("title", {}).get("en", pid))
-        metas = view.get("metas", [proj.get("summary", {}).get("en", "")])
-        links = view.get("links")
-        if links is None:
-            links = [
-                {"label": l["label"].get("en", l["label"]) if isinstance(l["label"], dict) else l["label"],
-                 "url": l["url"]}
-                for l in proj.get("links", [])
-            ]
-        ul.append(render_project_item(ptitle, metas, links))
-    ul.append("    </ul>")
-    parts.append("\n".join(ul))
-    return assemble_plain_section("", "\n".join(parts), sec_meta.get("class") or page_default_class, sec_meta.get("id"))
-
-
-def render_education_section(sec_meta, blocks, site, page_default_class=None):
-    """kind: education —— 教育经历节（assets/data/education.json）。
-    每条数据的 year / institution / details 按语言提供；标题声明了某语言
-    但数据缺少该语言字段时，该语言显示占位消息而不是报错。"""
-    path = CONTENT_DATA_DIR / "education.json"
-    data = load_json(path)
-    title = sec_meta.get("title")
-    if not title:
-        raise BuildError("education 节缺少 title")
-    langs = list(title)
-    bodies = {}
-    for lang in langs:
-        has_all = all(
-            lang in e.get("year", {}) and lang in e.get("institution", {}) and lang in e.get("details", {})
-            for e in data
-        )
-        if not has_all:
-            bodies[lang] = lang_unavailable_message(lang, site)
-            continue
-        items = []
-        for e in data:
-            items.append('    <div class="edu-item">')
-            items.append(f'        <div class="edu-year">{e["year"][lang]}</div>')
-            items.append('        <div class="edu-details">')
-            items.append(f'            <div class="edu-institution">{e["institution"][lang]}</div>')
-            for detail in e["details"][lang]:
-                items.append("            " + render_markdown(detail).strip("\n"))
-            items.append("        </div>")
-            items.append("    </div>")
-        bodies[lang] = '<div class="edu-list">\n' + "\n".join(items) + "\n</div>"
-    return assemble_switchable_section(
-        title, langs, bodies, site,
-        sec_meta.get("class") or page_default_class, sec_meta.get("id"),
-    )
-
-
 RENDERERS = {
     "content": render_content_section,
-    "links": render_links_section,
     "publications": render_publications_section,
-    "projects": render_projects_section,
-    "projects-group": render_projects_group,
-    "education": render_education_section,
 }
 
 
@@ -699,12 +558,6 @@ def render_page(template_path, page_md_path, site, deps):
     sections = []
     for sec_meta, blocks in split_sections(body):
         kind = sec_meta.get("kind", "content")
-        if kind == "links":
-            deps.add(CONTENT_DATA_DIR / "links.json")
-        if kind == "education":
-            deps.add(CONTENT_DATA_DIR / "education.json")
-        if kind in ("projects", "projects-group"):
-            deps.add(CONTENT_DATA_DIR / "projects.json")
         renderer = RENDERERS.get(kind)
         if renderer is None:
             raise BuildError(f"{page_id} 页面的节 kind 未知：{kind!r}")

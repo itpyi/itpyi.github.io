@@ -11,7 +11,11 @@ Symmetries and gates in product codes.
 
 Fault-tolerant non-Clifford gates.
 
-<!-- section {kind: links, title: More links, switchable: false, list_class: null} -->
+<!-- section {title: More links, switchable: false, list_class: null} -->
+- [ORCID](https://orcid.org/0009-0003-1126-1628)
+- [SciRate](https://scirate.com/wang-yifei)
+- [Google Scholar](https://scholar.google.com/citations?user=dwTYUPwAAAAJ)
+- [Stack Exchange](https://stackexchange.com/users/17951034/itpyi)
 
 <!-- section {title: Publications, switchable: false, id: publication} -->
 <!-- lang:en -->

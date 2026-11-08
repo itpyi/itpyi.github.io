@@ -13,7 +13,7 @@ quotes:
 routes:
   - href: academics.html
     class: route-panel route-panel-academic
-    title: {zh: 治学, en: Academic}
+    title: {zh: 学术, en: Academics}
     copy: {zh: 正式学术主页, en: Formal academic homepage}
   - href: general.html
     class: route-panel route-panel-general
