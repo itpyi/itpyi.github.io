@@ -1,8 +1,8 @@
 ---
 title: {zh: 学术, en: Academics}
 meta:
-  zh: 王逸飞的正式履历页，包含研究、教育列表与开源项目。
-  en: Formal curriculum vitae of Wang Yifei, including research, education, and open-source work.
+  zh: 王逸飞的正式履历页，包含研究、学术报告、教育列表与开源项目。
+  en: Formal curriculum vitae of Wang Yifei, including research, talks, education, and open-source work.
 subnav: {zh: 学术, en: Academics}
 scripts: [assets/js/publications.js]
 section-class: cv-section
@@ -41,6 +41,21 @@ My main interests today still follow the first thread: magic-state preparation. 
 - [Stack Exchange](https://stackexchange.com/users/17951034/itpyi)
 
 <!-- section {kind: publications, title: {zh: 学术论文, en: Publications}, id: publication} -->
+
+<!-- section {layout: cards, title: {zh: 学术报告, en: Talks}, id: talks} -->
+<!-- lang:zh -->
+### Magna: simulating magic state factories as cheaply as Clifford circuits
+
+柏林自由大学 · 2026 年 11 月 18 日
+
+- [Slides · HTML](assets/talks/2026-11-18-fu-berlin/index.html)
+
+<!-- lang:en -->
+### Magna: simulating magic state factories as cheaply as Clifford circuits
+
+Freie Universität Berlin · 18 November 2026
+
+- [Slides · HTML](assets/talks/2026-11-18-fu-berlin/index.html)
 
 <!-- section {layout: cards, title: {zh: 开源, en: Open Source}} -->
 <!-- lang:zh -->
